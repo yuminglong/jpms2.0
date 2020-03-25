@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>常宁市智慧政协提案综合办理系统</title>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="shortcut icon" href="libs/images/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="libs/css/style.css">
+    <link rel="stylesheet" href="layui/css/font.css">
+    <link rel="stylesheet" href="libs/css/weadmin.css">
+
+</head>
+<body class="login-bg">
+
+<div class="login">
+    <div class="message">常宁市政协提案系统 1.0-管理登录</div>
+    <div id="darkbannerwrap"></div>
+
+    <form method="post" class="layui-form">
+        <input name="nickName" placeholder="用户名" type="text" lay-verify="required" class="layui-input">
+        <hr class="hr15">
+        <input name="password" lay-verify="required" placeholder="密码" type="password" class="layui-input">
+        <hr class="hr15">
+        <input class="loginin" value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit">
+        <hr class="hr20">
+        <div>
+            <p align="center">请使用有极速模式的浏览器!推荐使用360、Chrome谷歌、Firefox火狐、IE11等浏览器。</p>
+        </div>
+    </form>
+</div>
+
+<script src="layui/layui.js"></script>
+<script type="text/javascript">
+    layui.extend({
+        admin: '{/}./libs/js/admin'
+    });
+    layui.use(['form', 'jquery', 'admin'], function () {
+        var form = layui.form
+            , admin = layui.admin;
+        var $ = layui.jquery;
+        // layer.msg('玩命卖萌中', function(){
+        //   //关闭后的操作
+        //   });
+        //监听提交
+        var goto = false;
+        form.on('submit(login)', function (data) {
+            if (goto) {
+                layer.msg('您已经点过了，请等待...', {icon: 4, time: 1500});
+                return false;
+            }
+            goto = true;
+            $.ajax({
+                url: "front/user/login",
+                data: data.field,
+                type: "GET",
+                dataType: "json",
+                success: function (msg) {
+                    if (msg.datas == -1) {
+                        layer.msg(msg.resp_msg, {icon: 2, time: 1500}, function () {
+                            window.location.href = "login";
+                        })
+                    } else if (msg.datas <= 2) {
+                        layer.msg(msg.resp_msg, {icon: 1, time: 1500}, function () {
+                            window.location.href = "index";
+                        })
+                    } else if (msg.datas > 2) {
+                        layer.msg(msg.resp_msg, {icon: 1, time: 1500}, function () {
+                           window.location.href = "skip?table=system/list";
+                        })
+
+                    } else {
+                        goto = false;
+                        layer.msg(msg.resp_msg, {icon: 2, time: 1500, shift: 6})
+                    }
+                },
+                error: function (error) {
+                    goto = false;
+                    alert("异常");
+                }
+            });
+            return false;
+        });
+    });
+</script>
+<!-- 底部结束 -->
+</body>
+</html>

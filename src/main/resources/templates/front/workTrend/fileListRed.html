@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns:shiro="http://www.w3.org/1999/xhtml">
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>常宁市智慧政协提案综合办理系统</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="libs/css/style.css">
+    <style>
+
+        /*  .layui-table tr {border-bottom:1px dashed #dcd8d8;}*/
+        .layui-table-view .layui-table td, .layui-table-view .layui-table th {padding:10px 0;}
+        .layui-table tbody tr:hover {background-color: #f7f7f7;}
+        .layui-table tbody tr:hover a {color: #c52c2e;}
+        .layui-table-view .layui-table th .layui-table-cell span {color:#b33637;font-size:20px;font-weight:bold;}
+        .layui-table tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body class="layui-layout-body layui-list layui-index">
+<div class="layui-layout">
+    <div class="layui-card layadmin-header">
+        <div class="breadcrumb">
+            <i class="layui-icon layui-icon-home"></i>
+            <span class="layui-breadcrumb" lay-separator=">">
+                    <a>文件动态</a>
+                    <a>工作动态</a>
+                </span>
+            <button type="button" class="layui-btn layui-btn-xs layui-btn-red right" id="layui-Reload">
+                <i class="layui-icon layui-icon-refresh"></i>
+            </button>
+        </div>
+    </div>
+    <!-- 内容主体区域 -->
+    <div class="list-content">
+        <div class="list-head">
+            <div class="layui-inline left">
+                <form class="layui-form" onsubmit="return false;">
+                    <div class="layui-inline">
+                        <div class="layui-inline list-search">
+                            <input type="text" name="title"  placeholder="搜索工作动态" autocomplete="off" id="fileValue" class="layui-input layui_title">
+                        </div>
+                        <div class="layui-inline">
+                            <button type="button" lay-submit=""  lay-filter="fileBtn"    class="layui-btn layui-btn-sm layui-btn-red"><i class="layui-icon layui-icon-search" formnovalidate></i>搜索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="layui-inline layui-new left">
+                <div class="layui-inline">
+                    <button type="button" class="layui-btn layui-btn-sm layui-btn-red" id="fileNew" shiro:hasPermission="addwork">新增工作动态</button>
+                </div>
+            </div>
+        </div>
+        <table class="layui-table" lay-even="" lay-filter="fileTable" id="fileTable"></table>
+    </div>
+
+</div>
+<script src="layui/layui.js"></script>
+<script>
+    //JavaScript代码区域
+    layui.use(["table", "form", "element", "jquery"], function () {
+        // 加载表格
+        var table = layui.table
+            , form = layui.form
+            , element = layui.element
+            , $ = layui.jquery;
+        form.render();
+        element.render("breadcrumb");
+        element.render("collapse");
+        table.render({
+            id: "fileTable",
+            elem: "#fileTable",
+            method: "get",
+            url: "system/work/findList",
+            skin:"nob",
+            cols: [
+                [
+                    {type: "numbers", title: "序号", width: 80 ,hide:true},
+                    {field: "workId", title: "ID", width: "6%", hide: true},
+                    {field: "title", title: "标题", align: "left" ,templet: function (item) {
+                            return '<a href="work?workId='+item.workId+'" target="_blank">' + item.title + '</a>';
+                        }
+
+                    },
+                    {field: "createTime",  align: "center", width: 240},
+                    {field: "createUser", title: "发稿人", align: "center", width: 190, hide: true},
+                    {field: "period", title: "来源", align: "center", width: 190, hide: true},
+                    {field: 'ICON', title: "操作", align: "center", toolbar: '#fileBar', width: 270, hide: true},
+                ]
+            ],
+            page: {
+                limit: 20,
+                limits: [20, 30, 40, 50, 100],
+                prev: "上一页",
+                next: "下一页"
+            },
+            request: {
+                pageName: "pageNumber",
+                limitName: "pageSize"
+            },
+            response: {
+                statusCode: 200
+            },
+            parseData: function (res) {
+                return {
+                    "code": res.resp_code,
+                    "count": res.datas.total,
+                    "data": res.datas.list
+                }
+            },
+            height: "full-140"
+        });
+
+        //监听表格复选框选择
+        table.on('checkbox(fileTable)', function (obj) {
+            console.log(obj)
+        });
+        //监听工具条
+        table.on('tool(fileTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'check') {
+                layer.open({
+                    type: 2,
+                    title: "查看文档",
+                    move: false,
+                    shade: 0.3,
+                    area: ["100%", "100%"],
+                    content: "work?workId="+data.workId
+                });
+            }
+            /* else if (obj.event === 'del') {
+                layer.confirm('真的删除这篇文档吗', function (index) {
+                    obj.del();
+                    layer.close(index);
+                });
+            }*/
+        });
+
+        // 搜索提示
+      /*  $("#fileBtn").on("click", function () {
+            var sValue = $.trim($("#fileValue").val());
+            if (sValue == "") {
+                layer.msg("请输入搜索关键字！", {time: 2000, shade: 0.3});
+                return;
+            }
+        });*/
+
+
+        // 搜索提示
+        form.on("submit(fileBtn)", function (data) {
+            var index = layer.msg('查询中，请稍候...', {icon: 16, time: false, shade: 0});
+            setTimeout(function () {
+                table.reload('fileTable', { //表格的id
+                    url: "system/work/findList",
+                    where: {
+                        'title': data.field.title
+                    }
+                });
+
+                layer.close(index);
+            }, 400);
+        });
+
+
+        // 新增工作动态
+        $("#fileNew").on("click", function () {
+            parent.layer.open({
+                type: 2,
+                title: "新增工作动态",
+                move: false,
+                shade: 0.3,
+                area: ["90%", "100%"],
+                content: "skip?table=front/workTrend/addFile",
+                end:function () {
+                    location.reload();
+
+                }
+            });
+        });
+
+        // 重载表格
+        $("#layui-Reload").on("click", function () {
+            //执行重载
+            table.reload('fileTable', {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            }, 'data');
+        });
+    });
+</script>
+
+<script type="text/html" id="fileBar">
+    <a class="layui-btn layui-btn-xs layui-btn-red" lay-event="check"><i class="layui-icon layui-icon-file-b"></i>查看</a>
+    <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>-->
+</script>
+</body>
+</html>

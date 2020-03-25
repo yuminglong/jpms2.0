@@ -1,0 +1,12 @@
+方法：
+统计分析
+List<Map<String, Object>> porposaState(String operate);
+
+ 参数说明：                              返回：
+String operate  操作
+	"porposaState"://提案状态统计           statue   count
+    "proposaType"://提案类型                type     count
+    "unitSate"://单位状态                   statue   count
+    "unitType"://单位办理类别               type     count
+    "replyType"://答复类型;                 type     count
+

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jiebao.jpms.mapper.JpmsFolderMapper">
+
+    <select id="seltfol" resultType="com.jiebao.jpms.model.JpmsFolder">
+      SELECT *
+      FROM jiebao_jpms_folder t
+      WHERE t.user_id = #{userId}
+      ORDER BY t.create_time desc
+    </select>
+	
+</mapper>

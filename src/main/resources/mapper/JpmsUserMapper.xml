@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jiebao.system.mapper.JpmsUserMapper">
+
+	<select id="findRoles" resultType="com.jiebao.system.model.JpmsRole">
+        SELECT r.*
+        FROM jiebao_jpms_role_user t ,
+        jiebao_jpms_user u,
+        jiebao_jpms_role r
+        where
+        t.user_id = u.user_id
+        and t.`status` != -1
+        and t.role_id = r.role_id
+        and u.user_id =#{userId}
+    </select>
+
+	<select id="findPermission" resultType="com.jiebao.system.model.JpmsPermission">
+        SELECT p.*
+        FROM jiebao_jpms_role_permission t ,
+        jiebao_jpms_role r ,
+        jiebao_jpms_permission p
+        WHERE t.pid = p.pid
+        AND t.`status` != -1
+        AND t.rid = r.role_id
+        AND  r.role_id = #{roleId}
+    </select>
+
+	<select id="findByName" resultType="com.jiebao.system.model.JpmsUser">
+        SELECT *
+        FROM jiebao_jpms_user u
+		WHERE u.nick_name = #{nickName}
+    </select>
+
+	<select id="findList" resultType="com.jiebao.system.model.JpmsUser">
+		SELECT *
+		FROM jiebao_jpms_user u
+		<where>
+			<if test="realName != null">
+				u.real_name like concat('%', #{realName}, '%')
+			</if>
+			<if test="type != null">
+				and u.type = #{type}
+			</if>
+		</where>
+	</select>
+
+	<select id="roleList" resultType="com.jiebao.system.model.JpmsUserRole">
+		SELECT u.nick_name,r.remark ,t.*
+		FROM jiebao_jpms_role_user t ,
+		jiebao_jpms_user u,
+		jiebao_jpms_role r
+		where
+		t.user_id = u.user_id
+		and t.role_id = r.role_id
+		<if test="rid != null">
+			and t.id = #{rid}
+		</if>
+	</select>
+
+	<delete id="deleterole">
+		DELETE from jiebao_jpms_role_user
+		WHERE user_id = #{userId}
+	</delete>
+
+	<select id="perList" resultType="com.jiebao.system.model.JpmsRolePermission">
+		SELECT p.`name`,r.remark,t.*
+		FROM jiebao_jpms_role_permission t
+		,jiebao_jpms_role r
+		,jiebao_jpms_permission p
+		WHERE t.pid=p.pid and t.rid=r.role_id
+		<if test="id != null">
+			and t.id = #{id}
+		</if>
+	</select>
+
+	<select id="userRoles" resultType="com.jiebao.system.model.JpmsUserRole">
+			SELECT *
+			FROM jiebao_jpms_role_user r
+			where r.status = 1
+			and r.role_id = #{roleId}
+	</select>
+
+	<select id="perRoles" resultType="com.jiebao.system.model.JpmsRolePermission">
+			SELECT *
+			FROM jiebao_jpms_role_permission p
+			where p.status = 1
+			and p.rid = #{roleId}
+	</select>
+
+	<select id="ListRoles" resultType="com.jiebao.system.model.JpmsRole">
+            SELECT *
+            FROM jiebao_jpms_role
+    </select>
+
+	<select id="proList" resultType="com.jiebao.system.model.JpmsPermission">
+		SELECT p.p_type as name
+		FROM jiebao_jpms_permission p
+		GROUP BY p.p_type
+	</select>
+
+	<select id="proType" resultType="com.jiebao.system.model.JpmsPermission">
+		SELECT p.`name` as `name`,p.pid as `value`
+		FROM `jiebao_jpms_permission` p
+		WHERE p.p_type = #{type}
+	</select>
+
+	<select id="useList" resultType="com.jiebao.system.model.JpmsUser">
+		SELECT t.type_name as name ,
+		t.type_id as value
+		FROM jiebao_jpms_type t
+	</select>
+
+	<select id="useType" resultType="com.jiebao.system.model.JpmsUser">
+		SELECT u.nick_name as name ,
+		u.user_id as `value`
+		FROM jiebao_jpms_user u
+		WHERE u.type = #{type}
+	</select>
+	<select id="userType" resultType="com.jiebao.system.model.JpmsUser">
+		SELECT *
+		FROM jiebao_jpms_user u
+		WHERE u.type = #{type}
+	</select>
+
+
+
+	<select id="unitAnaly" resultType="Map">
+			select u.unit_name as 'unitName',
+			(select count(*) from jiebao_jpms_proposal p where p.unit_id = u.unit_id AND p.status = '10') as 'overManage',
+			(select count(*) from jiebao_jpms_proposal p where p.unit_id = u.unit_id AND p.status  BETWEEN 3 and 9) as 'managing',
+			(select count(*) from jiebao_jpms_proposal p where p.unit_id = u.unit_id AND p.status = '1') as 'stayManage',
+			(select count(*) from jiebao_jpms_proposal p where p.unit_id = u.unit_id AND p.status  BETWEEN -1 and 0) as 'notManage'
+			from jiebao_jpms_unit u
+
+  			GROUP BY u.unit_name
+	</select>
+
+	<select id="classify" resultType="Map">
+			SELECT
+			COUNT(*) AS allClassify,
+			(select count(*) from jiebao_jpms_proposal p where  p.classify = '经济建设') as 'classifyOne',
+			(select count(*) from jiebao_jpms_proposal p where  p.classify = '政治建设') as 'classifyTwo',
+			(select count(*) from jiebao_jpms_proposal p where  p.classify = '文化建设') as 'classifyThree',
+			(select count(*) from jiebao_jpms_proposal p where  p.classify = '社会建设') as 'classifyFour',
+			(select count(*) from jiebao_jpms_proposal p where  p.classify = '生态文明建设') as 'classifyFive'
+			from jiebao_jpms_proposal
+	</select>
+
+	<select id="staAnaly" resultType="Map">
+			SELECT
+			COUNT(*) AS total,
+			(select count(*) from jiebao_jpms_proposal p where  p.status = '10') as 'overManage',
+			(select count(*) from jiebao_jpms_proposal p where  p.status  BETWEEN 3 and 9) as 'managing',
+			(select count(*) from jiebao_jpms_proposal p where  p.status = '1') as 'stayManage',
+			(select count(*) from jiebao_jpms_proposal p where  p.status  BETWEEN -1 and 0) as 'notManage'
+			from jiebao_jpms_proposal
+	</select>
+
+
+	<select id="propType" resultType="Map">
+			SELECT   DISTINCT
+			(select count(*) from jiebao_jpms_proposal p where  p.type	= '个人提案') as 'onePro',
+			(select count(*) from jiebao_jpms_proposal p where  p.type  ='个人联名提案') as 'manyPro',
+			(select count(*) from jiebao_jpms_proposal p where  p.type != '个人提案'  and  p.type != '个人联名提案' ) as 'ourPro'
+
+			from  jiebao_jpms_proposal
+	</select>
+
+	<select id="satisfactions" resultType="Map">
+			SELECT   DISTINCT
+			(select count(*) from jiebao_jpms_proposal p where  p.satisfaction	= '非常满意') as 'veryGood',
+			(select count(*) from jiebao_jpms_proposal p where  p.satisfaction  ='比较满意') as 'good',
+			(select count(*) from jiebao_jpms_proposal p where  p.satisfaction = '不满意'  ) as 'bad',
+			(select count(*) from jiebao_jpms_proposal p where  p.satisfaction  ='非常不满意') as 'veryBad'
+
+			from  jiebao_jpms_proposal
+	</select>
+
+    <select id="collective" resultType="Map">
+			SELECT   DISTINCT
+			(select count(*) from jiebao_jpms_proposal p where  p.type	= '界别提案') as 'jbPro',
+			(select count(*) from jiebao_jpms_proposal p where  p.type  ='人民团体提案') as 'rmPro',
+			(select count(*) from jiebao_jpms_proposal p where  p.type = '委员小组提案'  ) as 'wyPro',
+			(select count(*) from jiebao_jpms_proposal p where  p.type  ='专门委员会提案') as 'zmPro'
+
+			from  jiebao_jpms_proposal
+	</select>
+
+
+    <select id="overAnswer" resultType="Map">
+			SELECT   DISTINCT
+			(select count(*) from jiebao_jpms_punit p where  p.over_answer	= 'A.已经办结') as 'Atype',
+			(select count(*) from jiebao_jpms_punit p where  p.over_answer  ='B.列入计划拟解决或拟采纳') as 'Btype',
+			(select count(*) from jiebao_jpms_punit p where  p.over_answer = 'C.因政策限制或条件不成熟，暂时不能办理'  ) as'Ctype'
+
+			from  jiebao_jpms_punit
+	</select>
+
+	<select id="jointlm" resultType="com.jiebao.jpms.model.JpmsPersons">
+		SELECT *
+		FROM jiebao_jpms_persons p
+		WHERE
+		p.proposal_id = #{proposalId}
+
+	</select>
+
+
+
+	<select id="joint" resultType="com.jiebao.jpms.model.JpmsPersons">
+		SELECT p.*,u.real_name
+		FROM jiebao_jpms_persons p ,jiebao_jpms_user u
+		WHERE
+		u.user_id =p.user_id
+		and
+		p.proposal_id = #{proposalId}
+
+	</select>
+
+	<select id="jointpunit" resultType="com.jiebao.jpms.model.JpmsPunit">
+		SELECT p.*,u.unit_name
+		FROM jiebao_jpms_punit p,jiebao_jpms_unit u
+		WHERE
+		p.unit_id=u.unit_id
+		and
+		p.proposal_id = #{proposalId}
+		<if test="type != null">
+			and p.type = #{type}
+		</if>
+		<if test="unitId !=null">
+			and p.unit_id = #{unitId}
+		</if>
+
+	</select>
+
+	<select id="wxlogin" resultType="com.jiebao.system.model.JpmsUser">
+		SELECT *
+		FROM `jiebao_jpms_user` u
+		where  u.wxopenid = #{openid}
+	</select>
+
+
+</mapper>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jiebao.system.mapper.JpmsProposalMapper">
+
+
+	<select id="findList" resultType="com.jiebao.jpms.model.JpmsProposal">
+		SELECT t.*,s.status_name,u.real_name
+		FROM jiebao_jpms_proposal t,jiebao_jpms_status s ,jiebao_jpms_user u
+		<where>
+			t.`status` = s.id
+			and t.user_id = u.user_id
+			<if test="cause != null">
+				and t.cause like concat('%', #{cause}, '%')
+			</if>
+			<if test="status!=null">
+				<if test="status == 2">
+					and t.status BETWEEN 4 and 9
+				</if>
+				<if test="status != 2">
+					and t.status = #{status}
+				</if>
+			</if>
+
+		</where>
+		ORDER BY t.proposal_number desc
+	</select>
+
+	<select id="findById" resultType="com.jiebao.jpms.model.JpmsProposal">
+		SELECT t.*,s.status_name,u.real_name,d.unit_name
+		FROM jiebao_jpms_proposal t,jiebao_jpms_status s ,jiebao_jpms_user u, jiebao_jpms_unit d
+		<where>
+			t.`status` = s.id
+			and t.user_id = u.user_id
+			and t.unit_id = d.unit_id
+			and t.proposal_id = #{proposalId}
+		</where>
+		ORDER BY t.create_time desc
+	</select>
+
+	<select id="membersProposal" resultType="com.jiebao.jpms.model.JpmsProposal">
+		SELECT t.*,s.status_name,u.real_name,d.unit_name
+		FROM jiebao_jpms_proposal t,jiebao_jpms_status s ,jiebao_jpms_user u, jiebao_jpms_unit d
+		<where>
+			t.`status` = s.id
+			and t.user_id = u.user_id
+			and t.unit_id = d.unit_id
+			and t.user_id = #{userId}
+			and t.`status` != -1
+			<if test="cause != null">
+				and t.cause like concat('%', #{cause}, '%')
+			</if>
+			<if test="status != null">
+				and t.proposal_id = #{status}
+			</if>
+		</where>
+		ORDER BY t.proposal_number desc
+	</select>
+
+
+	<select id="appendix" resultType="com.jiebao.jpms.model.JpmsAppendix">
+       SELECT * FROM
+      `jiebao_jpms_appendix`  a
+       WHERE a.proposal_id = #{proposalId}
+       <if test="type != null">
+		   and a.type = #{type}
+	   </if>
+    </select>
+
+	<delete id="deletepunit">
+		DELETE from jiebao_jpms_punit
+		WHERE proposal_id = #{proposalId}
+	</delete>
+
+	<delete id="deletepersons">
+		DELETE from jiebao_jpms_persons
+		WHERE proposal_id = #{proposalId}
+	</delete>
+
+	<select id="maxnumber" resultType="Integer">
+			SELECT MAX(j.proposal_number) FROM 	jiebao_jpms_proposal j
+	</select>
+
+
+</mapper>

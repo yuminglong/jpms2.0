@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <title>常宁市智慧政协提案综合办理系统</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="libs/css/style.css">
+</head>
+<body class="layui-layout-body layui-list">
+<div class="layui-layout">
+    <div class="layui-card layadmin-header">
+        <div class="breadcrumb">
+            <i class="layui-icon layui-icon-home"></i>
+            <span class="layui-breadcrumb" lay-separator=">">
+                    <a>系统管理</a>
+                    <a>系统用户</a>
+                </span>
+            <button type="button" class="layui-btn layui-btn-xs right" id="layui-Reload">
+                <i class="layui-icon layui-icon-refresh"></i>
+            </button>
+        </div>
+    </div>
+    <!-- 内容主体区域 -->
+    <div class="list-content">
+        <div class="list-head">
+            <form class="layui-form left" onsubmit="return false;">
+                <div class="layui-inline">
+                    <div class="layui-inline user-title1">
+                        <label class="layui-form-label">姓名</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="realName" placeholder="请输入姓名" autocomplete="off" id="userValue" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline user-title2">
+                        <label class="layui-form-label">类型</label>
+                        <div class="layui-input-block">
+                            <select name="type">
+                                <option value="">无</option>
+                                <option value="1">单位用户</option>
+                                <option value="2">提案委员</option>
+                                <option value="3">政府办</option>
+                                <option value="6">市委办</option>
+                                <option value="4">提案委</option>
+                                <option value="5">系统管理员</option>
+                            </select>
+                            <div class="layui-unselect layui-form-select layui-form-selected">
+                                <div class="layui-select-title">
+                                    <input type="text" placeholder="请选择" value="不限" readonly="" class="layui-input layui-unselect" name="">
+                                    <i class="layui-edge">
+                                    </i>
+                                </div>
+                                <dl class="layui-anim layui-anim-upbit" style="">
+                                    <dd lay-value="" class="layui-this">不限</dd>
+                                    <dd lay-value="1" class="">单位用户</dd>
+                                    <dd lay-value="2" class="">提案委员</dd>
+                                    <dd lay-value="3" class="">政府办</dd>
+                                    <dd lay-value="6" class="">市委办</dd>
+                                    <dd lay-value="4" class="">提案委</dd>
+                                    <dd lay-value="5" class="">系统管理员</dd>
+
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button type="button" lay-filter="search" lay-submit="" class="layui-btn layui-btn-sm"><i class="layui-icon layui-icon-search" formnovalidate></i>搜索</button>
+                    </div>
+                </div>
+            </form>
+            <div class="layui-inline hide" id="bar">
+                <button shiro:hasPermission="deleteuser" type="button" class="layui-btn layui-btn-sm layui-btn-danger" lay-event="userDelete">彻底删除</button>
+                <button shiro:hasPermission="adduser" type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-event="userNew">添加</button>
+            </div>
+        </div>
+
+        <table class="layui-table lay-even=" lay-filter="userTable" id="userTable"></table>
+    </div>
+
+</div>
+<script src="layui/layui.js"></script>
+
+<script>
+    //JavaScript代码区域
+    layui.use(["table", "form", "element", "jquery"], function () {
+        // 加载表格
+        var table = layui.table
+            , form = layui.form
+            , element = layui.element
+            , $ = layui.jquery;
+        form.render();
+        element.render("breadcrumb");
+        element.render("collapse");
+        table.render({
+            id: "userTable",
+            elem: "#userTable",
+            method: "get",
+            url: "system/user/findList",
+            toolbar: '#bar',
+            totalRow: true,
+            cols: [
+                [
+                    {type: "checkbox", fixed: "left", width: 50},
+                    {type: "numbers", title: "序号", width: 80},
+                    {field: "userId", title: "ID", width: 50, hide: true},
+                    {field: "nickName", title: "用户名", align: "center"},
+                    {field: "mobile", title: "手机", align: "center"},
+                    {field: "realName", title: "姓名", align: "center", width: 150},
+                    {field: "email", title: "邮箱", align: "center", width: 180, hide: true},
+                    {
+                        field: "status", title: "用户状态", align: "center", width: 100, templet: function (item) {
+                            if (item.status == "-1") {
+                                return "已删除";
+                            } else if (item.status == "1") {
+                                return "正常";
+                            } else if (item.status == "0") {
+                                return "已停用";
+                            }
+                        }
+                    },
+                    {field: "createTime", title: "创建时间", align: "center", width: 180},
+                    {
+                        field: "type", title: "类型", align: "center", width: 180, templet: function (item) {
+                            if (item.type == "1") {
+                                return "单位用户";
+                            } else if (item.type == "2") {
+                                return "提案委员";
+                            } else if (item.type == "3") {
+                                return "政府办";
+                            } else if (item.type == "4") {
+                                return "提案委";
+                            } else if (item.type == "5") {
+                                return "系统管理员";
+                            } else if (item.type == "6") {
+                                return "市委办";
+                            } else {
+                                return "无";
+                            }
+                        }
+                    },
+                    {field: 'ICON', title: "操作", align: "center", toolbar: '#userBar', width: 200},
+                ]
+            ],
+            page: {
+                limit: 20,
+                limits: [20, 30, 40, 50, 100],
+                prev: "上一页",
+                next: "下一页"
+            },
+            request: {
+                pageName: "pageNumber",
+                limitName: "pageSize"
+            },
+            response: {
+                statusCode: 200
+            },
+            parseData: function (res) {
+                return {
+                    "code": res.resp_code,
+                    "count": res.datas.total,
+                    "data": res.datas.list
+                }
+            }, done: function (res) {
+                table_data = res.data;
+            },
+            height: "full-140"
+        });
+
+        var table_data = new Array();
+        var ids = new Array();
+        //监听表格复选框选择
+        table.on('checkbox(userTable)', function (obj) {
+            if (obj.checked == true) {
+                if (obj.type == 'one') {
+                    ids.push(obj.data.userId)
+                } else if (obj.type == 'all') {
+                    ids.length = 0;
+                    for (var i = 0; i < table_data.length; i++) {
+                        ids.push(table_data[i].userId);
+                    }
+                } else {
+                    for (var i = 0; i < table_data.length; i++) {
+                        ids.push(table_data[i].userId);
+                    }
+                }
+            } else if (obj.checked == false) {
+                if (obj.type == 'one') {
+                    for (var i = 0; i < ids.length; i++) {
+                        if (ids[i] == obj.data.userId) {
+                            // ids.remove(i);用这个方法会报错not a function
+                            //ids.pop();   //建议用这个
+                            ids.splice(i, 1);
+                        }
+                    }
+                } else {
+                    for (var i = 0; i < ids.length; i++) {
+                        for (var j = 0; j < table_data.length; j++) {
+                            if (ids[i] == table_data[j].userId) {
+                                // ids.remove(i);
+                                //ids.pop();
+                                ids.splice(i, 1);
+                            }
+                        }
+                    }
+                }
+            }
+            console.log(ids);
+            console.log(table_data);
+        });
+
+        //监听头工具栏事件
+        table.on('toolbar(userTable)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id)
+                , data = checkStatus.data; //获取选中的数据
+            switch (obj.event) {
+                case 'userNew':
+                    layer.open({
+                        type: 2,
+                        title: "新增用户",
+                        move: false,
+                        shade: 0.3,
+                        area: ["550px", "650px"],
+                        content: "skip?table=system/user/addUser",
+                        end: function () {  //刷新页面
+                            location.reload();
+                        }
+                    });
+                    break;
+                case 'userDelete':
+                    if (data.length === 0) {
+                        layer.msg('请选择一行');
+                    } else {
+                        layer.confirm('一旦删除无法恢复，是否删除?', {icon: 3, title: '提示'}, function (index) {
+                            //  obj.del();//删除对应行（tr）的Dom结构
+                            layer.close(index);
+                            //向服务端发送删除指令
+                            $.ajax({
+                                url: "system/user/delUser?ids=" + ids,
+                                data: {
+                                    /*  "ids": JSON.stringify(ids)*/
+                                },
+                                type: "GET",
+                                dataType: "json",
+                                success: function (msg) {
+                                    layer.msg(msg.resp_msg, {icon: 1, time: 1500}, function () {
+                                        location.reload();//刷新表格
+                                    });
+                                },
+                                error: function (error) {
+                                    alert("异常");
+                                }
+                            });
+                        });
+                    }
+                    break;
+            }
+            ;
+        });
+
+        //监听工具条
+        table.on('tool(userTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'detail') {
+                layer.msg('ID：' + data.id + ' 的查看操作');
+            } else if (obj.event === 'del') {
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del();
+                    layer.close(index);
+                    //向服务器发送指令
+                    $.ajax({
+                        url: "/system/user/deleteUser",
+                        data: {
+                            "userId": data.userId
+                        },
+                        type: "GET",
+                        dataType: "json",
+                        success: function (msg) {
+                            layer.msg(msg.resp_msg, {icon: 1, time: 1500});
+                        },
+                        error: function (error) {
+                            alert("异常");
+                        }
+                    });
+                });
+            } else if (obj.event === 'edit') {
+                layer.open({
+                    type: 2,
+                    title: "修改用户",
+                    move: false,
+                    area: ["500px", "600px"],
+                    content: "amendUser?UserId=" + data.userId,
+                    end: function () {  //刷新页面
+                        location.reload();
+                    }
+                });
+            }else if(obj.event === 'reset') {
+                layer.confirm('确认重置该用户密码吗?', function (index) {
+                    //向服务器发送指令
+                    $.ajax({
+                        url: "system/user/reset",
+                        data: {
+                            "userId": data.userId
+                        },
+                        type: "GET",
+                        dataType: "json",
+                        success: function (msg) {
+                            layer.msg(msg.resp_msg, {icon: 1, time: 1500});
+                        },
+                        error: function (error) {
+                            alert("异常");
+                        }
+                    });
+                });
+            }
+        });
+
+        // 搜索提示
+        form.on("submit(search)", function (data) {
+            var index = layer.msg('查询中，请稍候...', {icon: 16, time: false, shade: 0});
+            setTimeout(function () {
+                table.reload('userTable', { //表格的id
+                    url: "system/user/findList",
+                    where: {
+                        'realName': data.field.realName,
+                        'type': data.field.type
+                    }
+                });
+                layer.close(index);
+            }, 400);
+        });
+
+        // 重载表格
+        $("#layui-Reload").on("click", function () {
+            //执行重载
+            table.reload('userTable', {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            }, 'data');
+        });
+
+    });
+</script>
+
+<script type="text/html" id="userBar">
+    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="reset" shiro:hasPermission="reset"><i class="layui-icon layui-icon-edit"></i>重置密码</a>
+    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" shiro:hasPermission="deleteuser"><i class="layui-icon layui-icon-delete"></i>删除</a>
+</script>
+</body>
+</html>

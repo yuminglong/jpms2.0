@@ -1,0 +1,42 @@
+
+方法：
+
+ 根据标题模糊 分页查询提案
+List<JpmsProposal> findList(@PathVariable Integer pageNumber, @PathVariable Integer pageSize,String cause)
+参数：
+pageNumber 当前页数
+pageSize    每页显示数量
+cause        标题   可不传
+
+根据id 查询 提案
+JpmsProposal lookProposa(@PathVariable Integer proposalId)
+proposalId  提案id
+
+
+审查提案并指定承办单位
+Result checkProposal(@PathVariable Integer proposalId, @PathVariable Integer status, @PathVariable Integer unitId)
+proposalId  提案id
+status       状态   -1提案不通过
+unitId      指定单位id
+
+提案分类
+Result classUnit(@PathVariable Integer proposalId, @PathVariable Integer classify)
+proposalId  提案 id
+classify    分类id
+
+
+审核调整办理单位
+Result adjust(@PathVariable Integer proposalId, @PathVariable Integer status, @PathVariable Integer unitId)
+proposalId  提案id
+status      -1 不调整
+unitId      调整的单位id
+
+审核延期交办
+ Result postpone(@PathVariable Integer proposalId, @PathVariable Integer status)
+ proposalId   提案id
+ status       -1 不通过
+
+ 办结·重新办理
+ Result conclude(@PathVariable Integer proposalId, @PathVariable Integer status)
+ proposalId
+status  9 重新办理  10办结

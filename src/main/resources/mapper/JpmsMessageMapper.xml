@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jiebao.jpms.mapper.JpmsMessageMapper">
+
+	<select id="findList" resultType="com.jiebao.jpms.model.JpmsMessage">
+		SELECT *
+		FROM
+		<choose>
+			<when test="folderId != null">/*查询自建文件夹*/
+				jiebao_jpms_message t
+				where t.`status` != -1
+				and t.folder_id = #{folderId}
+				AND t.user_id = #{userId}
+			</when>
+			<when test="status == -1">/*查询回收站*/
+				(SELECT * FROM
+				jiebao_jpms_message z
+				WHERE z.send_id = #{userId}
+				OR z.rec_id = #{userId} ) t
+				WHERE t.`status`= #{status}
+			</when>
+			<when test="status == 1 ||status == 4 ">/*草搞箱·发件箱*/
+				(SELECT * FROM
+				 jiebao_jpms_message z
+				WHERE z.send_id = #{userId}) t
+				WHERE t.`status`= #{status}
+			</when>
+			<otherwise>/*收件箱*/
+				(SELECT * FROM
+				jiebao_jpms_message z
+				WHERE z.rec_id = #{userId}) t
+				WHERE t.`status`= 2
+				OR t.`status`= 3
+			</otherwise>
+		</choose>
+		<if test="title != null">
+			AND t.title like concat('%',#{title}, '%')
+		</if>
+		ORDER BY t.`status` desc ,
+		t.create_at desc
+	</select>
+
+
+
+</mapper>

@@ -1,0 +1,318 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8"><!--单位提案-->
+    <title>常宁市智慧政协提案综合办理系统</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="libs/css/style.css">
+</head>
+
+<body>
+<div class="layui-layout-body layui-index">
+    <div class="breadcrumb">
+        <i class="layui-icon layui-icon-home"></i>
+        <span class="layui-breadcrumb" lay-separator=">">
+                <a>常宁市政协</a>
+                <a>新闻投稿</a>
+                <a><cite>正文</cite></a>
+            </span>
+        <button type="button" class="layui-btn layui-btn-xs layui-btn-red" id="layui-Reload">
+            <i class="layui-icon layui-icon-refresh"></i>
+        </button>
+    </div>
+    <div class="page-content">
+        <div class="layui-row">
+            <div class="layui-inline">
+                <button shiro:hasPermission="addproposa" data-method="offset" data-type="auto" type="button"
+                        id="channelSelect" class="layui-btn layui-btn-sm layui-btn-red news-form"><i
+                        class="layui-icon layui-icon-edit"></i>新建提案
+                </button>
+                <button type="button" id="changePassword" class="layui-btn layui-btn-sm layui-btn-red"><i
+                        class="layui-icon layui-icon-password"></i>修改密码
+                </button>
+            </div>
+            <div class="layui-inline">
+                <form class="layui-form" onsubmit="return false;">
+                    <div class="layui-inline">
+                        <div class="layui-inline layui_title_box">
+                            <input type="text" name="title" placeholder="提案标题" autocomplete="off"
+                                   class="layui-input layui_title">
+                        </div>
+                        <div class="layui-inline layui_title_box">
+                            <input type="text" name="proposalId" placeholder="提案号" autocomplete="off"
+                                   class="layui-input layui_title">
+                        </div>
+                        <div class="layui-inline">
+                            <button lay-filter="search" lay-submit="" class="layui-btn layui-btn-sm layui-btn-red"><i
+                                    class="layui-icon layui-icon-search" formnovalidate></i>搜索
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <table class="layui-table lay-even=" lay-filter="templates" id="dataTable"></table>
+    </div>
+</div>
+
+<div id="password" class="pd-20 hide layui-form">
+    <form class="form form-horizontal" onsubmit="return false;" novalidate="novalidate">
+        <div class="layui-row clearfix">
+            <label class="form-label layui-col-xs4 layui-col-sm3">原密码：</label>
+            <div class="formControls layui-col-xs8 layui-col-sm9">
+                <input type="password" class="input-text" autocomplete="off" placeholder="原密码" name="password_old"
+                       lay-verify="required" minlength="6" maxlength="16" aria-required="true">
+            </div>
+        </div>
+        <div class="layui-row clearfix">
+            <label class="form-label layui-col-xs4 layui-col-sm3">新密码：</label>
+            <div class="formControls layui-col-xs8 layui-col-sm9">
+                <input type="password" class="input-text" autocomplete="off" placeholder="新密码" name="password_new"
+                       lay-verify="required" minlength="6" maxlength="16" aria-required="true">
+            </div>
+        </div>
+        <div class="layui-row clearfix">
+            <label class="form-label layui-col-xs4 layui-col-sm3">确认密码：</label>
+            <div class="formControls layui-col-xs8 layui-col-sm9">
+                <input type="password" class="input-text" autocomplete="off" placeholder="再次输入新密码"
+                       name="password_confirm" lay-verify="required" minlength="6" maxlength="16" aria-required="true">
+            </div>
+        </div>
+        <div class="layui-row clearfix">
+            <div class="layui-col-xs8 layui-col-sm9 layui-col-xs-offset4 layui-col-sm-offset3">
+                <input class="layui-btn layui-btn-red layui-btn-sm" lay-submit lay-filter="updatepwd" type="submit"
+                       value="提交">
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="layui/layui.js"></script>
+<script>
+    layui.use('element', function () {
+        var element = layui.element;
+    });
+    layui.use(["table", "form", "element", "jquery"], function () {
+        var table = layui.table
+            , form = layui.form
+            , element = layui.element
+            , $ = layui.jquery;
+
+        form.render();
+        element.render("breadcrumb");
+        element.render("collapse");
+
+        table.render({
+            id: "dataTable",
+            elem: "#dataTable",
+            method: "get",
+            url: "parent/findList",
+            cols: [
+                [
+                    {type: "numbers", title: "序号", width: "6%", hide: true},
+                    {field: "proposalId", title: "id", width: "6%" ,hide: true},
+                    {field: "proposalNumber", title: "提案号",width: "6%"},
+                    {
+                        field: "cause", title: "提案标题", align: "center", templet: function (item) {
+                            /* return '<a href="detaile?proposalId=item.proposalId" target="_blank">' + item.cause + '</a>';*/
+                            return '<a href="detaile/' + item.proposalId + '" target="_blank">' + item.cause + '</a>';
+                        }
+                    },
+                    {field: "realName", title: "主导人", align: "center"},
+                    {field: "type", title: "提案类型", align: "center"},
+                    {field: "createTime", title: "提案时间", align: "center"},
+                    {field: "statusName", title: "提案状态", align: "center", width: "12%"},
+                    {field: "statusUnit", title: "答复状态", align: "center", templet: '#buttonCheck', width: "12%"},
+                    {field: 'ICON', title: "操作", align: "center", toolbar: '#indexBar', width: "10.3%"},
+                ]
+            ],
+            page: {
+                limit: 20,
+                limits: [20, 30, 40, 50, 100],
+                prev: "上一页",
+                next: "下一页"
+            },
+            request: {
+                pageName: "pageNumber",
+                limitName: "pageSize"
+            },
+            response: {
+                statusCode: 200
+            },
+            parseData: function (res) {
+                return {
+                    "code": res.resp_code,
+                    "count": res.datas.total,
+                    "data": res.datas.list
+
+                }
+            },
+            height: "full-130"
+
+        });
+
+
+        $("#channelSelect").on("click", function () {
+            layer.open({
+                type: 2,
+                title: "新建提案",
+                move: false,
+                shade: 0.3,
+                area: ["80%", "90%"],
+                content: "skip?table=front/members/edit",
+                end: function () {  //刷新页面
+                    location.reload();
+                }
+            });
+        });
+
+
+        // 修改登录密码
+        $(function () {
+            // $("#form-edit-password").validate();
+            $("#changePassword").on("click", function () {
+                layer.open({
+                    type: 1,
+                    title: "修改登录密码",
+                    area: ["500px", "auto"],
+                    move: false,
+                    content: $("#password")
+                });
+            });
+        });
+
+        // 搜索提示
+        form.on("submit(search)", function (data) {
+            var index = layer.msg('查询中，请稍候...', {icon: 16, time: false, shade: 0});
+            setTimeout(function () {
+                table.reload('dataTable', { //表格的id
+                    url: "parent/findList",
+                    where: {
+                        'cause': data.field.title,
+                        'status': data.field.proposalId
+                    }
+                });
+                layer.close(index);
+            }, 400);
+        });
+
+        //修改密码——>监听提交
+        var goto = false;
+        form.on('submit(updatepwd)', function (data) {
+            if (goto) {
+                layer.msg('您已经点过了，请等待...', {icon: 4, time: 1500})
+                return false;
+            }
+            goto = true;
+            if (data.field.password_new == data.field.password_confirm) {
+                $.ajax({
+                    url: "system/user/updatepwd",
+                    data: data.field,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (msg) {
+                        console.log(msg)
+                        layer.closeAll();
+                        layer.msg(msg.resp_msg, {time: 1500, icon: 1}, function () {
+                            parent.layui.layer.closeAll();
+                            parent.location.reload();
+                        });
+
+
+                    },
+                    error: function (error) {
+                        alert("异常")
+                    }
+                });
+            } else {
+                layer.msg("两次密码不一致！", {time: 1500, icon: 1});
+            }
+            return false;
+        });
+
+        //监听行工具事件
+        table.on('tool(templates)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+                var data = obj.data //获得当前行数据
+                    , layEvent = obj.event; //获得 lay-event 对应的值
+                //  alert(data.realName)
+                if (layEvent === 'check') {
+                    layer.open({
+                        type: 2,
+                        title: "查看提案",
+                        move: false,
+                        shade: 0.3,
+                        area: ["80%", "95%"],
+                        content: "checkMotion?proposalId=" + data.proposalId,
+                        end: function () {  //刷新页面
+                            location.reload();
+                        }
+                    });
+                } else if (layEvent === 'del') {
+                    layer.confirm('真的删除行么', {icon: 3, title: '提示'}, function (index) {
+                        obj.del(); //删除对应行（tr）的DOM结构
+                        layer.close(index);
+                        //向服务端发送删除指令
+                        $.ajax({
+                            url: "/parent/delete",
+                            data: {
+                                "proposalId": data.proposalId
+                            },
+                            type: "GET",
+                            dataType: "json",
+                            success: function (msg) {
+                                layer.msg(msg.resp_msg, {time: 1500, shade: 0.3});
+                            },
+                            error: function (error) {
+                                alert("异常");
+                            }
+                        });
+                    });
+                } else if (obj.event === 'reply') {
+                    layer.open({
+                        type: 2,
+                        title: "单位答复",
+                        area: ["40%", "40%"],
+                        content: "ReplyMotion?proposalId=" + data.proposalId,
+                        end: function () {  //刷新页面
+                            location.reload();
+                        }
+                    });
+
+                }
+            }
+        );
+
+
+        // 重载表格
+        $("#layui-Reload").on("click", function () {
+            //执行重载
+            table.reload('dataTable', {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            }, 'data');
+        });
+    });
+
+</script>
+
+<script type="text/html" id="buttonCheck">
+    {{#  if(d.statusUnit == 1){ }}
+    <button class="layui-btn layui-btn-xs">已答复</button>
+    {{#  } else if(d.statusUnit == 0) { }}
+    <button class="layui-btn layui-btn-red layui-btn-xs">未答复</button>
+    {{#  } }}
+</script>
+
+<!-- 图标 -->
+<script type="text/html" id="indexBar">
+    <!--<a class="layui-btn layui-btn-red layui-btn-xs" lay-event="check">查看</a>-->
+    <!--  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>-->
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reply" shiro:hasRole="unit"></i>上传</a>
+</script>
+
+</body>
+</html>

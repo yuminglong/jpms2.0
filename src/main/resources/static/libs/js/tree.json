@@ -1,0 +1,23 @@
+{
+  "code": 0,
+  "msg": "获取成功",
+  "data": {
+    "trees":[
+    	{"name": "委员", "value": "wy", "checked": false, "list": [
+    		{"name": "常宁委员", "value": "wy-basic", "checked": false},
+			{"name": "常宁委员1", "value": "wy-basic1", "checked": false}
+		]},
+    	{"name": "提案委", "value": "taw", "checked": false, "list": [
+    		{"name": "常宁提案委", "value": "taw-basic", "checked": false},
+			{"name": "常宁提案委1", "value": "taw-basic1", "checked": false}
+		]},
+    	{"name": "单位", "value": "dw", "checked": false, "list": [
+    		{"name": "常宁单位", "value": "dw-basic", "checked": false},
+			{"name": "常宁单位1", "value": "dw-basic1", "checked": false}
+		]},
+    	{"name": "督察室", "value": "dcw", "checked": false, "list": [
+    		{"name": "常宁督察室", "value": "dcw-basic", "checked": false},
+			{"name": "常宁督察室1", "value": "dcw-basic1", "checked": false}
+		]}
+	]}
+}

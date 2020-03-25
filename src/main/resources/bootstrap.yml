@@ -1,0 +1,19 @@
+server:
+    port: 8888
+
+jiebao:
+    nacos:
+        server-addr: 127.0.0.1:9999
+
+spring:
+    application:
+        name: jws
+    cloud:
+        nacos:
+            config:
+                server-addr: ${jiebao.nacos.server-addr}
+                file-extension: yml
+                shared-dataids: common.yml
+                refreshable-dataids: common.yml
+            discovery:
+                server-addr: ${jiebao.nacos.server-addr}

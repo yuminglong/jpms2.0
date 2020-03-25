@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新建/修改提案</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="libs/css/style.css">
+</head>
+<body>
+<div class="layui-fluid">
+    <form action="" class="layui-form-item layui-form" onsubmit="return false;">
+        <div class="layui-form-item" style="padding-top:20px;">
+            <label class="layui-form-label">案由：</label>
+            <div class="layui-input-block">
+                <input type="hidden" name="proposalId" id="proposalId" autocomplete="off" class="layui-input">
+                <input type="text" placeholder="请输入提案案由" name="cause" required lay-verify="required" autocomplete="off" class="layui-input" style="width: 800px">
+            </div>
+        </div>
+        <!--  <div class="layui-form-item">
+            <label class="layui-form-label">创办日期：</label>
+             <div class="layui-inline left">
+                 <input type="text" class="layui-input" id="date" name="createTime">
+             </div>
+             <label class="layui-form-label" style="display:none">结办日期：</label>
+             <div class="layui-inline left" style="display:none">
+                 <input type="text" class="layui-input" id="lastTime" name="lastTime">
+             </div>
+             <label class="layui-form-label" style="display:none">距办结：</label>
+             <div class="layui-inline layui-motion-select left" style="display:none">
+                 <input type="text" name="day" id="day" disabled="true" autocomplete="off" class="layui-input">
+             </div>
+
+         </div>-->
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">来源：</label>
+            <div class="layui-inline left">
+                <input type="text" name="period" required lay-verify="required" placeholder="请输入提案来源" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">届：</label>
+            <div class="layui-inline left">
+                <input type="text" class="layui-input" name="anniversary" required lay-verify="required">
+            </div>
+            <label class="layui-form-label">次：</label>
+            <div class="layui-inline left">
+                <input type="text" name="number" required lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">提案类型：</label>
+            <div class="layui-inline left">
+                <select name="classify">
+                    <option value="经济建设" selected="selected">经济建设</option>
+                    <option value="政治建设">政治建设</option>
+                    <option value="文化建设">文化建设</option>
+                    <option value="社会建设">社会建设</option>
+                    <option value="生态文明建设">生态文明建设</option>
+                </select>
+            </div>
+
+            <label class="layui-form-label">提案类别：</label>
+            <div class="layui-inline left" style="width: 188px">
+                <select name="type" lay-filter="search_type">
+                    <option value="个人提案">个人提案</option>
+                    <option value="个人联名提案" selected="selected">个人联名提案</option>
+                    <option value="界别提案">界别提案</option>
+                    <option value="人民团体提案" >人民团体提案</option>
+                    <option value="委员小组提案">委员小组提案</option>
+
+                    <option value="专门委员会提案">专门委员会提案</option>
+                </select>
+            </div>
+            <label class="layui-form-label">具体：</label>
+            <div class="layui-inline left">
+                <input type="text" name="specifica" required lay-verify="required" autocomplete="off" class="layui-input" placeholder="如:个人提案则注明单位" >
+            </div>
+        </div>
+
+
+        <div class="layui-form-item" id="lmyh">
+            <div id="test3" class="demo-transfer layui-inline left"></div>
+            <p>联名用户补充：</p>
+            <textarea name="peoples" style="word-break: break-all;height: 334px;width: 260px" placeholder="用户之间用，逗号隔开"></textarea>
+            <div id="test2" class="demo-transfer layui-inline left" style="display:none"></div>
+        </div>
+
+        <div class="layui-form-item motion-form">
+            <label class="layui-form-label">选项勾选：</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="isWrite" title="是否本人撰写" value="1">
+                <input type="checkbox" name="isResearch" title="是否经过调研" value="1">
+                <input type="checkbox" name="isTopic" title="是否参考提案选题" value="1">
+                <input type="checkbox" name="isMaterials" title="是否转呈他人材料" value="1">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <textarea id="editAera" style="display: none;"></textarea>
+            <!--<textarea name="content" style="height: 200px;width: 800px" placeholder="请输入提案正文内容..."></textarea>-->
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">提案附件:</label>
+            <div class="layui-inline left">
+                <button type="button" class="layui-btn layui-btn-red" id="upload">
+                    <i class="layui-icon">&#xe67c;</i>文件上传
+                </button>
+            </div>
+        </div>
+
+        <div class="layui-form-item text-c">
+            <div class="layui-inline">
+                <button type="button" class="layui-btn layui-btn-red" lay-submit="" lay-filter="proposal" id="proposal">提交提案</button>
+            </div>
+            <div class="layui-inline">
+                <button type="button" class="layui-btn layui-btn-red" id="toClose">关闭页面</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="layui/layui.js"></script>
+<script>
+    layui.use(['transfer', 'layedit', 'laydate', 'table', 'form', 'upload', "element", "jquery", 'util'], function () {
+        var upload = layui.upload;
+        var table = layui.table
+            , layedit = layui.layedit
+            , transfer = layui.transfer
+            , form = layui.form
+            , element = layui.element
+            , $ = layui.jquery
+            , util = layui.util;
+        layedit.set({
+            uploadImage: {
+                url: 'picture' //接口url
+                , type: 'POST' //默认post
+            }
+        });
+        var index = layedit.build('editAera', {//建立编辑器
+            height: 1000 //设置编辑器高度
+        });
+
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        // laydate.render({
+        //     elem: '#lastTime' //指定元素
+        //     , min: minDate()
+        //     , calendar: true
+        //     , value: new Date()
+        //     , theme: '#c50e10'
+        //     , done: function (value, date) {
+        //         //  console.log(value); //得到日期生成的值，如：2017-08-18
+        //         // console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
+        //
+        //       /*  var begindate = new Date();
+        //         var startDate = begindate.getTime(); //将开始日期转换成毫秒
+        //         var myDate = new Date(Date.parse(value.replace(/-/g, "/")));
+        //         var endDate = myDate.getTime(); //将结束日期转换成毫秒
+        //         var day = parseInt((endDate - startDate) / 1000 / 3600 / 24); //结束日期减去开始日期后转换成天数
+        //         $("#day").val(day + ' 天');*/
+        //     }
+        // });
+
+        // 设置最小可选的日期
+        // function minDate() {
+        //     var now = new Date();
+        //     return now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+        // }
+
+        //联名人
+        $.ajax({
+            url: "front/user/findsel",
+            data: {},
+            type: "GET",
+            dataType: "json",
+            success: function (msg) {
+               // console.log(msg);
+                transfer.render({
+                    elem: '#test3'
+                    , data: msg
+                    , title: ['用户列表', '联名用户']
+                    , showSearch: true
+                    , id: 'demo1'
+                    , parseData: function (msg) {
+                        return {
+                            "value": msg.userId //数据值
+                            , "title": msg.realName //数据标题
+                        }
+                    }
+                });
+            }
+        });
+
+        //建议办理单位
+        // $.ajax({
+        //     url: "front/unit/listunitse",
+        //     data: {},
+        //     type: "GET",
+        //     dataType: "json",
+        //     success: function (msg) {
+        //        // console.log(msg);
+        //         transfer.render({
+        //             elem: '#test2'
+        //             , data: msg
+        //             , title: ['单位列表', '建议办理单位']
+        //             , showSearch: true
+        //             , id: 'demo2'
+        //             , parseData: function (msg) {
+        //                 return {
+        //                     "value": msg.unitId //数据值
+        //                     , "title": msg.unitName //数据标题
+        //                 }
+        //             }
+        //         });
+        //     }
+        // });
+
+        // // 日期
+        // layui.use('laydate', function () {
+        //     var laydate = layui.laydate;
+        //     //执行一个laydate实例
+        //     laydate.render({
+        //         elem: '#date' //指定元素
+        //         ,min: 0 //7天前
+        //         ,max: 0 //7天后
+        //         , value: new Date()
+        //         , theme: '#c50e10'
+        //     });
+        // });
+
+
+        // 下拉框改变触发
+        form.on('select(search_type)', function (data) {
+            //alert(data.value)
+            if (data.value == '个人提案') {
+                $("#lmyh").css('display', 'none');
+            } else {
+                $("#lmyh").css('display', 'block');
+            }
+
+        });
+
+        //$("#test3").css('display', 'none');
+        var goto = false;
+        form.on('submit(proposal)', function (data) {
+            if (goto) {
+                layer.msg('您已经点过了，请等待...', {icon: 2, time: 1500})
+                return false;
+            }
+            goto = true;
+            //parent.layui.layer.closeAll();
+            data.field.content = layedit.getContent(index);
+           // data.field.createTime = new Date(data.field.createTime);//就是这么简单
+           // data.field.lastTime = new Date(data.field.lastTime);
+            //批量办法定事件
+            var getData = [];
+            var valueone = [];//用户id
+            var peoplestwo = '';//联名用户
+           /* var getData2 = [];
+            var valuetwo = [];//单位id
+            var units = '';//建议承办单位*/
+            getData = transfer.getData('demo1'); //获取用户右侧数据
+           //getData2 = transfer.getData('demo2'); //获取单位右侧数据
+            /*    for (var q = 0; q < getData2.length; q++) {
+            valuetwo[q] = getData2[q].value
+                units += getData2[q].title
+                if (q < getData2.length - 1) {
+                    units += '，'
+                }
+            }*/
+            for (var w = 0; w < getData.length; w++) {
+                valueone[w] = getData[w].value
+                peoplestwo += getData[w].title
+                if (w < getData.length - 1) {
+                   peoplestwo += '，'
+                }
+            }
+            data.field.peoplestwo = peoplestwo;
+           // data.field.units = units;
+            $.ajax({
+                url: "front/members/save",
+                data: data.field,
+                type: "post",
+                dataType: "json",
+                success: function (msg) {
+                    // layer.closeAll();
+                    layer.msg(msg.resp_msg, {icon: 1, time: 1500}, function () {
+                        $("#proposalId").val(msg.datas.proposalId);
+                        if (data.field.type != '个人提案') {
+                            $.ajax({//联名人
+                                url: "front/user/addPersons?proposalId=" + msg.datas.proposalId + "&users=" + valueone,
+                                type: "POST",
+                                dataType: "json",
+                                success: function (msg2) {
+
+                                }
+                            });
+                        }
+                    });
+
+                },
+                error: function (error) {
+                    alert("异常")
+                }
+            });
+        });
+
+
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#upload' //绑定元素
+            , url: 'upload?type=1' //上传接口
+            , auto: false
+            , bindAction: '#proposal'
+            , accept: 'file' //允许上传的文件类型
+            , size: 20480 //最大允许上传的文件大小
+            , done: function (res) {
+                console.log(res.datas)
+                setTimeout(function () {
+                    $.ajax({
+                        url: "updateAP",
+                        data: {
+                            "proposalId": $("#proposalId").val()
+                            , "appendixId": res.datas.appendixId
+                            , "type": 1
+                        },
+                        type: "GET",
+                        dataType: "json",
+                        success: function (msg) {
+                            parent.layui.layer.closeAll();
+                        },
+                        error: function (error) {
+                            alert("异常");
+                        }
+                    });
+                }, 4000);
+                // layer.msg("提交成功", {time: 2000, shade: 0.3});
+            }
+            , error: function () {
+                //请求异常回调
+                layer.alert("后台出错", {
+                    icon: 5,
+                    title: "提示"
+                });
+            }
+        });
+
+        // 关闭页面
+        $("#toClose").on("click", function () {
+            parent.layui.layer.closeAll();
+        });
+
+    });
+</script>
+</body>
+</html>

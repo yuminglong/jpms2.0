@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>常宁市智慧政协提案综合办理系统</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="libs/images/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="libs/css/style.css">
+</head>
+<body>
+<div class="layui-layout-body layui-index layui-layout-admin">
+    <div class="layui-layout-admin layui-header">
+        <img class="layui-logo-admin" src="libs/images/logo.png" alt="">
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                   <!-- <img src="http://t.cn/RCzsdCq" class="layui-nav-img">-->
+                    [[${session.user.realName}]]
+                </a>
+            </li>
+            <li class="layui-nav-item" id="logout"><a href="javascript:;">注销</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black layui-bg-my">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域 -->
+            <ul class="layui-nav layui-nav-tree" lay-shrink="all"  >
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">桌面</a>
+                    <dl class="layui-nav-child">
+                        <dd class="layui-this"><a href="javascript:;" lay-href="skip?table=front/desktop_index">我的桌面</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:;">提案管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" lay-href="motion_index">提案列表</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:;">文件动态</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" lay-href="skip?table=front/inform/fileListRed">通知公告</a></dd>
+                        <dd><a href="javascript:;" lay-href="skip?table=front/workTrend/fileListRed">工作动态</a></dd>
+                        <dd><a href="javascript:;" lay-href="skip?table=front/exchange/fileListRed">经验交流</a></dd>
+                        <dd><a href="javascript:;" lay-href="skip?table=front/download/fileListRed">资料下载</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">系统管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" lay-href="skip?table=front/fuser/infoList">基本资料</a></dd>
+                        <dd><a href="javascript:;" lay-href="skip?table=front/fuser/changePassword">修改密码</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body backstage-box">
+         <iframe frameborder="0" scrolling="yes" style="width:100%;height:100%" src="skip?table=front/desktop_index"></iframe>
+    </div>
+
+    <div class="layui-footer">
+        <div class="copyright">常宁市智慧政协提案综合办理系统版权所有</div>
+    </div>
+</div>
+
+<script src="layui/layui.js"></script>
+<script>
+    //JavaScript代码区域
+    layui.use(["table", "element", "jquery"], function () {
+        // 加载表格
+        var table = layui.table
+            , element = layui.element
+            , $ = layui.jquery;
+        // 左侧切换iframe
+        $(function () {
+            $(".layui-nav .layui-nav-child dd").on("click", "*[lay-href]", function () {
+                var address = $(this).attr("lay-href");
+                $(".backstage-box iframe").attr("src", address);
+            });
+        });
+
+        $("#logout").click(function () {
+            layer.confirm('确认注销吗?', {icon: 3, title: '提示'}, function (index) {
+                layer.close(index);
+                $.ajax({
+                    url: "front/user/logout",
+                    data: {},
+                    type: "GET",
+                    dataType: "json",
+                    success: function (msg) {
+                        layer.closeAll();
+                        layer.msg(msg.resp_msg, {icon: 1, time: 1500}, function () {
+                            window.location.href = "login";
+                        });
+                    },
+                    error: function (error) {
+                        alert("异常")
+                    }
+                });
+            });
+
+        })
+    });
+</script>
+
+</body>
+</html>

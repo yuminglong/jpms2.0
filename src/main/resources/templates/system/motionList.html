@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <title>常宁市智慧政协提案综合办理系统</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="libs/css/style.css">
+
+    <link rel="stylesheet" type="text/css" href="layui/css/iconfont.css">
+    <!-- 搜索下拉框 开始 -->
+    <link rel="stylesheet" type="text/css" href="layui/css/ySearchSelect.css">
+    <script type="text/javascript" src="layui/jquery-1.11.3.min.js"></script>
+    <!--[if lt IE 9]>
+    <script src="layui/html5shiv.min.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+    <script src="layui/jQuery.Hz2Py-szm-min.js"></script>
+    <script src="layui/ySearchSelect.js"></script>
+</head>
+<body class="layui-layout-body layui-list">
+<div class="layui-layout">
+    <div class="layui-card layadmin-header">
+        <div class="breadcrumb">
+            <i class="layui-icon layui-icon-home"></i>
+            <span class="layui-breadcrumb" lay-separator=">">
+                    <a>提案管理</a>
+                    <a>提案列表</a>
+            </span>
+            <button type="button" class="layui-btn layui-btn-xs right" id="layui-Reload">
+                <i class="layui-icon layui-icon-refresh"></i>
+            </button>
+        </div>
+    </div>
+    <!-- 内容主体区域 -->
+    <div class="list-content">
+        <div class="list-head">
+            <div class="layui-inline left">
+
+                <form class="layui-form" onsubmit="return false;">
+
+                    <div class="layui-inline user-title1">
+                        <label class="layui-form-label">标题</label>
+                        <div class="layui-inline list-search">
+                            <input type="text" name="title" placeholder="搜索提案标题" autocomplete="off" class="layui-input layui_title">
+                        </div>
+                        <div class="layui-inline user-title2">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-block">
+                                <select name="status" lay-verify="" lay-search>
+                                    <option value="">请选择</option>
+                                    <option value="0">已驳回</option>
+                                    <option value="1">待审查</option>
+                                    <option value="2">办理中</option>
+                                    <option value="3">已立案</option>
+                                  <!--  <option value="6">需要延期交办</option>
+                                    <option value="5">需调办单位</option>-->
+                                    <option value="10">已办结</option>
+                                    <option value="-1">已删除</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline user-title3">
+                            <label class="layui-form-label">单位</label>
+                            <div class="layui-input-block">
+                                <div class="layui-form-select ySearchSelect y1" style="width: 150px">
+                                    <div class="layui-input" id="lunit" value="">请选择</div>
+                                    <i class="layui-edge"></i>
+                                    <ul style="z-index: 891" id="list">
+                                    </ul>
+                                </div>
+                            </div>
+                            <script>
+                                $(function () {
+                                    $(".y1").ySearchSelect(); //调用自定义 高亮插件
+                                })
+                            </script>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button type="button" class="layui-btn layui-btn-sm" lay-filter="search" lay-submit=""><i class="layui-icon layui-icon-search" formnovalidate></i>搜索</button>
+                        </div>
+
+                        <div class="layui-inline user-title1">
+
+                            <button shiro:hasPermission="addproposa" data-method="offset" data-type="auto" type="button"
+                                    id="channelSelect" class="layui-btn layui-btn-sm  news-form"><i
+                                    class="layui-icon layui-icon-edit"></i>新建提案
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="list-head hide" id="bar">
+                <div class="layui-inline left">
+                    <button type="button" shiro:hasPermission="deleteproposa" class="layui-btn layui-btn-sm layui-btn-danger" lay-event="partDelete">彻底删除</button>
+                </div>
+            </div>
+        </div>
+        <table class="layui-table lay-even=" lay-filter="motionTable" id="motionTable"></table>
+    </div>
+
+</div>
+
+<script src="layui/layui.js"></script>
+
+
+<script>
+    //JavaScript代码区域
+    layui.use(["table", "form", "element", "jquery"], function () {
+        // 加载表格
+        var table = layui.table
+            , form = layui.form
+            , element = layui.element
+            , $ = layui.jquery;
+        form.render();
+        element.render("breadcrumb");
+        element.render("collapse");
+        table.render({
+            id: "motionTable",
+            elem: "#motionTable",
+            method: "get",
+            url: "parent/findList",
+            toolbar: '#bar',
+            cols: [
+                [
+                    {type: "checkbox", fixed: "left", width: 30},
+                    {field: "proposalId", title: "ID", width: 80,hide: true},
+                    {field: "proposalNumber", title: "提案号", width: 80},
+
+                    {type: "numbers", title: "序号", width: "6%", hide: true},
+
+                    {
+                        field: "cause", title: "提案标题", align: "center", templet: function (item) {
+                           /* return '<a href="detaile?proposalId=item.proposalId" target="_blank">' + item.cause + '</a>';*/
+                            return '<a href="detaile/'+item.proposalId+'" target="_blank">' + item.cause + '</a>';
+                            //return '<a href="word">' + item.cause + '</a>';
+                        }
+                    },
+                    {field: "statusName", title: "提案状态", align: "center"},
+                    {field: "createTime", title: "提交时间", align: "center", width: 200},
+                    {field: "realName", title: "主导人", align: "center", width: 100},
+                    // {field: "unitName", title: "办理单位", align: "center", width: "12%"},
+                    {
+                        field: "zlist", title: "主办单位", align: "center", width: 200, templet: function (item) {
+                            var zhuban = "";
+                            for (var i = 0; i < item.zlist.length; i++) {
+                                zhuban += item.zlist[i].unitName;
+                                if (i < item.zlist.length - 1) {
+                                    zhuban += ",";
+                                }
+                            }
+                            return zhuban;
+                        }
+                    },
+                    {
+                        field: "hlist", title: "会办单位", align: "center", width: 200, templet: function (item) {
+                            var huiban = "";
+                            for (var i = 0; i < item.hlist.length; i++) {
+                                huiban += item.hlist[i].unitName;
+                                if (i < item.hlist.length - 1) {
+                                    huiban += ",";
+                                }
+                            }
+                            return huiban;
+                        }
+                    },
+                    {field: 'ICON', title: "操作", align: "center", toolbar: '#motionBar', width: 250},
+
+                ]
+            ],
+            page: {
+                limit: 20,
+                limits: [20, 30, 40, 50, 100],
+                prev: "上一页",
+                next: "下一页"
+            },
+            request: {
+                pageName: "pageNumber",
+                limitName: "pageSize"
+            },
+            response: {
+                statusCode: 200
+            },
+            parseData: function (res) {
+                return {
+                    "code": res.resp_code,
+                    "count": res.datas.total,
+                    "data": res.datas.list
+                }
+            }, done: function (res) {
+                table_data = res.data;
+            },
+            height: "full-140"
+        });
+
+        //单位查询
+        $.ajax({
+            url: 'front/unit/listunitse',
+            type: 'get',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                var carNewsList = "<li value=''>请选择</li>";
+                $.each(data, function (i, item) {
+                    carNewsList += "<li  value=" + item.unitId + ">" + item.unitName + "</li>";
+                });
+                $('#list').html(carNewsList);
+            },
+            error: function (error) {
+                alert("请求数据失败!");
+            }
+        });
+
+
+        var table_data = new Array();
+        var ids = new Array();
+        //监听表格复选框选择
+        table.on('checkbox(motionTable)', function (obj) {
+            if (obj.checked == true) {
+                if (obj.type == 'one') {
+                    ids.push(obj.data.proposalId)
+                } else if (obj.type == 'all') {
+                    ids.length = 0;
+                    for (var i = 0; i < table_data.length; i++) {
+                        ids.push(table_data[i].proposalId);
+                    }
+                } else {
+                    for (var i = 0; i < table_data.length; i++) {
+                        ids.push(table_data[i].proposalId);
+                    }
+                }
+            } else if (obj.checked == false) {
+                if (obj.type == 'one') {
+                    for (var i = 0; i < ids.length; i++) {
+                        if (ids[i] == obj.data.proposalId) {
+                            // ids.remove(i);用这个方法会报错not a function
+                            //ids.pop();   //建议用这个
+                            ids.splice(i, 1);
+                        }
+                    }
+                } else {
+                    for (var i = 0; i < ids.length; i++) {
+                        for (var j = 0; j < table_data.length; j++) {
+                            if (ids[i] == table_data[j].proposalId) {
+                                // ids.remove(i);
+                                ids.pop();
+                                ids.splice(i, 1);
+                            }
+                        }
+                    }
+                }
+            }
+
+            console.log(ids);
+            console.log(table_data);
+        });
+
+        //监听头工具栏事件
+        table.on('toolbar(motionTable)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id)
+                , data = checkStatus.data; //获取选中的数据
+            switch (obj.event) {
+                case 'partDelete':
+                    if (data.length == 0) {
+                        layer.msg('请选择一行');
+                    } else {
+                        layer.confirm('一旦删除无法恢复，是否删除?', {icon: 3, title: '提示'}, function (index) {
+                            //  obj.del();//删除对应行（tr）的Dom结构
+                            layer.close(index);
+                            //向服务端发送删除指令
+                            $.ajax({
+                                url: "parent/deleteProposa?ids=" + ids,
+                                data: {
+                                    /*"ids": JSON.stringify(ids)*/
+                                },
+                                type: "GET",
+                                dataType: "json",
+                                success: function (msg) {
+                                    layer.msg(msg.resp_msg, {icon: 1, time: 1500}, function () {
+                                        location.reload();//刷新表格
+                                    });
+                                },
+                                error: function (error) {
+                                    alert("异常");
+                                }
+                            });
+                        });
+                    }
+                    break;
+            }
+            ;
+        });
+
+
+        // 搜索提示
+        form.on("submit(search)", function (data) {
+            var index = layer.msg('查询中，请稍候...', {icon: 16, time: false, shade: 0});
+            setTimeout(function () {
+                table.reload('motionTable', { //表格的id
+                    url: "parent/findList",
+                    where: {
+                        'cause': data.field.title,
+                        'status': data.field.status,
+                        'unitId': $('#lunit').val()
+                    }
+                });
+                layer.close(index);
+            }, 400);
+        });
+
+        //监听行工具事件
+        table.on('tool(motionTable)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data //获得当前行数据
+                , layEvent = obj.event; //获得 lay-event 对应的值
+            // alert(obj.data.realName)
+            if (layEvent === 'reply') {
+                layer.open({
+                    type: 2,
+                    title: "答复提案",
+                    move: false,
+                    shade: 0.3,
+                    area: ["80%", "90%"],
+                    content: "skiprReplyMotion?proposalId=" + data.proposalId
+                });
+            } else if (layEvent === 'del') {
+                layer.confirm('真的删除行么', {icon: 3, title: '提示'}, function (index) {
+                    //obj.del(); //删除对应行（tr）的DOM结构
+                    layer.close(index);
+                    //向服务端发送删除指令
+                    $.ajax({
+                        url: "parent/delete",
+                        data: {
+                            "proposalId": data.proposalId
+                        },
+                        type: "GET",
+                        dataType: "json",
+                        success: function (msg) {
+                            layer.msg(msg.resp_msg, {icon: 1, time: 1500}, function () {
+                                location.reload();
+                            });
+                        },
+                        error: function (error) {
+                            alert("异常");
+                        }
+                    });
+                });
+            } else if (layEvent === 'edit') {
+                parent.layer.open({
+                    type: 2,
+                    title: "审查提案",
+                    move: false,
+                    shade: 0.3,
+                    area: ["90%", "100%"],
+                    content: "systemcheckMotion?proposalId=" + data.proposalId,
+                    end: function () {  //刷新页面
+                        location.reload();
+                    }
+
+                });
+            }
+        });
+        $("#channelSelect").on("click", function () {
+            parent.layer.open({
+                type: 2,
+                title: "新建提案",
+                move: false,
+                shade: 0.3,
+                area: ["90%", "100%"],
+                content: "skip?table=front/members/edit",
+                end: function () {  //刷新页面
+                    location.reload();
+                }
+            });
+        });
+
+        // 重载表格
+        $("#layui-Reload").on("click", function () {
+            //执行重载
+            table.reload('motionTable', {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            }, 'data');
+        });
+
+    });
+</script>
+
+<script type="text/html" id="motionBar">
+    <!-- <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reply"></i>答复</a>-->
+    <a class="layui-btn layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>审查</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-red" lay-event="del" shiro:hasPermission="deleteproposa"><i class="layui-icon layui-icon-delete"></i>删除</a>
+</script>
+</body>
+</html>

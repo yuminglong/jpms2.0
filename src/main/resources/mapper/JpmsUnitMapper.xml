@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jiebao.jpms.mapper.JpmsUnitMapper">
+
+    <select id="selUnitsta" resultType="Map">
+        SELECT statue ,
+        COUNT(statue) as count
+        FROM  jiebao_jpms_unit
+        GROUP BY statue
+    </select>
+
+    <select id="selUnitype" resultType="Map">
+        SELECT type ,
+        COUNT(type) as count
+        FROM  jiebao_jpms_unit
+        GROUP BY type
+    </select>
+
+    <select id="listUnit" resultType="com.jiebao.jpms.model.JpmsUnit">
+        SELECT *
+        FROM jiebao_jpms_unit t
+        WHERE t.unit_id != 0
+        <if test="unitName !=null">
+            and t.unit_name like concat('%', #{unitName}, '%')
+        </if>
+    </select>
+
+
+    <select id="findList" resultType="com.jiebao.jpms.model.JpmsProposal">
+        SELECT distinct t.*,s.status_name,u.real_name FROM(
+        SELECT p.* ,u.unit_name FROM
+        `jiebao_jpms_punit` t ,jiebao_jpms_proposal p,jiebao_jpms_unit u
+        WHERE t.proposal_id = p.proposal_id
+        and t.unit_id = u.unit_id
+        and p.status != -1
+        and t.type BETWEEN 3 and 4
+        and u.unit_id = #{unitId}) t
+        ,jiebao_jpms_status s ,jiebao_jpms_user u
+        WHERE t.`status` = s.id
+        and t.user_id = u.user_id
+        <if test="cause !=null">
+            and t.cause like concat('%', #{cause}, '%')
+        </if>
+        <if test="status !=null">
+            and t.proposal_id = #{status}
+        </if>
+        ORDER BY t.create_time desc
+    </select>
+
+
+    <select id="selectByProId" resultType="com.jiebao.jpms.model.JpmsPunit">
+        SELECT  *	from  jiebao_jpms_punit p where p.type=3 and p.proposal_id = #{ProposalId}
+    </select>
+
+    <update id="updateAnswer" parameterType="com.jiebao.jpms.model.JpmsPunit">
+        UPDATE  jiebao_jpms_punit p   SET  p.over_answer = #{overAnswer} where p.type=3 and  p.proposal_id = #{ProposalId}
+
+    </update>
+
+
+</mapper>

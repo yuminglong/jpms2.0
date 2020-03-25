@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>单位答复</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="libs/css/style.css">
+</head>
+<body>
+<div class="layui-fluid layui-form motion-form motion-form1" lay-filter="layuiadmin-form-useradmin"
+     id="layuiadmin-form-useradmin">
+    <input type="hidden" name="proposalId" id="proposalId" autocomplete="off" class="layui-input"
+           th:value="${proposalId}">
+
+    <div class="layui-form-item">
+        <div class="layui-inline left">
+            <input type="radio" name="answer" value="A.已经办结" title="A.已经办理" checked>
+            <input type="radio" name="answer" value="B.列入计划拟解决或拟采纳" title="B.列入计划拟解决或拟采纳">
+            <input type="radio" name="answer" value="C.因政策限制或条件不成熟，暂时不能办理" title="C.因政策限制或条件不成熟，暂时不能办理。">
+
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-inline left">
+            <h2 id="hint" style="display:none;color: red"> 此提案已办结</h2>
+            <button type="button" class="layui-btn layui-btn-red" id="upload">
+                <i class="layui-icon">&#xe67c;</i>附件上传
+            </button>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-inline left" id="downloadthree">
+
+        </div>
+    </div>
+    <p style="font-size: 15px ;text-align: center ;color: #9F9F9F">注：附件都为单附件，上传后原附件自动进行删除</p>
+</div>
+
+<script src="layui/layui.js"></script>
+<script>
+    layui.use(['layedit', 'laydate', 'form', 'upload', "element", "jquery"], function () {
+        var upload = layui.upload;
+        var $ = layui.jquery
+            , form = layui.form;
+
+        //执行实例   提案附件
+        var uploadInst = upload.render({
+            elem: '#upload' //绑定元素
+            , url: 'upload?proposalId=' + $("#proposalId").val() + '&type=3' //上传接口
+            , accept: 'file' //允许上传的文件类型
+            , size: 20480 //最大允许上传的文件大小
+            , done: function (res) {
+                $.ajax({
+                    url: "front/unit/answer",
+                    data: {
+                        "proposalId": $("#proposalId").val(),
+                        "answer": $('input:radio:checked').val()
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    success: function (msg) {
+                        console.log(msg)
+                        layer.closeAll();
+                        layer.msg(msg.resp_msg, {icon: 1, time: 3000}, function () {
+                            parent.layui.layer.closeAll();
+                        });
+                    },
+                    error: function (error) {
+                        alert("异常")
+                    }
+                })
+
+
+                //layer.msg("上传成功！", {icon: 1, time: 3000}, function () { });
+                $("#downloadthree a").remove();
+                $("#downloadthree").append('<a  class="layui-btn-red layui-download" href="/file/' + res.datas.appendixId + '" style="color: blue">' + res.datas.appendixName + '</a>');
+            }
+            , error: function () {
+                //请求异常回调
+                layer.alert("后台出错", {
+                    icon: 5,
+                    title: "提示"
+                });
+            }
+        });
+
+        $.ajax({
+            url: "selectapd/" + $("#proposalId").val() + '/3',
+            type: "GET",
+            dataType: "json",
+            success: function (msg) {
+                console.log(msg);
+                if (msg.datas == '-1') {
+                    // $("#downloadti").css('display', 'none');
+                } else {
+                    $("#downloadthree").append('<a  class="layui-btn-red layui-download" href="/file/' + msg.datas.appendixId + '" style="color: blue">' + msg.datas.appendixName + '</a>');
+                }
+            },
+            error: function (error) {
+                alert("异常");
+            }
+
+        });
+
+        $.ajax({
+            url: "parent/lookProposal/" + $("#proposalId").val(),
+            type: "GET",
+            dataType: "json",
+            success: function (msg) {
+                //console.log(msg.status);
+                if (msg.status > '9') {
+                    $("#upload").css('display', 'none');
+                    $("#hint").css('display','block')
+                }
+
+            },
+            error: function (error) {
+                alert("异常");
+            }
+
+        });
+
+        // 关闭
+        $("#toClose").on("click", function () {
+            parent.layui.layer.closeAll();
+        });
+    });
+</script>
+</body>
+</html>

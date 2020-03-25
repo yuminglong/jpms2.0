@@ -1,0 +1,56 @@
+spring:
+  jmx:
+    enabled: false
+  datasource:
+    #                url: jdbc:mysql://${jiebao.datasource.ip}:3306/jpms?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
+    #                username: ${jiebao.datasource.username}
+    #                password: ${jiebao.datasource.password}
+    url: jdbc:mysql://127.0.0.1:3306/jpms?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
+    username: root
+    #password: jiebao@2008
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+
+  #文件上传大小限制
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+  #静态资源
+  resources:
+    static-locations: classpath:/static/   ,file:D:/jpms/jpmsupload/picture/
+
+  #session 3小时
+  server:
+    session:
+      timeout: 10800
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.jiebao.jpms.model
+  global-config:
+    db-config:
+      id-type: auto
+
+jiebao:
+  swagger:
+    enabled: true
+    title: JWS
+    description: JWS接口文档
+    version: 2.0
+    base-package: com.jiebao.system.controller
+  cache-manager:
+    configs:
+      - key: menu
+        second: 600
+      - key: jpms
+        second: 1800
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+  autoRuntimeDialect: trues

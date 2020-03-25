@@ -1,0 +1,27 @@
+{
+  "code": 0,
+  "msg": "获取成功",
+  "data": {
+    "trees":[
+    	{"name": "提案权限", "value": "motion", "checked": false, "list": [
+    		{"name": "增加提案", "value": "motion-basic", "checked": false},
+			{"name": "删除提案", "value": "motion-basic1", "checked": false},
+			{"name": "修改提案", "value": "motion-basic2", "checked": false}
+		]},
+    	{"name": "政策法规权限", "value": "policy", "checked": false, "list": [
+    		{"name": "增加政策法规", "value": "policy-basic", "checked": false},
+			{"name": "修改政策法规", "value": "policy-basic1", "checked": false},
+			{"name": "删除政策法规", "value": "policy-basic2", "checked": false}
+		]},
+    	{"name": "政协委员权限", "value": "committee", "checked": false, "list": [
+    		{"name": "增加政协委员", "value": "committee-basic", "checked": false},
+			{"name": "删除政协委员", "value": "committee-basic1", "checked": false},
+			{"name": "修改政协委员", "value": "committee-basic2", "checked": false}
+		]},
+    	{"name": "办理单位权限", "value": "unit", "checked": false, "list": [
+    		{"name": "增加办理单位", "value": "unit-basic", "checked": false},
+			{"name": "删除办理单位", "value": "unit-basic1", "checked": false},
+			{"name": "修改办理单位", "value": "unit-basic2", "checked": false}
+		]}
+	]}
+}

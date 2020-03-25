@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>新建/修改提案</title><!--提案委审查提案-->
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="libs/css/style.css">
+</head>
+<body>
+<div class="layui-fluid layui-form" lay-filter="proposal">
+    <form action="" class="layui-form-item layui-form" onsubmit="return false;">
+        <div class="layui-form-item" style="padding-top:20px;">
+            <label class="layui-form-label">案由：</label>
+            <!--            <div class="layui-input-block">-->
+            <div class="layui-inline left">
+                <input type="hidden" name="proposalId" id="proposalId" autocomplete="off" class="layui-input" th:value="${proposalId}">
+                <input type="text" placeholder="请输入提案案由" name="cause" required lay-verify="required" autocomplete="off" class="layui-input" style="width: 800px">
+
+            </div>
+            <label class="layui-form-label">提案号：</label>
+            <div class="layui-inline left">
+                <input type="text" name="proposalNumber" placeholder="请输入提案号" autocomplete="off" class="layui-input">
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">主导人：</label>
+            <div class="layui-inline left">
+                <input type="text" name="leader" readonly="readonly" id="realName" placeholder="请输入提案主导人" required
+                       lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">联系电话：</label>
+            <div class="layui-inline left">
+                <input type="text" name="mobile" readonly="readonly" placeholder="请输入提案负责人手机号码" autocomplete="off"
+                       class="layui-input">
+            </div>
+            <label class="layui-form-label">单位答复：</label>
+            <div class="layui-inline left">
+                <select name="answer" disabled="disabled">
+                    <option value="暂未答复" selected="selected">暂未答复</option>
+                    <option value="A.已经办结" >A.已经办结</option>
+                    <option value="B.列入计划拟解决或拟采纳">B.列入计划拟解决或拟采纳</option>
+                    <option value="C.因政策限制或条件不成熟，暂时不能办理">C.因政策限制或条件不成熟，暂时不能办理</option>
+                </select>
+            </div>
+            <label class="layui-form-label">审核答复：</label>
+            <div class="layui-inline left">
+                <select name="overAnswer" >
+                    <option value="暂未答复" selected="selected">暂未答复</option>
+                    <option value="A.已经办结">A.已经办结</option>
+                    <option value="B.列入计划拟解决或拟采纳">B.列入计划拟解决或拟采纳</option>
+                    <option value="C.因政策限制或条件不成熟，暂时不能办理">C.因政策限制或条件不成熟，暂时不能办理</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">创办日期：</label>
+            <div class="layui-inline left">
+                <input type="text" class="layui-input" id="date" name="createTime">
+            </div>
+            <label class="layui-form-label">结办日期：</label>
+            <div class="layui-inline left">
+                <input type="text" class="layui-input" id="lastTime" name="lastTime">
+            </div>
+            <label class="layui-form-label">距办结：</label>
+            <div class="layui-inline layui-motion-select left">
+                <input type="text" name="day" id="day" disabled="true" autocomplete="off" class="layui-input">
+            </div>
+            <!--
+             <label class="layui-form-label">主导人：</label>
+             <div class="layui-inline left">
+                 <input type="text" name="leader" placeholder="请输入提案主导人" required lay-verify="required" autocomplete="off" class="layui-input">
+             </div>-->
+        </div>
+
+
+        <div class="layui-form-item">
+
+            <label class="layui-form-label">来源：</label>
+            <div class="layui-inline left">
+                <input type="text" name="period" required lay-verify="required" placeholder="请输入提案来源" autocomplete="off"
+                       class="layui-input">
+            </div>
+            <label class="layui-form-label">届：</label>
+            <div class="layui-inline left">
+                <input type="text" class="layui-input" required lay-verify="required" autocomplete="off" name="anniversary">
+            </div>
+            <label class="layui-form-label">次：</label>
+            <div class="layui-inline left">
+                <input type="text" name="number" required lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+
+        </div>
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">提案类型：</label>
+            <div class="layui-inline left">
+                <select name="classify">
+                    <option value="经济建设" selected="selected">经济建设</option>
+                    <option value="政治建设">政治建设</option>
+                    <option value="文化建设">文化建设</option>
+                    <option value="社会建设">社会建设</option>
+                    <option value="生态文明建设">生态文明建设</option>
+                </select>
+            </div>
+
+            <label class="layui-form-label">提案类别：</label>
+            <div class="layui-inline left" style="width: 188px" lay-search="">
+                <select name="type" lay-filter="search_type">
+                    <option value="个人提案">个人提案</option>
+                    <option value="个人联名提案"selected="selected">个人联名提案</option>
+                    <option value="界别提案">界别提案</option>
+                    <option value="人民团体提案" >人民团体提案</option>
+                    <option value="委员小组提案">委员小组提案</option>
+
+                    <option value="专门委员会提案">专门委员会提案</option>
+                </select>
+            </div>
+            <label class="layui-form-label">具体：</label>
+            <div class="layui-inline left">
+                <input type="text" name="specifica" required lay-verify="required" autocomplete="off" class="layui-input" placeholder="如:个人提案则注明单位" >
+            </div>
+
+            <label class="layui-form-label" id="pass1">审核状态：</label>
+            <div class="layui-inline layui-motion-select left" id="pass2">
+                <select name="status">
+                    <option value="3" selected="selected">立案</option>
+                    <option value="1">待审查</option>
+                    <option value="0">驳回</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">审查意见：</label>
+            <div class="layui-inline left">
+                <input type="text" name="review"  placeholder="审查意见" autocomplete="off"
+                       class="layui-input" style="width: 800px">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div id="test2" class="demo-transfer layui-inline left"></div>
+            <div id="test3" class="demo-transfer layui-inline left"></div>
+            <div id="buchong">
+                <p>联名用户补充：</p>
+                <textarea name="peoples" style="word-break: break-all;height: 334px;width: 260px"
+                          placeholder="用户之间用，逗号隔开"></textarea>
+            </div>
+
+        </div>
+
+        <div class="layui-form-item motion-form">
+            <label class="layui-form-label">选项勾选：</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="isWrite" title="是否本人撰写" value="1">
+                <input type="checkbox" name="isResearch" title="是否经过调研" value="1">
+                <input type="checkbox" name="isTopic" title="是否参考提案选题" value="1">
+                <input type="checkbox" name="isMaterials" title="是否转呈他人材料" value="1">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">提案内容：</label>
+            <textarea id="editAera" style="display: none;"></textarea>
+        </div>
+
+        <div class="layui-form-item" id="uploading">
+            <label class="layui-form-label"></label>
+            <div class="layui-inline left" id="downloadtwo">提案附件:
+                <button type="button" class="layui-btn layui-btn-red" id="upload">
+                    <i class="layui-icon">&#xe67c;</i>附件上传
+                </button>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item" id="uploading2">
+            <label class="layui-form-label"></label>
+            <div class="layui-inline left" id="downloadtitwo">提案委：
+                <button type="button" class="layui-btn layui-btn-red" id="upload2">
+                    <i class="layui-icon">&#xe67c;</i>附件上传
+                </button>
+            </div>
+            <p style="font-size: 15px ;text-align: center ;color: #9F9F9F">注：附件都为单附件，上传后原附件自动进行删除</p>
+        </div>
+
+        <div class="layui-form-item text-c">
+            <div class="layui-inline">
+                <button type="button" class="layui-btn layui-btn-red" lay-submit="" lay-filter="proposal" id="proposal">
+                    提交提案
+                </button>
+            </div>
+            <div class="layui-inline">
+                <button type="button" id="jieban" class="layui-btn layui-btn-red" lay-submit lay-filter="applyOver">
+                    结办提案
+                </button>
+            </div>
+            <div class="layui-inline">
+                <button type="button" id="chongban" class="layui-btn layui-btn-red" lay-submit lay-filter="applyLate">
+                    重新办理
+                </button>
+            </div>
+            <div class="layui-inline">
+                <button type="button" id="goout" class="layui-btn layui-btn-red" lay-submit lay-filter="applyout">还原提案
+                </button>
+            </div>
+            <div class="layui-inline">
+                <button type="button" id="supervise" class="layui-btn layui-btn-red" lay-submit lay-filter="supervise">
+                    催办提案
+                </button>
+            </div>
+            <div class="layui-inline">
+                <button type="button" class="layui-btn layui-btn-red" id="toClose">关闭页面</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script src="layui/layui.js"></script>
+<script>
+    layui.use(['transfer', 'layedit', 'laydate', 'table', 'form', 'upload', "element", "jquery", 'util'], function () {
+        var upload = layui.upload;
+        var table = layui.table
+            , layedit = layui.layedit
+            , transfer = layui.transfer
+            , form = layui.form
+            , element = layui.element
+            , $ = layui.jquery
+            , util = layui.util;
+        layedit.set({
+            uploadImage: {
+                url: 'picture' //接口url
+                , type: 'POST' //默认post
+            }
+        });
+
+        var index = layedit.build('editAera', {//建立编辑器
+            height: 1000 //设置编辑器高度
+        });
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#lastTime' //指定元素
+            , min: minDate()
+            , calendar: true
+            , theme: '#c50e10'
+            , done: function (value, date) {
+                //  console.log(value); //得到日期生成的值，如：2017-08-18
+                // console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
+
+                var begindate = new Date();
+                var startDate = begindate.getTime(); //将开始日期转换成毫秒
+                var myDate = new Date(Date.parse(value.replace(/-/g, "/")));
+                var endDate = myDate.getTime(); //将结束日期转换成毫秒
+                var day = parseInt((endDate - startDate) / 1000 / 3600 / 24); //结束日期减去开始日期后转换成天数
+                $("#day").val(day + ' 天');
+            }
+        });
+
+        // 设置最小可选的日期
+        function minDate() {
+            var now = new Date();
+            return now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+        }
+
+        //回显数据
+        $.ajax({
+            url: "parent/lookProposal/" + $("#proposalId").val(),
+            type: "GET",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                //距离结束
+                //  var begindate = data.createTime;  //假设开始日期为一个日期格式的字符串
+                //  begindate = new Date(Date.parse(begindate.replace(/-/g, "/"))); //将开始时间由字符串格式转换为日期格式
+                var begindate = new Date();
+                var myDate = data.lastTime; //结束日期
+                myDate = new Date(Date.parse(myDate.replace(/-/g, "/")));
+                var startDate = begindate.getTime(); //将开始日期转换成毫秒
+                var endDate = myDate.getTime(); //将结束日期转换成毫秒
+                var day = parseInt((endDate - startDate) / 1000 / 3600 / 24); //结束日期减去开始日期后转换成天数
+                if (day < 0) {
+                    day = '已超时 ' + Math.abs(day);
+                }
+                if (data.status >= 3) {
+                    data.status = 3;
+                }
+                var overAnswer='';
+                var answer='';
+                if(data.overAnswerType==null){
+                   overAnswer='暂未答复';
+                   answer='暂未答复';
+                }else{
+                    overAnswer=data.overAnswerType.overAnswer;
+                    answer= data.overAnswerType.answer;
+                }
+
+                form.val('proposal', {
+                    "cause": data.cause
+                    , "createTime": data.createTime
+                    , "lastTime": data.lastTime
+                    , "period": data.period//来源
+                    , "classify": data.classify//提案类别
+                    , "status": data.status
+                    , "anniversary": data.anniversary//届
+                    , "number": data.number//次
+                    , "leader": data.leader//主导人
+                    , "mobile": data.mobile//手机
+                    , "statusName": data.statusName
+                    , "type": data.type//提案分类
+                    // , "unitId": data.unitId
+                    , "isWrite": data.isWrite
+                    , "isResearch": data.isResearch
+                    , "isTopic": data.isTopic
+                    , "isMaterials": data.isMaterials
+                    , "content": data.content
+                    , "peoples": data.peoples
+                    ,"specifica":data.specifica
+                    , "day": day + ' 天'
+                    ,"overAnswer":overAnswer
+                    ,"answer" :answer
+                    ,"review":data.review
+                    ,"proposalNumber":data.proposalNumber
+
+                });
+
+                if (data.type == '个人提案') {
+                    $("#test3").css('display', 'none');
+                    $("#buchong").css('display', 'none');
+                } else {
+                    $("#test3").css('display', 'block');
+                    $("#buchong").css('display', 'block');
+                }
+                if (data.status != 8) {
+                    $("#jieban").css('display', 'none');
+                    $("#chongban").css('display', 'none');
+                }
+                if (data.status != -1) {
+                    $("#goout").css('display', 'none');
+                }
+                if (data.status == '10') {
+                    $("#proposal").css('display', 'none');
+                    $("#supervise").css('display', 'none');
+                }
+                layedit.setContent(index, data.content, false);
+            }
+        });
+
+        $.ajax({
+            url: "selectapd/" + $("#proposalId").val() + '/1',
+            type: "GET",
+            dataType: "json",
+            success: function (msg) {
+                if (msg.datas == '-1') {
+                    // $("#download").css('display', 'none');
+                } else {
+                    $("#downloadtwo").append('<a  class="layui-btn-red layui-download" href="file/' + msg.datas.appendixId + '" style="color: blue">' + msg.datas.appendixName + '</a>');
+                }
+            },
+            error: function (error) {
+                alert("异常");
+            }
+
+        });
+
+        $.ajax({
+            url: "selectapd/" + $("#proposalId").val() + '/2',
+            type: "GET",
+            dataType: "json",
+            success: function (msg) {
+                // console.log(msg);
+                if (msg.datas == '-1') {
+                    // $("#downloadti").css('display', 'none');
+                } else {
+                    $("#downloadtitwo").append('<a  class="layui-btn-red layui-download" href="file/' + msg.datas.appendixId + '" style="color: blue">' + msg.datas.appendixName + '</a>');
+                }
+            },
+            error: function (error) {
+                alert("异常");
+            }
+
+        });
+
+
+        //联名人
+        $.ajax({
+            url: "front/user/findsel",
+            data: {},
+            type: "GET",
+            dataType: "json",
+            success: function (msg) {
+                $.ajax({
+                    url: "front/user/jointuser",
+                    data: {
+                        "proposalId": $("#proposalId").val()
+                    },
+                    type: "GET",
+                    dataType: "json",
+                    success: function (msg1) {
+                        var joint = JSON.parse(msg1.userData);
+                        //初始右侧数据
+                        transfer.render({
+                            elem: '#test3'
+                            , data: msg
+                            , title: ['用户列表', '联名用户']
+                            , showSearch: true
+                            , id: 'demo1'
+                            , value: joint
+                            , parseData: function (msg) {
+                                return {
+                                    "value": msg.userId //数据值
+                                    , "title": msg.realName //数据标题
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+
+        //建议办理单位
+        $.ajax({
+            url: "front/unit/listunitse",
+            data: {},
+            type: "GET",
+            dataType: "json",
+            success: function (msg) {
+                $.ajax({
+                    url: "front/user/jointpunit",
+                    data: {
+                        "proposalId": $("#proposalId").val()
+                    },
+                    type: "GET",
+                    dataType: "json",
+                    success: function (msg1) {
+                        var joint = JSON.parse(msg1.userData);
+                        //初始右侧数据
+                        transfer.render({
+                            elem: '#test2'
+                            , data: msg
+                            , title: ['单位列表', '建议办理单位']
+                            , showSearch: true
+                            , id: 'demo2'
+                            , value: joint
+                            , parseData: function (msg) {
+                                return {
+                                    "value": msg.unitId //数据值
+                                    , "title": msg.unitName //数据标题
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
+        //重新办理
+        form.on('submit(applyLate)', function (data) {
+            layer.confirm('确定重新办理该提案吗?', {icon: 3, title: '提示'}, function (index) {
+                $.ajax({
+                    url: "system/committee/conclude/" + $("#proposalId").val(),
+                    data: {},
+                    type: "GET",
+                    dataType: "json",
+                    success: function (msg) {
+                        layer.msg(msg.resp_msg, {icon: 1, time: 1500}, function () {
+                            //parent.layui.layer.closeAll();
+                        });
+                    },
+                    error: function (error) {
+                        alert("异常");
+                    }
+                });
+            });
+
+        });
+
+        //结办提案
+        form.on('submit(applyOver)', function (data) {
+            layer.confirm('确定结办提案吗?', {icon: 3, title: '提示'}, function (index) {
+                $.ajax({
+                    url: "system/committee/ending/" + $("#proposalId").val(),
+                    data: {},
+                    type: "GET",
+                    dataType: "json",
+                    success: function (msg) {
+                        layer.msg(msg.resp_msg, {icon: 1, time: 1500}, function () {
+                            parent.layui.layer.closeAll();
+                        });
+                    },
+                    error: function (error) {
+                        alert("异常");
+                    }
+                })
+            });
+
+        });
+        //还原提案
+        form.on('submit(applyout)', function (data) {
+            layer.confirm('确定还原提案吗?', {icon: 3, title: '提示'}, function (index) {
+                $.ajax({
+                    url: "system/committee/goout/" + $("#proposalId").val(),
+                    data: {},
+                    type: "GET",
+                    dataType: "json",
+                    success: function (msg) {
+                        layer.msg(msg.resp_msg, {icon: 1, time: 1500}, function () {
+                            //parent.layui.layer.closeAll();
+                        });
+                    },
+                    error: function (error) {
+                        alert("异常");
+                    }
+                })
+            });
+        });
+        var goto = false;
+        form.on('submit(supervise)', function (data) {
+            if (goto) {
+                layer.msg('您已经点过了，请等待...', {icon: 2, time: 1500})
+                return false;
+            }
+            goto = true;
+            layer.confirm('确定催办提案吗?', {icon: 3, title: '提示'}, function (index) {
+                $.ajax({
+                    url: "system/committee/supervise/" + $("#proposalId").val(),
+                    data: {},
+                    type: "GET",
+                    dataType: "json",
+                    success: function (msg) {
+                        layer.msg(msg.resp_msg, {icon: 1, time: 3000}, function () {
+                            //parent.layui.layer.closeAll();
+                        });
+                    },
+                    error: function (error) {
+                        alert("异常");
+                    }
+                })
+            });
+        });
+
+        // 日期
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#date' //指定元素
+                , theme: '#c50e10'
+            });
+        });
+
+
+        // 下拉框改变触发
+        form.on('select(search_type)', function (data) {
+            //alert(data.value)
+            if (data.value == '个人提案') {
+                $("#test3").css('display', 'none');
+                $("#buchong").css('display', 'none');
+            } else {
+                $("#test3").css('display', 'block');
+                $("#buchong").css('display', 'block');
+            }
+
+        });
+
+        //$("#test3").css('display', 'none');
+        var gotoT = false;
+        form.on('submit(proposal)', function (data) {
+
+            if (gotoT) {
+
+                layer.msg('您已经点过了，请等待...', {icon: 4, time: 1500})
+                return false;
+            }
+            gotoT = true;
+            data.field.content = layedit.getContent(index);
+            data.field.createTime = new Date(data.field.createTime);
+            data.field.lastTime = new Date(data.field.lastTime);
+            //parent.layui.layer.closeAll();
+            //  data.field.lastTime = new Date(data.field.lastTime);//就是这么简单
+            //批量办法定事件
+            var getData = [];
+            var valueone = [];//用户id
+            var peoplestwo = '';//联名用户
+            var getData2 = [];
+            var valuetwo = [];//单位id
+            var units = '';//建议承办单位
+            var overAnswer = '';
+            getData = transfer.getData('demo1'); //获取用户右侧数据
+            getData2 = transfer.getData('demo2'); //获取单位右侧数据
+            for (var q = 0; q < getData2.length; q++) {
+                valuetwo[q] = getData2[q].value
+                units += getData2[q].title
+                if (q < getData2.length - 1) {
+                    units += '，'
+                }
+            }
+            for (var w = 0; w < getData.length; w++) {
+                valueone[w] = getData[w].value;
+                peoplestwo += getData[w].title
+                if (w < getData.length - 1) {
+                    peoplestwo += '，'
+                }
+            }
+            // if (peoplestwo != null) {
+            //     peoplestwo += ',' + data.field.peoples;
+            // }
+            data.field.peoplestwo = peoplestwo;
+            data.field.units = units;
+            $.ajax({
+                url: "front/members/SubReply/",
+                data: data.field,
+                type: "POST",
+                dataType: "json",
+                success: function (msg) {
+                    // layer.closeAll();
+                    $("#proposalId").val(msg.datas.proposalId);
+                    $.ajax({//单位
+                        url: "front/user/addpunit?proposalId=" + msg.datas.proposalId + "&units=" + valuetwo + '&type=' + 1,
+                        type: "GET",
+                        dataType: "json",
+                        success: function (msgq) {
+                            valuetwo = 1;
+                            if (valueone == 1 && valuetwo == 1) {
+                                layer.msg('提交成功!', {icon: 1, time: 1500}, function () {
+                                    parent.layui.layer.closeAll();
+                                });
+                            }
+                        }
+                    });
+                    if (data.field.type != '个人提案') {
+                        //  console.log(valueone)
+                        $.ajax({//联名人
+                            url: "front/user/addPersons?proposalId=" + msg.datas.proposalId + "&users=" + valueone,
+                            type: "POST",
+                            dataType: "json",
+                            success: function (msgw) {
+                                valueone = 1;
+                                if (valueone == 1 && valuetwo == 1) {
+                                    layer.msg('提交成功!', {icon: 1, time: 1500}, function () {
+                                        parent.layui.layer.closeAll();
+                                    });
+                                }
+                            }
+                        });
+                    }
+                    if (data.field.type == '个人提案') {
+                        valueone = 1;
+                        if (valueone == 1 && valuetwo == 1) {
+                            layer.msg('提交成功!', {icon: 1, time: 1500}, function () {
+                                parent.layui.layer.closeAll();
+                            });
+                        }
+                    }
+
+
+                },
+                error: function (error) {
+                    alert("异常")
+                }
+            });
+        });
+
+
+        //执行实例   提案附件
+        var uploadInst = upload.render({
+            elem: '#upload' //绑定元素
+            , url: 'upload?proposalId=' + $("#proposalId").val() + '&type=1' //上传接口
+            , accept: 'file' //允许上传的文件类型
+            , size: 20480 //最大允许上传的文件大小
+            , done: function (res) {
+                $("#downloadtwo a").remove();
+                $("#downloadtwo").append('<a  class="layui-btn-red layui-download" href="file/' + res.datas.appendixId + '" style="color: blue">' + res.datas.appendixName + '</a>');
+            }
+            , error: function () {
+                //请求异常回调
+                layer.alert("后台出错", {
+                    icon: 5,
+                    title: "提示"
+                });
+            }
+        });
+
+        //执行实例   提案附件
+        var uploadInst = upload.render({
+            elem: '#upload2' //绑定元素
+            , url: 'upload?proposalId=' + $("#proposalId").val() + '&type=2' //上传接口
+            , accept: 'file' //允许上传的文件类型
+            , size: 20480 //最大允许上传的文件大小
+            , done: function (res) {
+                $("#downloadtitwo a").remove();
+                $("#downloadtitwo").append('<a  class="layui-btn-red layui-download" href="file/' + res.datas.appendixId + '" style="color: blue">' + res.datas.appendixName + '</a>');
+            }
+            , error: function () {
+                //请求异常回调
+                layer.alert("后台出错", {
+                    icon: 5,
+                    title: "提示"
+                });
+            }
+        });
+
+
+        // 关闭页面
+        $("#toClose").on("click", function () {
+            parent.layui.layer.closeAll();
+        });
+
+    });
+</script>
+</body>
+</html>

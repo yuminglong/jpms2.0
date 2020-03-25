@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>常宁市智慧政协提案综合办理系统</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="libs/css/style.css">
+</head>
+<body class="layui-layout-body layui-list">
+<div class="layui-layout">
+    <div class="layui-card layadmin-header">
+        <div class="breadcrumb">
+            <i class="layui-icon layui-icon-home"></i>
+            <span class="layui-breadcrumb" lay-separator=">">
+                    <a>控制台</a>
+                    <a>我的桌面</a>
+                </span>
+
+        </div>
+    </div>
+    <!-- 内容主体区域 -->
+    <div class="list-content">
+        <div class="dada-box layui-bg-my">
+            <div class="data-show">
+                <ul class="clearfix">
+                    <li>
+                        <a href="motion_index" class="clearfix">
+                            <div class="icon-bg bg-org left">
+                                <i class="layui-icon layui-icon-form"></i>
+                            </div>
+                            <div class="right-text-con">
+                                <p class="name">待办的提案</p>
+                                <p>
+                                    <span class="color-org" id="listStrip"></span>
+                                    <span class="learn-more">了解更多<i class="layui-icon layui-icon-next"></i></span>
+                                </p>
+                            </div>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="motion_index" class="clearfix">
+                            <div class="icon-bg bg-blue left">
+                                <i class="layui-icon layui-icon-form"></i>
+                            </div>
+                            <div class="right-text-con">
+                                <p class="name">已办结的提案</p>
+                                <p>
+                                    <span class="color-org" id="listStriptwo"></span>
+                                    <span class="learn-more">了解更多<i class="layui-icon layui-icon-next"></i></span>
+                                </p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="data-list">
+                <div class="layui-row">
+                    <div class="panel_box1">
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <a href="skip?table=front/inform/fileListRed" class="span-title">通知公告</a>
+                                <span class="badge"> new </span>
+                                <a href="skip?table=front/inform/fileListRed" class="tools"><i
+                                        class="layui-icon layui-icon-add-circle"></i></a>
+                            </div>
+                            <div class="panel-body">
+                                <table class="table table-hover personal-task"  lay-filter="inform" id="inform">
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel_box2">
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <a href="skip?table=front/workTrend/fileListRed" class="span-title">工作动态</a>
+                                <span class="badge"> new </span>
+                                <a href="skip?table=front/workTrend/fileListRed" class="tools"><i
+                                        class="layui-icon layui-icon-add-circle"></i></a>
+                            </div>
+                            <div class="panel-body">
+                                <table class="table table-hover personal-task"  lay-filter="workTrend" id="workTrend">
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row">
+                    <div class="panel_box1">
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <a href="skip?table=front/exchange/fileListRed" class="span-title">经验交流</a>
+                                <span class="badge"> new </span>
+                                <a href="skip?table=front/exchange/fileListRed" class="tools">
+                                    <i class="layui-icon layui-icon-add-circle"></i></a>
+                            </div>
+                            <div class="panel-body">
+                                <table class="table table-hover personal-task"  lay-filter="exchange" id="exchange">
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel_box2">
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <a href="skip?table=front/download/fileListRed" class="span-title">资料下载</a>
+                                <span class="badge"> new </span>
+                                <a href="skip?table=front/download/fileListRed" class="tools">
+                                    <i class="layui-icon layui-icon-add-circle"></i></a>
+                            </div>
+                            <div class="panel-body">
+                                <table  class="table table-hover personal-task"  lay-filter="download" id="download">
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="layui/layui.js"></script>
+<script>
+    //JavaScript代码区域
+    layui.use(["table", "form", "element", "jquery"], function () {
+
+
+        // 加载表格
+        var table = layui.table
+            , form = layui.form
+            , element = layui.element
+            , $ = layui.jquery;
+        form.render();
+        element.render("breadcrumb");
+        element.render("collapse");
+        table.render({
+            id: "motionTable",
+            elem: "#motionTable",
+            method: "get",
+            url: "/libs/js/motion.json",
+            cols: [
+                [
+                    {type: "numbers", title: "序号", width: "6%"},
+                    {field: "a", title: "提案标题", align: "center", width: "32%"},
+                    {field: "b", title: "提案状态", width: "8%", align: "center"},
+                    {field: "c", title: "提交时间", align: "center", width: "16%"},
+                    {field: "d", title: "发稿人", align: "center", width: "11%"},
+                    {field: "e", title: "办理单位", align: "center", width: "11%"},
+                    {field: 'ICON', title: "操作", align: "center", toolbar: '#motionBar', width: "16.3%"},
+                ]
+            ],
+            page: {
+                limit: 20,
+                limits: [20, 30, 40, 50, 100],
+                prev: "上一页",
+                next: "下一页"
+            },
+            request: {
+                pageName: "pageNumber",
+                limitName: "pageSize"
+            },
+            response: {
+                statusCode: 200
+            },
+            parseData: function (res) {
+                return {
+                    "code": res.status,
+                    "count": res.totalRow,
+                    "data": res.rows.item
+                }
+            },
+            height: "full-140"
+        });
+
+        $.ajax({
+            url: "front/members/listStrip",
+            data: {},
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                $("#listStrip").text(data.datas);
+                $("#listStriptwo").text(data.resp_code)
+
+            },
+            error: function (msg) {
+                alert("待办提案条数错误")
+            }
+        });
+
+
+        table.render({
+            id: "download"
+            , elem: '#download'
+            , method: "get"
+            ,skin:"nob"
+            , url: 'system/download/findLists' //数据接口
+            //, page: true //开启分页
+            , cols: [
+                [
+                    {field: "downloadId", width: 80, sort: true, fixed: 'left', hide: true}
+                    , {field: "title", width: '80%' , templet: function (item) {
+                        return '<a href="system/download/file/'+item.downloadId+'">' + item.title + '</a>';
+                    }}
+                    , {field: 'createTime', width: '20%' ,align: "center" }
+                    , {field: 'period', width: 80, hide: true}
+                    , {field: 'createUser', width: 80, sort: true, hide: true}
+                ]
+            ],
+            response: {
+                statusCode: 200
+            },
+            parseData: function (res) {
+                return {
+                    "code": res.resp_code,
+                    "count": res.datas.total,
+                    "data": res.datas.list
+                }
+            },
+
+        });
+
+
+        table.render({
+            id: "exchange"
+            , elem: '#exchange'
+            , method: "get"
+            ,skin:"nob"
+            , url: 'system/exchange/exchangeList' //数据接口
+            //, page: true //开启分页
+            , cols: [
+                [
+                    {field: "exchangeId", width: 80, sort: true, fixed: 'left', hide: true}
+                    , {field: "title", width: '80%' , templet: function (item) {
+                        return '<a href="exchange?exchangeId='+item.exchangeId+'" target="_blank">' + item.title + '</a>';
+                    }}
+                    , {field: 'createTime', width: '20%' ,align: "center" }
+                    , {field: 'period', width: 80, hide: true}
+                    , {field: 'createUser', width: 80, sort: true, hide: true}
+                ]
+            ],
+            response: {
+                statusCode: 200
+            },
+            parseData: function (res) {
+                return {
+                    "code": res.resp_code,
+                    "count": res.datas.total,
+                    "data": res.datas.list
+                }
+            },
+
+        });
+
+
+
+        table.render({
+            id: "workTrend"
+            , elem: '#workTrend'
+            , method: "get"
+            ,skin:"nob"
+            , url: 'system/work/workList' //数据接口
+            //, page: true //开启分页
+            , cols: [
+                [
+                    {field: "workId", width: 80, sort: true, fixed: 'left', hide: true}
+                    , {field: "title", width: '80%' , templet: function (item) {
+                        return '<a href="work?workId='+item.workId+'" target="_blank">' + item.title + '</a>';
+                    }}
+                    , {field: 'createTime', width: '20%' ,align: "center" }
+                    , {field: 'period', width: 80, hide: true}
+                    , {field: 'createUser', width: 80, sort: true, hide: true}
+                ]
+            ],
+            response: {
+                statusCode: 200
+            },
+            parseData: function (res) {
+                return {
+                    "code": res.resp_code,
+                    "count": res.datas.total,
+                    "data": res.datas.list
+                }
+            },
+
+        });
+
+
+        table.render({
+            id: "inform"
+            , elem: '#inform'
+            , method: "get"
+            ,skin:"nob"
+            , url: 'system/inform/informList' //数据接口
+            //, page: true //开启分页
+            , cols: [
+                [
+                    {field: "informId", width: 80, sort: true, fixed: 'left', hide: true}
+                    , {field: "title", width: '80%' , templet: function (item) {
+                        return '<a href="inform?informId='+item.informId+'" target="_blank">' + item.title + '</a>';
+                    }}
+                    , {field: 'createTime', width: '20%' ,align: "center" }
+                    , {field: 'period', width: 80, hide: true}
+                    , {field: 'createUser', width: 80, sort: true, hide: true}
+                ]
+            ],
+            response: {
+                statusCode: 200
+            },
+            parseData: function (res) {
+                return {
+                    "code": res.resp_code,
+                    "count": res.datas.total,
+                    "data": res.datas.list
+                }
+            },
+            done: function (res, curr, count) {
+                $('.layui-table .layui-table-cell > span').css({'font-weight': 'bold'});//表头字体样式
+
+                $('th').hide();//表头隐藏的样式
+                $('.layui-table-view').css('margin-top','0');
+                $('.layui-table-view').css('margin-left','0.5%');
+
+                $('.layui-table-view').css('margin-bottom','0');
+
+                }
+        });
+
+        // 搜索提示
+        $("#motionBtn").on("click", function () {
+            var sValue = $.trim($("#motionValue").val());
+            if (sValue == "") {
+                layer.msg("请输入搜索关键字！", {time: 2000, shade: 0.3});
+                return;
+            }
+        });
+
+    });
+
+
+</script>
+
+<script type="text/html" id="motionBar">
+    <a class="layui-btn layui-btn-xs" lay-event="check"><i class="layui-icon layui-icon-file-b"></i>查看</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="reply"><i class="layui-icon layui-icon-survey"></i>答复</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i
+            class="layui-icon layui-icon-delete"></i>删除</a>
+</script>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jiebao.system.mapper.JpmsInformMapper">
+
+    <select id="findAllList" resultType="com.jiebao.system.model.JpmsInform">
+        SELECT *
+        FROM jiebao_jpms_inform t
+        where t.`status` != -1
+        <if test="title != null">
+            and t.title like concat('%', #{title}, '%')
+        </if>
+        ORDER BY t.create_time desc
+    </select>
+	
+</mapper>

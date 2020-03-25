@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加系统角色</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="libs/css/style.css">
+</head>
+<body>
+<div class="amendPart" lay-filter="amendPart">
+    <form action="" class="layui-form" onsubmit="return false;">
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色</label>
+            <div class="layui-input-inline">
+                <select name="role" id="role" lay-filter="search_type">
+                    <option value="0">请选择</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择用户</label>
+            <div class="layui-input-block" style="margin-left:150px;">
+                <div id="LAY-auth-tree-index"></div>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+        </div>
+        <div class="layui-form-item text-r">
+            <div class="layui-inline">
+                <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="toSubmit">提交</button>
+            </div>
+            <div class="layui-inline">
+                <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="toClose">关闭</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<script src="layui/layui.js"></script>
+<script>
+    layui.config({
+        base: "libs/controller/",//你存放authtree.js文件的位置
+    }).extend({
+        authtree: 'authtree',
+    });
+
+    layui.use(['form', "element", "jquery", "authtree", "layer"], function () {
+        var $ = layui.jquery
+            , form = layui.form
+            , authtree = layui.authtree
+            , layer = layui.layer;
+
+        //角色下拉列表
+        $.ajax({
+            url: 'system/role/ListRoles',
+            dataType: 'json',
+            type: 'get',
+            success: function (data) {
+                $.each(data, function (index, item) {
+                    $('#role').append(new Option(item.remark, item.roleId));// 下拉菜单里添加元素
+                });
+                layui.form.render("select");//重新渲染 固定写法
+
+            }
+        })
+
+        // 添加角色
+        form.on('select(search_type)', function (data) {
+            // alert(data.value)
+            $.ajax({
+                url: 'system/user/useList?roleId=' + data.value,
+                dataType: 'json',
+                type: 'get',
+                success: function (data) {
+                    var trees = data.datas;
+                    authtree.render('#LAY-auth-tree-index', trees, {
+                        inputname: 'authids[]',
+                        layfilter: 'lay-check-auth',
+                        autowidth: true,
+                    });
+                }
+            });
+        });
+
+        // 关闭页面
+        $("#toClose").on("click", function () {
+            parent.layui.layer.closeAll();
+        });
+
+        var goto = false;
+        form.on('submit(toSubmit)', function (data) {
+            if (goto) {
+                layer.msg('您已经点过了，请等待...', {icon: 4, time: 1500})
+                return false;
+            }
+            goto = true;
+            // 获取所有已选中节点
+            var userIds = authtree.getLeaf('#LAY-auth-tree-index');
+            var roleId = $("#role").val();
+            $.ajax({
+                url: "system/user/addRole?userIds=" + userIds + "&roleId=" + roleId,
+                type: "GET",
+                dataType: "json",
+                success: function (msg) {
+                    console.log(msg);
+                    layer.closeAll();
+                    layer.msg(msg.resp_msg, {icon: 1, time: 1500}, function () {
+                        parent.layui.layer.closeAll();
+                    });
+                },
+                error: function (error) {
+                    alert("异常")
+                }
+            });
+        });
+
+
+        // 一般来说，权限数据是异步传递过来的
+        $.ajax({
+            // url: '/libs/js/permission.json',
+            url: 'system/user/useList',
+            dataType: 'json',
+            success: function (data) {
+                var trees = data.datas;
+                // 如果后台返回的不是树结构，请使用 authtree.listConvert 转换
+
+                authtree.render('#LAY-auth-tree-index', trees, {
+                    inputname: 'authids[]',
+                    layfilter: 'lay-check-auth',
+                    autowidth: true,
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>

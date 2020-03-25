@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>常宁市智慧政协提案综合办理系统</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="libs/css/style.css">
+
+</head>
+<body class="layui-layout-body layui-list" style="background:#f3f3f3;">
+<div class="layui-layout">
+    <div class="layui-card layadmin-header">
+        <div class="breadcrumb">
+            <i class="layui-icon layui-icon-home"></i>
+            <span class="layui-breadcrumb" lay-separator=">">
+                    <a>统计分析</a>
+                    <a>统计分析列表</a>
+                </span>
+            <button type="button" class="layui-btn layui-btn-xs right" id="layui-Reload">
+                <i class="layui-icon layui-icon-refresh"></i>
+            </button>
+        </div>
+    </div>
+    <!-- 内容主体区域 -->
+    <div class="list-content">
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md6">
+                    <div class="layui-card">
+                        <div class="layui-card-header">提案状态&满意度统计</div>
+                        <div class="layui-card-body">
+                            <div class="layui-carousel" id="Unit_carousel" lay-filter="Unit_carousel">
+                                <div carousel-item>
+                                    <div style="width:100%;height:380px;" id="UnitAll"></div>
+                                    <div style="width:100%;height:380px;" id="satisfaction"></div>
+                                    <div style="width:100%;height:380px;" id="answer"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-col-md6">
+                    <div class="layui-card">
+                        <div class="layui-card-header">提案类型&分类统计</div>
+                        <div class="layui-card-body">
+                            <div class="layui-carousel" id="Unit_type" lay-filter="Unit_type">
+                                <div carousel-item>
+                                    <div style="width:100%;height:380px;" id="type"></div>
+                                    <div style="width:100%;height:380px;" id="fourType"></div>
+                                    <div style="width:100%;height:380px;" id="classify"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--    <div class="list-content">-->
+    <!--        <div class="layui-fluid">-->
+    <!--            <div class="layui-row layui-col-space15">-->
+    <!--                                <div class="layui-col-md6">-->
+    <!--                                    <div class="layui-card">-->
+    <!--                                        <div class="layui-card-header">提案满意度统计</div>-->
+    <!--                                        <div class="layui-card-body">-->
+    <!--                                            <div style="width:100%;height:380px;" id="satisfactions"></div>-->
+    <!--                                        </div>-->
+    <!--                                    </div>-->
+    <!--                                </div>-->
+    <!--                <div class="layui-col-md6">-->
+    <!--                    <div class="layui-card">-->
+    <!--                        <div class="layui-card-header">提案类型统计</div>-->
+    <!--                        <div class="layui-card-body">-->
+    <!--                            <div class="layui-carousel" id="Unit_types" lay-filter="Unit_types">-->
+    <!--                                <div carousel-item>-->
+    <!--                                    &lt;!&ndash;<div id="Unit"></div>&ndash;&gt;-->
+    <!--                                    <div id="types"></div>-->
+    <!--                                    <div id="fourTypes"></div>-->
+
+    <!--                                </div>-->
+    <!--                            </div>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+</div>
+
+
+<script src="layui/layui.js"></script>
+<script src="libs/js/echarts.js"></script>
+<script>
+    //注意：折叠面板 依赖 element 模块，否则无法进行功能性操作
+    layui.config({
+        version: 1,
+        base: "libs/js/",
+    })
+    layui.use(["element", "echarts", "carousel", "jquery"], function () {
+        var element = layui.element,
+            $ = layui.jquery,
+            carousel = layui.carousel,
+            echarts = layui.echarts;
+
+        // 重载
+        $("#layui-Reload").on("click", function () {
+            //执行重载
+            window.location.reload();
+        });
+
+        //建造轮播实例
+
+        carousel.render({
+            elem: '#Unit_carousel'
+            , width: '100%' //设置容器宽度
+            , height: '380px'
+            , arrow: 'none' //不显示箭头
+            , indicator: 'outside'//lay-indicator:outside
+            , autoplay: false//自动切换
+            , trigger: 'hover'//悬浮切换
+            //,anim: 'updown' //切换动画方式默认左右
+        });
+        carousel.render({
+            elem: '#Unit_type'
+            , width: '100%' //设置容器宽度
+            , height: '380px'
+            , arrow: 'none' //不显示箭头
+            , indicator: 'outside'//lay-indicator:outside
+            , autoplay: false//自动切换
+            , trigger: 'hover'//悬浮切换
+            //,anim: 'updown' //切换动画方式默认左右
+        });
+        //监听轮播切换事件
+        carousel.on('change(Unit_type)', function (obj) { //Unit_type 来源于对应HTML容器的 lay-filter="Unit_type" 属性值
+            obj.index === 0 ? classify.resize() : (obj.index === true ? type.resize() : fourType.resize());
+            //console.log(obj.index); //当前条目的索引
+            //console.log(obj.prevIndex); //上一个条目的索引
+            //console.log(obj.item); //当前条目的元素对象
+            classify.resize();
+            type.resize();
+            fourType.resize();
+        });
+
+        carousel.on('change(Unit_carousel)', function (obj) { //Unit_type 来源于对应HTML容器的 lay-filter="Unit_type" 属性值
+            obj.index === 0 ? UnitAll.resize() : (obj.index === true ? satisfaction.resize() : answer.resize());
+            //console.log(obj.index); //当前条目的索引
+            //console.log(obj.prevIndex); //上一个条目的索引
+            //console.log(obj.item); //
+            answer.resize();
+            UnitAll.resize();
+            satisfaction.resize();
+        });
+
+        // 基于准备好的dom，初始化echarts实例
+        //  var MotionSum = echarts.init(document.getElementById('MotionSum')),
+        // Unit = echarts.init(document.getElementById('Unit')),
+            UnitAll = echarts.init(document.getElementById('UnitAll')),
+            type = echarts.init(document.getElementById('type')),
+            satisfaction = echarts.init(document.getElementById('satisfaction')),
+            classify = echarts.init(document.getElementById('classify')),
+            fourType = echarts.init(document.getElementById('fourType'));
+            answer = echarts.init(document.getElementById('answer'));
+
+
+        var unitNameData;//单位
+        var overManage;//已结办
+        var managing;//办理中
+        var stayManage//待办理
+        var notManage//不办理
+
+
+        //办理单位
+        $.ajax({
+            url: "analyze/rcbchart",
+            type: "GET",
+            data: {},
+            async: false,
+            dataType: "json",
+            success: function (result) {
+                unitNameData = JSON.parse(result.unitName);
+                overManage = JSON.parse(result.overManage);
+                managing = JSON.parse(result.managing);
+                stayManage = JSON.parse(result.stayManage);
+                notManage = JSON.parse(result.notManage);
+
+            }
+        });
+
+        var coverManage;//已结办
+        var cmanaging;//办理中
+        var cstayManage//待办理
+        var cnotManage//不办理
+        //提案状态办理情况
+        $.ajax({
+            url: "analyze/staAnaly",
+            type: "GET",
+            data: {},
+            async: false,
+            dataType: "json",
+            success: function (result) {
+                coverManage = JSON.parse(result.overManage);
+                cmanaging = JSON.parse(result.managing);
+                cstayManage = JSON.parse(result.stayManage);
+                cnotManage = JSON.parse(result.notManage);
+
+            }
+        });
+
+        var classifyOne;
+        var classifyTwo;
+        var classifyThree
+        var classifyFour
+        var classifyFive
+        //提案状态办理情况
+        $.ajax({
+            url: "analyze/classify",
+            type: "GET",
+            data: {},
+            async: false,
+            dataType: "json",
+            success: function (result) {
+                classifyOne = JSON.parse(result.classifyOne);
+                classifyTwo = JSON.parse(result.classifyTwo);
+                classifyThree = JSON.parse(result.classifyThree);
+                classifyFour = JSON.parse(result.classifyFour);
+                classifyFive = JSON.parse(result.classifyFive);
+            }
+        });
+
+
+        //提案类型统计
+        var onePro;
+        var manyPro;
+        var ourPro;
+
+        $.ajax({
+            url: "analyze/propType",
+            type: "GET",
+            data: {},
+            async: false,
+            dataType: "json",
+            success: function (result) {
+                onePro = JSON.parse(result.onePro);
+                manyPro = JSON.parse(result.manyPro);
+                ourPro = JSON.parse(result.ourPro);
+            }
+        });
+
+        var veryGood;
+        var good;
+        var bad;
+        var veryBad;
+        $.ajax({
+            url: "analyze/satisfactions",
+            type: "GET",
+            data: {},
+            async: false,
+            dataType: "json",
+            success: function (result) {
+                veryGood = JSON.parse(result.veryGood);
+                good = JSON.parse(result.good);
+                bad = JSON.parse(result.bad);
+                veryBad = JSON.parse(result.veryBad);
+            }
+        });
+
+
+        var jbPro;
+        var rmPro;
+        var wyPro;
+        var zmPro;
+        $.ajax({
+            url: "analyze/collective",
+            type: "GET",
+            data: {},
+            async: false,
+            dataType: "json",
+            success: function (result) {
+                jbPro = JSON.parse(result.jbPro);
+                rmPro = JSON.parse(result.rmPro);
+                wyPro = JSON.parse(result.wyPro);
+                zmPro = JSON.parse(result.zmPro);
+            }
+        });
+
+
+        var Atype;
+        var Btype;
+        var Ctype;
+        $.ajax({
+            url: "analyze/overAnswer",
+            type: "GET",
+            data: {},
+            async: false,
+            dataType: "json",
+            success: function (result) {
+                Atype = JSON.parse(result.Atype);
+                Btype = JSON.parse(result.Btype);
+                Ctype = JSON.parse(result.Ctype);
+            }
+        });
+
+
+        // 指定图表的配置项和数据
+        var /*optionMotionSum = {
+            tooltip : {
+                trigger: 'axis',
+                axisPointer : {
+                    // 坐标轴指示器，坐标轴触发有效
+                    type : 'shadow',
+                    // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            color: ["#009688","#1e9fff","#fb602f","#f13e3e"],
+            //颜色绿、蓝、橙、红
+            legend: {
+                data: ['已办结', '办理中','待办理','不办理']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis:  {
+                type: 'value'
+            },
+            yAxis: {
+                type: 'category',
+                data: unitNameData
+            },
+            series: [
+                {
+                    name: '已办结',
+                    type: 'bar',
+                    stack: '总量',
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'insideRight'
+                        }
+                    },
+                    data: overManage
+                },
+                {
+                    name: '办理中',
+                    type: 'bar',
+                    stack: '总量',
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'insideRight'
+                        }
+                    },
+                    data: managing
+                },
+                {
+                    name: '待办理',
+                    type: 'bar',
+                    stack: '总量',
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'insideRight'
+                        }
+                    },
+                    data:stayManage
+                },
+                {
+                    name: '不办理',
+                    type: 'bar',
+                    stack: '总量',
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'insideRight'
+                        }
+                    },
+                    data: notManage
+                }
+            ]
+        },*/ optionUnitAll = {
+                color: ["#009688", "#1e9fff", "#fb602f", "#f13e3e"],
+                //颜色绿、蓝、橙、红
+                //环形图每块的颜色
+                title: {
+                    text: '提案状态类型汇总',
+                    subtext: '办理情况',//副标题
+                    x: 'center'//标题居中
+                },
+                tooltip: {
+                    trigger: 'item'//悬浮显示对比
+                },
+                legend: {
+                    orient: 'vertical',//类型垂直,默认水平
+                    left: 'left',//类型区分在左 默认居中
+                    data: ['已办结', '办理中', '待办理', '不办理']
+                },
+                series: [
+                    {
+                        type: 'pie',//饼状
+                        radius: '60%',//圆的大小
+                        center: ['50%', '50%'],//居中
+                        data: [
+                            {value: coverManage, name: '已办结'},
+                            {value: cmanaging, name: '办理中'},
+                            {value: cstayManage, name: '待办理'},
+                            {value: cnotManage, name: '不办理'}
+                        ]
+                    }
+                ]
+            }, classifyAll = {
+                color: ["#009688", "#1e9fff", "#fb602f", "#f13e3e", "#921AFF"],
+                //颜色绿、蓝、橙、红
+                //环形图每块的颜色
+                title: {
+                    text: '提案分类汇总',
+                    subtext: '分类情况',//副标题
+                    x: 'center'//标题居中
+                },
+                tooltip: {
+                    trigger: 'item'//悬浮显示对比
+                },
+                legend: {
+                    orient: 'vertical',//类型垂直,默认水平
+                    left: 'left',//类型区分在左 默认居中
+                    data: ['经济建设', '政治建设', '文化建设', '社会建设', '生态文明建设']
+                },
+                series: [
+                    {
+                        type: 'pie',//饼状
+                        radius: '60%',//圆的大小
+                        center: ['50%', '50%'],//居中
+                        data: [
+                            {value: classifyOne, name: '经济建设'},
+                            {value: classifyTwo, name: '政治建设'},
+                            {value: classifyThree, name: '文化建设'},
+                            {value: classifyFour, name: '社会建设'},
+                            {value: classifyFive, name: '生态文明建设'}
+                        ]
+                    }
+                ]
+            },
+            optionSatisfaction = {
+                color: ["#009688", "#1e9fff", "#fb602f", "#f13e3e"],
+                //颜色绿、蓝、橙、红
+                //环形图每块的颜色
+                title: {
+                    text: '提案满意度统计',
+                    subtext: '满意度',//副标题
+                    x: 'center'//标题居中
+                },
+                tooltip: {
+                    trigger: 'item'//悬浮显示对比
+                },
+                legend: {
+                    orient: 'vertical',//类型垂直,默认水平
+                    left: 'left',//类型区分在左 默认居中
+                    data: ['非常满意', '比较满意', '不满意', '非常不满意']
+                },
+                series: [
+                    {
+                        type: 'pie',//饼状
+                        radius: '60%',//圆的大小
+                        center: ['50%', '50%'],//居中
+                        data: [
+                            {value: veryGood, name: '非常满意'},
+                            {value: good, name: '比较满意'},
+                            {value: bad, name: '不满意'},
+                            {value: veryBad, name: '非常不满意'}
+                        ]
+                    }
+                ]
+            },
+            optionType = {
+                color: ["#009688", "#1e9fff", "#fb602f"],
+                //颜色绿、蓝、橙、红
+                //环形图每块的颜色
+                title: {
+                    text: '提案类型统计',
+                    subtext: '类型统计情况',//副标题
+                    x: 'center'//标题居中
+                },
+                tooltip: {
+                    trigger: 'item'//悬浮显示对比
+                },
+                legend: {
+                    orient: 'vertical',//类型垂直,默认水平
+                    left: 'left',//类型区分在左 默认居中
+                    data: ['个人提案', '个人联名提案', '集体提案']
+                },
+                series: [
+                    {
+                        type: 'pie',//饼状
+                        radius: '60%',//圆的大小
+                        center: ['50%', '50%'],//居中
+                        data: [
+                            {value: onePro, name: '个人提案'},
+                            {value: manyPro, name: '个人联名提案'},
+                            {value: ourPro, name: '集体提案'}
+                        ]
+                    }
+                ]
+            },
+            optionFourType = {
+                color: ["#009688", "#1e9fff", "#fb602f", "#f13e3e"],
+                //颜色绿、蓝、橙、红
+                //环形图每块的颜色
+                title: {
+                    text: '集体提案类型统计',
+                    subtext: '集体提案统计情况',//副标题
+                    x: 'center'//标题居中
+                },
+                tooltip: {
+                    trigger: 'item'//悬浮显示对比
+                },
+                legend: {
+                    orient: 'vertical',//类型垂直,默认水平
+                    left: 'left',//类型区分在左 默认居中
+                    data: ['界别提案', '人民团体提案', '委员小组提案', '专门委员会提案']
+                },
+                series: [
+                    {
+                        type: 'pie',//饼状
+                        radius: '60%',//圆的大小
+                        center: ['50%', '50%'],//居中
+                        data: [
+                            {value: jbPro, name: '界别提案'},
+                            {value: rmPro, name: '人民团体提案'},
+                            {value: wyPro, name: '委员小组提案'},
+                            {value: zmPro, name: '专门委员会提案'},
+
+                        ]
+                    }
+                ]
+            },
+            optionAnswer ={
+                color: ["#009688", "#1e9fff", "#fb602f"],
+                //颜色绿、蓝、橙、红
+                //环形图每块的颜色
+                title: {
+                    text: '答复类型统计',
+                    subtext: '答复类型统计情况',//副标题
+                    x: 'center'//标题居中
+                },
+                tooltip: {
+                    trigger: 'item'//悬浮显示对比
+                },
+                legend: {
+                    orient: 'vertical',//类型垂直,默认水平
+                    left: 'left',//类型区分在左 默认居中
+                    data: ['A.已经办结', 'B.列入计划拟解决或拟采纳', 'C.因政策限制或条件不成熟，暂时不能办理']
+                },
+                series: [
+                    {
+                        type: 'pie',//饼状
+                        radius: '60%',//圆的大小
+                        center: ['50%', '50%'],//居中
+                        data: [
+                            {value: Atype, name: 'A.已经办结'},
+                            {value: Btype, name: 'B.列入计划拟解决或拟采纳'},
+                            {value: Ctype, name: 'C.因政策限制或条件不成熟，暂时不能办理'}
+                        ]
+                    }
+                ]
+            };
+
+
+        // 使用刚指定的配置项和数据显示图表。
+        //  MotionSum.setOption(optionMotionSum);
+        // Unit.setOption(optionUnit);
+        UnitAll.setOption(optionUnitAll);
+        classify.setOption(classifyAll);
+        satisfaction.setOption(optionSatisfaction);
+        type.setOption(optionType);
+        fourType.setOption(optionFourType);
+        answer.setOption(optionAnswer);
+
+
+        window.onresize = function () {
+            //用于使echarts自适应高度和宽度
+            //      MotionSum.resize();
+            //Unit.resize();
+            UnitAll.resize();
+            classify.resize();
+            satisfaction.resize();
+            type.resize();
+            fourType.resize();
+            answer.resize();
+        };
+    });
+</script>
+</body>
+</html>
