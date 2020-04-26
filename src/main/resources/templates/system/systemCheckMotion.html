@@ -78,10 +78,10 @@
 
         <div class="layui-form-item">
 
-            <label class="layui-form-label">来源：</label>
+            <!--<label class="layui-form-label">来源：</label>
             <div class="layui-inline left">
                 <input type="text" name="period" required lay-verify="required" placeholder="请输入提案来源" autocomplete="off" class="layui-input">
-            </div>
+            </div>-->
             <label class="layui-form-label">届：</label>
             <div class="layui-inline left">
                 <input type="text" class="layui-input" required lay-verify="required" autocomplete="off" name="anniversary">
@@ -90,8 +90,6 @@
             <div class="layui-inline left">
                 <input type="text" name="number" required lay-verify="required" autocomplete="off" class="layui-input">
             </div>
-        </div>
-        <div class="layui-form-item">
             <label class="layui-form-label">提案类型：</label>
             <div class="layui-inline left">
                 <select name="classify">
@@ -102,6 +100,9 @@
                     <option value="生态文明建设">生态文明建设</option>
                 </select>
             </div>
+
+        </div>
+        <div class="layui-form-item">
 
             <label class="layui-form-label">提案类别：</label>
             <div class="layui-inline left" style="width: 188px" lay-search="">
@@ -119,7 +120,7 @@
             <div class="layui-inline left">
                 <input type="text" disabled="true" name="statusName" required lay-verify="required" autocomplete="off" class="layui-input">
             </div>
-            <label class="layui-form-label">具体：</label>
+            <label class="layui-form-label">单位：</label>
             <div class="layui-inline left">
                 <input type="text" name="specifica" required lay-verify="required" autocomplete="off" class="layui-input" placeholder="如:个人提案则注明单位" >
             </div>
@@ -291,7 +292,7 @@
                     "cause": data.cause
                     , "createTime": data.createTime
                     , "lastTime": data.lastTime
-                    , "period": data.period//来源
+                  //  , "period": data.period//来源
                     , "classify": data.classify//提案类别
                     // , "status": data.status
                     , "anniversary": data.anniversary//届

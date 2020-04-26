@@ -81,14 +81,14 @@ public class JpmsParentController {
     public Result deleteUserRole(int[] ids) {
         for (int i : ids) {
             //后面提案号顶上（连号）
-            int number = jpmsProposalService.getById(i).getProposalNumber();//要删除的提案号
+           /* int number = jpmsProposalService.getById(i).getProposalNumber();//要删除的提案号
             List<JpmsProposal> listp = jpmsProposalService.list();
             for (JpmsProposal j : listp) {
                 if (j.getProposalNumber() > number) {
                     j.setProposalNumber(j.getProposalNumber() - 1);
                     jpmsProposalService.saveOrUpdate(j);
                 }
-            }
+            }*/
             //删除附件
             List<JpmsAppendix> list = jpmsProposalService.appendix(i, null);
             for (JpmsAppendix appendix : list) {
