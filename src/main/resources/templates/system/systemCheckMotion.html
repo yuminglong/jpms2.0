@@ -84,11 +84,40 @@
             </div>-->
             <label class="layui-form-label">届：</label>
             <div class="layui-inline left">
-                <input type="text" class="layui-input" required lay-verify="required" autocomplete="off" name="anniversary">
+<!--    <input type="text" class="layui-input" required lay-verify="required" autocomplete="off" name="anniversary">-->
+                <div class="layui-inline left">
+                    <select name="anniversary" required lay-verify="required">
+                        <option value="七">第七届</option>
+                        <option value="八">第八届</option>
+                        <option value="九">第九届</option>
+                        <option value="十" selected="selected">第十届</option>
+                        <option value="十一">第十一届</option>
+                        <option value="十二">第十二届</option>
+                        <option value="十三">第十三届</option>
+                        <option value="十四">第十四届</option>
+                        <option value="十五">第十五届</option>
+                    </select>
+                </div>
             </div>
             <label class="layui-form-label">次：</label>
             <div class="layui-inline left">
-                <input type="text" name="number" required lay-verify="required" autocomplete="off" class="layui-input">
+              <!--  <input type="text" name="number" required lay-verify="required" autocomplete="off" class="layui-input">-->
+                <div class="layui-inline left">
+                    <select name="number" required lay-verify="required">
+                        <option value="一" selected="selected">第一次</option>
+                        <option value="二">第二次</option>
+                        <option value="三">第三次</option>
+                        <option value="四" >第四次</option>
+                        <option value="五">第五次</option>
+                        <option value="六">第六次</option>
+                        <option value="七">第七次</option>
+                        <option value="八">第八次</option>
+                        <option value="九">第九次</option>
+                        <option value="十">第十次</option>
+                        <option value="十一">第十一次</option>
+                        <option value="十二">第十二次</option>
+                    </select>
+                </div>
             </div>
             <label class="layui-form-label">提案类型：</label>
             <div class="layui-inline left">

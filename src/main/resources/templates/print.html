@@ -347,12 +347,18 @@
             success: function (data) {
 
 
-                $("[name=proposalNumber]").text(data.proposalNumber);//提案号
+               // $("[name=proposalNumber]").text(data.proposalNumber);//提案号
                 if(data.review==null){
                     $("[name=review]").text("");
                 }else{
                     $("[name=review]").text(data.review);
                 }
+                if(data.proposalNumber==null){
+                    $("[name=proposalNumber]").text("  ");
+                }else{
+                    $("[name=proposalNumber]").text(data.proposalNumber);
+                }
+
 
                 $("[name=cause]").text(data.cause);//案由
                 $("[name=anniversary]").text(data.anniversary);//届

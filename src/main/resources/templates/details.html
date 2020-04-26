@@ -233,6 +233,12 @@
                     $("[name=proposalNumber]").text(data.reserved+data.proposalNumber);//提案号
                 }
 
+                if(data.proposalNumber == null){
+                    $("[name=proposalNumber]").text("  ");
+                }else{
+                    $("[name=proposalNumber]").text(data.proposalNumber);
+                }
+
                 $("[name=cause]").text(data.cause);//案由
                 $("[name=anniversary]").text(data.anniversary);//届
                 $("[name=number]").text(data.number);//次
