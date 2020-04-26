@@ -27,7 +27,7 @@ public interface IJpmsUnitService extends IService<JpmsUnit> {
 	 * @param cause  标题
 	 * @return
 	 */
-	PageInfo<JpmsProposal> findList(Integer pageNumber, Integer pageSize, Integer unitId, String cause,Integer status);
+	PageInfo<JpmsProposal> findList(Integer pageNumber, Integer pageSize, Integer unitId, String cause,Integer status,String startDate,String endDate);
 
 
 }

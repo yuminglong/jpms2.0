@@ -12,11 +12,11 @@ import java.util.Map;
 @Mapper
 public interface JpmsProposalMapper extends SuperMapper<JpmsProposal> {
 
-	List<JpmsProposal> findList(@Param("cause") String cause, @Param("status") Integer stutus);
+	List<JpmsProposal> findList(@Param("cause") String cause, @Param("status") Integer stutus,@Param("startDate") String startDate,@Param("endDate") String endDate);
 
 	JpmsProposal findById(@Param("proposalId") Integer proposalId);
 
-	List<JpmsProposal> membersProposal(@Param("userId") Integer userId, @Param("cause") String cause,@Param("status")Integer status);
+	List<JpmsProposal> membersProposal(@Param("userId") Integer userId, @Param("cause") String cause,@Param("status")Integer status,@Param("startDate")String startDate,@Param("endDate")String endDate);
 
 	List<JpmsAppendix> appendix(@Param("proposalId") Integer proposalId,@Param("type")Integer type);
 

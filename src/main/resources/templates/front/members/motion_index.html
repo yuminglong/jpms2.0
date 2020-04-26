@@ -43,6 +43,10 @@
                             <input type="text" name="proposalId" placeholder="提案号" autocomplete="off"
                                    class="layui-input layui_title">
                         </div>
+                            <div class="layui-inline layui_title_box">
+                                <input type="text"  id="time" placeholder=" 提案时间 "  class="layui-input layui_title" autocomplete="off">
+                            </div>
+
                         <div class="layui-inline">
                             <button lay-filter="search" lay-submit="" class="layui-btn layui-btn-sm layui-btn-red"><i
                                     class="layui-icon layui-icon-search" formnovalidate></i>搜索
@@ -94,11 +98,12 @@
     layui.use('element', function () {
         var element = layui.element;
     });
-    layui.use(["table", "form", "element", "jquery"], function () {
+    layui.use(["table", "form", "element", "jquery","laydate"], function () {
         var table = layui.table
             , form = layui.form
             , element = layui.element
-            , $ = layui.jquery;
+            , $ = layui.jquery
+            , laydate = layui.laydate;
 
         form.render();
         element.render("breadcrumb");
@@ -153,6 +158,19 @@
 
         });
 
+        //提交时间查询
+        var startTime ;
+        var endTime ;
+        laydate.render({
+            elem: '#time'
+            ,type: 'year'
+            ,range: true
+            ,done:function (value,data,endDate) {
+                startTime = data.year
+                endTime = endDate.year
+            }
+        });
+
 
         $("#channelSelect").on("click", function () {
             parent.layer.open({
@@ -191,7 +209,9 @@
                     url: "parent/findList",
                     where: {
                         'cause': data.field.title,
-                        'status': data.field.proposalId
+                        'status': data.field.proposalId,
+                        'startDate':startTime,
+                        'endDate':endTime
                     }
                 });
                 layer.close(index);

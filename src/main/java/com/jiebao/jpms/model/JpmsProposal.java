@@ -164,4 +164,12 @@ public class JpmsProposal extends Model<JpmsProposal> {
     @ApiModelProperty(value = "ABC办结类型", required = true)
     private JpmsPunit overAnswerType;
 
+	@TableField(exist = false)
+	@ApiModelProperty(value = "开始时间", required = true)
+	private String startDate;
+
+	@TableField(exist = false)
+	@ApiModelProperty(value = "结束时间", required = true)
+	private String endDate;
+
 }

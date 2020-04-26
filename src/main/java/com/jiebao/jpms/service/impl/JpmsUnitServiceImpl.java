@@ -33,9 +33,9 @@ public class JpmsUnitServiceImpl extends ServiceImpl<JpmsUnitMapper, JpmsUnit> i
 	}
 
 	@Override
-	public PageInfo<JpmsProposal> findList(Integer pageNumber, Integer pageSize, Integer unitId, String cause,Integer status) {
+	public PageInfo<JpmsProposal> findList(Integer pageNumber, Integer pageSize, Integer unitId, String cause,Integer status,String startDate,String endDate) {
 		Page page = PageHelper.startPage(pageNumber, pageSize);
-		List<JpmsProposal> list = baseMapper.findList(unitId, cause,status);
+		List<JpmsProposal> list = baseMapper.findList(unitId, cause,status,startDate,endDate);
 		for(JpmsProposal j: list) {
 			List<JpmsAppendix> list2 = jpmsProposalService.appendix(j.getProposalId(), 3);//单位对提案的回复
 			boolean flag = false;

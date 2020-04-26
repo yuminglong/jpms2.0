@@ -70,17 +70,17 @@ public class WxFile {
 		PageInfo<JpmsProposal> list = null;
 		switch(user.getType()) {
 			case 1:// 1单位
-				list = jpmsUnitService.findList(1, user.getValue(), user.getUnitId(), user.getName(), null);
+				list = jpmsUnitService.findList(1, user.getValue(), user.getUnitId(), user.getName(), null,null,null);
 				break;
 			case 2:  // 2委员
-				list = jpmsProposalService.membersProposal(1, user.getValue(), user.getUserId(), user.getName(), null);
+				list = jpmsProposalService.membersProposal(1, user.getValue(), user.getUserId(), user.getName(), null,null,null);
 				break;
 			/*case 3://督察室
 				break;
 			case 4://4提案委
 				break;*/
 			default:
-				list = jpmsProposalService.findList(1, user.getValue(), null, null, null);
+				list = jpmsProposalService.findList(1, user.getValue(), null, null, null,null,null);
 		}
 		return Result.succeedWith(list, 200, "cg");
 	}

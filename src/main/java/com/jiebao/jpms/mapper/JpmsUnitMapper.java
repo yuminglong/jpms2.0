@@ -23,5 +23,5 @@ public interface JpmsUnitMapper extends SuperMapper<JpmsUnit> {
 
     boolean updateAnswer(@Param("ProposalId")Integer ProposalId ,@Param("overAnswer")String overAnswer);
 
-	List<JpmsProposal> findList(@Param("unitId") Integer unitId, @Param("cause") String cause,@Param("status")Integer status);
+	List<JpmsProposal> findList(@Param("unitId") Integer unitId, @Param("cause") String cause,@Param("status")Integer status,@Param("startDate")String startDate,@Param("endDate")String endDate);
 }

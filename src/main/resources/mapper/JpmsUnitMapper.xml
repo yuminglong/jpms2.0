@@ -45,6 +45,12 @@
         <if test="status !=null">
             and t.proposal_id = #{status}
         </if>
+        <if test="startDate !=null">
+            and   YEAR(t.create_time) >= #{startDate}
+        </if>
+        <if test="endDate !=null">
+            and  #{endDate} >= YEAR(t.create_time)
+        </if>
         ORDER BY t.create_time desc
     </select>
 

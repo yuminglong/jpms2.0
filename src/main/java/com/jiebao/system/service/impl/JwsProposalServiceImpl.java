@@ -102,9 +102,9 @@ public class JwsProposalServiceImpl extends ServiceImpl<JpmsProposalMapper, Jpms
 	}
 
 	@Override
-	public PageInfo<JpmsProposal> findList(Integer pageNumber, Integer pageSize, String cause, Integer status, @RequestParam(required = false) Integer unitId) {
+	public PageInfo<JpmsProposal> findList(Integer pageNumber, Integer pageSize, String cause, Integer status,String startDate,String endDate, @RequestParam(required = false) Integer unitId) {
 		Page page = PageHelper.startPage(pageNumber, pageSize);
-		List<JpmsProposal> list = baseMapper.findList(cause, status);
+		List<JpmsProposal> list = baseMapper.findList(cause, status,startDate,endDate);
 		for(int p = 0; p < list.size(); p++) {
 			if(!list.get(p).getType().equals("个人提案")) {
 				List<JpmsPersons> list2 = iJpmsUserService.joint(list.get(p).getProposalId());
@@ -150,9 +150,9 @@ public class JwsProposalServiceImpl extends ServiceImpl<JpmsProposalMapper, Jpms
 	}
 
 	@Override
-	public PageInfo<JpmsProposal> membersProposal(Integer pageNumber, Integer pageSize, Integer userId, String cause,Integer status) {
+	public PageInfo<JpmsProposal> membersProposal(Integer pageNumber, Integer pageSize, Integer userId, String cause,Integer status,String startDate,String endDate) {
 		Page page = PageHelper.startPage(pageNumber, pageSize);
-		List<JpmsProposal> list = baseMapper.membersProposal(userId, cause,status);
+		List<JpmsProposal> list = baseMapper.membersProposal(userId, cause,status,startDate,endDate);
 		for(JpmsProposal j: list) {
 			List<JpmsAppendix> list2 = jpmsProposalMapper.appendix(j.getProposalId(), 4);//单位对提案的回复
 
@@ -189,13 +189,13 @@ public class JwsProposalServiceImpl extends ServiceImpl<JpmsProposalMapper, Jpms
 		JpmsUser user = (JpmsUser) session.getAttribute("user");
 		switch(user.getType()) {
 			case 1:// 1单位
-				list = jpmsUnitService.findList(user.getUnitId(), null,null);
+				list = jpmsUnitService.findList(user.getUnitId(), null,null,null,null);
 				break;
 			case 2:  // 2委员
-				list = jpmsProposalMapper.membersProposal(user.getUserId(), null,null);
+				list = jpmsProposalMapper.membersProposal(user.getUserId(), null,null,null,null);
 				break;
 			default:
-				list = jpmsProposalMapper.findList(null, null);
+				list = jpmsProposalMapper.findList(null, null,null,null);
 		}
 		Integer p = 0;
 		Integer z = 0;
@@ -215,13 +215,13 @@ public class JwsProposalServiceImpl extends ServiceImpl<JpmsProposalMapper, Jpms
 		List<JpmsProposal> list = null;
 		switch(type) {
 			case 1:// 1单位
-				list = jpmsUnitService.findList(userId, null,null);
+				list = jpmsUnitService.findList(userId, null,null,null,null);
 				break;
 			case 2:  // 2委员
-				list = jpmsProposalMapper.membersProposal(userId, null,null);
+				list = jpmsProposalMapper.membersProposal(userId, null,null,null,null);
 				break;
 			default:
-				list = jpmsProposalMapper.findList(null, null);
+				list = jpmsProposalMapper.findList(null, null,null,null);
 		}
 		Integer p = 0;
 		Integer z = 0;

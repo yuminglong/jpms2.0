@@ -82,6 +82,13 @@
                             </script>
                         </div>
 
+                        <div class="layui-inline user-title4">
+                            <label class="layui-form-label">年份</label>
+                            <div class="layui-input-inline list-search">
+                                <input type="text" class="layui-input" id="time" placeholder=" - " autocomplete="off">
+                            </div>
+                        </div>
+
                         <div class="layui-inline">
                             <button type="button" class="layui-btn layui-btn-sm" lay-filter="search" lay-submit=""><i class="layui-icon layui-icon-search" formnovalidate></i>搜索</button>
                         </div>
@@ -112,12 +119,14 @@
 
 <script>
     //JavaScript代码区域
-    layui.use(["table", "form", "element", "jquery"], function () {
+    layui.use(["table", "form", "element", "jquery","laydate"], function () {
+
         // 加载表格
         var table = layui.table
             , form = layui.form
             , element = layui.element
-            , $ = layui.jquery;
+            , $ = layui.jquery
+            ,laydate = layui.laydate;
         form.render();
         element.render("breadcrumb");
         element.render("collapse");
@@ -197,6 +206,20 @@
                 table_data = res.data;
             },
             height: "full-140"
+        });
+
+
+        //提交时间查询
+        var startTime ;
+        var endTime ;
+        laydate.render({
+            elem: '#time'
+            ,type: 'year'
+            ,range: true
+            ,done:function (value,data,endDate) {
+                    startTime = data.year
+                    endTime = endDate.year
+            }
         });
 
         //单位查询
@@ -307,7 +330,9 @@
                     where: {
                         'cause': data.field.title,
                         'status': data.field.status,
-                        'unitId': $('#lunit').val()
+                        'unitId': $('#lunit').val(),
+                        'startDate':startTime,
+                        'endDate':endTime
                     }
                 });
                 layer.close(index);

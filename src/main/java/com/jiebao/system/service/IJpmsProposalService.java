@@ -29,7 +29,7 @@ public interface IJpmsProposalService extends IService<JpmsProposal> {
 	 * @return
 	 */
 
-	PageInfo<JpmsProposal> findList(Integer pageNumber, Integer pageSize, String cause ,Integer status,Integer unitId);
+	PageInfo<JpmsProposal> findList(Integer pageNumber, Integer pageSize, String cause ,Integer status,String startDate,String endDate,Integer unitId);
 
 	/**
 	 * 委员查看提案
@@ -39,7 +39,7 @@ public interface IJpmsProposalService extends IService<JpmsProposal> {
 	 * @param cause
 	 * @return
 	 */
-	PageInfo<JpmsProposal> membersProposal(Integer pageNumber, Integer pageSize, Integer userId, String cause,Integer status);
+	PageInfo<JpmsProposal> membersProposal(Integer pageNumber, Integer pageSize, Integer userId, String cause,Integer status,String startDate,String endDate);
 
 
 	/**

@@ -42,22 +42,22 @@ public class JpmsParentController {
 
     @ApiOperation(value = "查看全部提案")
     @GetMapping("/findList")
-    public Result findList(@RequestParam(defaultValue = "1") Integer pageNumber, @RequestParam(defaultValue = "20") Integer pageSize, @RequestParam(required = false) String cause, @RequestParam(required = false) Integer status, @RequestParam(required = false) Integer unitId, HttpSession session) {
+    public Result findList(@RequestParam(defaultValue = "1") Integer pageNumber, @RequestParam(defaultValue = "20") Integer pageSize, @RequestParam(required = false) String cause, @RequestParam(required = false) Integer status,@RequestParam(required = false) String startDate,@RequestParam(required = false) String endDate , @RequestParam(required = false) Integer unitId, HttpSession session) {
         JpmsUser user = (JpmsUser) session.getAttribute("user");
         PageInfo<JpmsProposal> list = null;
         switch (user.getType()) {
             case 1:// 1单位
-                list = jpmsUnitService.findList(pageNumber, pageSize, user.getUnitId(), cause, status);
+                list = jpmsUnitService.findList(pageNumber, pageSize, user.getUnitId(), cause, status,startDate,endDate);
                 break;
             case 2:  // 2委员
-                list = jpmsProposalService.membersProposal(pageNumber, pageSize, user.getUserId(), cause, status);
+                list = jpmsProposalService.membersProposal(pageNumber, pageSize, user.getUserId(), cause, status,startDate,endDate);
                 break;
 			/*case 3://督察室
 				break;
 			case 4://4提案委
 				break;*/
             default:
-                list = jpmsProposalService.findList(pageNumber, pageSize, cause, status, unitId);
+                list = jpmsProposalService.findList(pageNumber, pageSize, cause, status,startDate,endDate,unitId);
         }
         return Result.succeedWith(list, 200, "cg");
     }

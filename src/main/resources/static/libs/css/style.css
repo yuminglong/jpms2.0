@@ -83,6 +83,7 @@
 .layui-list .user-title2 .layui-input-block .layui-select-title .layui-input {width:182px;height:32px;}
 .layui-list .user-title2 {height:32px;margin-right:10px;}
 .layui-list .user-title3 .layui-input {width:150px;}
+.layui-list .user-title4 .layui-input {width:150px;height: 32px;}
 
 /*addUser*/
 .addUser {padding:20px 0 0 0;}
