@@ -212,7 +212,7 @@
             <label class="layui-form-label"></label>
             <div class="layui-inline left" id="downloadtitwo">提案委：
                 <button type="button" class="layui-btn layui-btn-red" id="upload2">
-                    <i class="layui-icon">&#xe67c;</i>附件上传
+                    <i class="layui-icon">&#xe67c;</i>意见上传
                 </button>
             </div>
             <p style="font-size: 15px ;text-align: center ;color: #9F9F9F">注：附件都为单附件，上传后原附件自动进行删除</p>
@@ -738,7 +738,12 @@
 
         // 关闭页面
         $("#toClose").on("click", function () {
-            parent.layui.layer.closeAll();
+            //parent.layui.layer.closeAll();
+            window.opener=null;
+
+            window.open('','_self');
+
+            window.close();
         });
 
     });

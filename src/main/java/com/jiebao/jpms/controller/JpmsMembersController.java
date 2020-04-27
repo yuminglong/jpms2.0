@@ -100,7 +100,7 @@ public class JpmsMembersController {
             //System.out.println("提案未通过"+jpmsProposal.getMobile());
             //SMSUtils.sendSMS(true, "497977", jpmsProposal.getProposalId().toString(), jpmsProposal.getMobile(), "0");
         } else if (jpmsProposal.getStatus() == 3) {//立案 给两办人员发送短信
-            jpmsProposal.setProposalNumber(jpmsProposalService.maxnumber()+1);//提案号
+           // jpmsProposal.setProposalNumber(jpmsProposalService.maxnumber()+1);//提案号
             List<JpmsUser> jpmsUserList = jpmsUserService.userType(3);
             for (JpmsUser j : jpmsUserList) {
                 //System.out.println("政府办" + j.getMobile());

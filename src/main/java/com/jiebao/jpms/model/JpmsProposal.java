@@ -123,7 +123,7 @@ public class JpmsProposal extends Model<JpmsProposal> {
 
 	@ApiModelProperty(value = "提案负责人联系电话", required = true)
 	private String mobile;
-	@ApiModelProperty(value = "具体", required = true)
+	@ApiModelProperty(value = "具体单位", required = true)
 	private String specifica;
 
 	@ApiModelProperty(value = "主办单位", required = true)
