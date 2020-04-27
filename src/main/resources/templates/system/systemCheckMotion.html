@@ -708,7 +708,12 @@
 
         // 关闭页面
         $("#toClose").on("click", function () {
-            parent.layui.layer.closeAll();
+           // parent.layui.layer.closeAll();
+            window.opener=null;
+
+            window.open('','_self');
+
+            window.close();
         });
 
     });
