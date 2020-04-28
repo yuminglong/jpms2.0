@@ -69,6 +69,7 @@
             padding-top: 30px;
             line-height: 50px;
         }
+
         .table1 {
             page-break-before: auto;
             page-break-after: always;
@@ -150,56 +151,89 @@
         <span name="proposalNumber"></span>
         号提案
     </h3>-->
-    <p style=" font-size:14pt">提案类型:<span name="type"></span></p>
-    <p style=" font-size:14pt">提案类型:<span name="classify"></span></p>
-    <p style=" font-size:14pt">收到提案时间:<span name="createTime"></span></p>
+
+
+    <div style="height: 100px">
+        <div style="float: right">
+            <p style=" font-size:14pt">提案类型:<span name="type"></span></p>
+            <p style=" font-size:14pt">提案类别:<span name="classify"></span></p>
+            <p style=" font-size:14pt">收到提案时间:<span name="createTime"></span></p>
+        </div>
+    </div>
+
     <p style="font-size:24pt; line-height:150%; margin:0pt; orphans:0; text-align:center; widows:0"><span
             style="font-family:宋体; font-size:24pt; font-weight:bold">&#xa0;</span></p>
-    <p style="font-size:24pt; line-height:150%; margin:0pt; orphans:0; text-align:center; widows:0">
-        <span style="font-family:宋体; font-size:30pt; font-weight:bold">政协常宁市第<span name="anniversary"></span>届第<span
-                name="number"></span>次会议</span></p>
-    <p style="background-color:#ffffff; font-size:20pt; line-height:150%; margin:0pt; text-align:center"><span
-            style="font-family:宋体; font-size:25pt; font-weight:bold">第<span name="proposalNumber"></span>号提案</span></p>
+
+
+    <div>
+        <div>
+
+            <div style="float: left"><p style="margin: 25px 0 0.5em;"><span style="font-family: 新宋体;font-size: 15pt">中 国 人 民</span></p>
+                <p style="margin: 0.5em 0;"><span style="font-family: 新宋体;font-size: 15pt;">政治协商会议</span></p></div>
+
+
+            <div style="float: left"><p></p>
+                <p
+                        style="font-size:35pt; line-height:150%; margin:0pt; orphans:0; text-align:center; widows:0">
+        <span style="font-family:宋体; font-size:33pt; font-weight:bold">常宁市第<span name="anniversary"></span>届委员会第<span
+                name="number"></span>次会议</span></p></div>
+        </div>
+
+
+        <div style="width: 100%;height:75px"></div>
+        <div><p align="center">
+            <p></p>
+            <p style="background-color:#ffffff; font-size:20pt; line-height:150%; margin:0pt; text-align:center">
+        <span
+                style="font-family:宋体; font-size:25pt; font-weight:bold"><strong
+                style="font-size: 60px ">提 &nbsp;案</strong>(第 <span
+                name="proposalNumber"></span> 号)</span>
+            </p></p></div>
+
+    </div>
+    <!--      <div style="height: 30px"></div>-->
+
+
 
     <div class="tab" cellpadding="0" cellspacing="0">
-        <p><span class="t1">案  &nbsp;&nbsp;由: </span> <u name="cause" class="t2"></u></p>
+        <p><span class="t1">案由(提案题目): </span> <u name="cause" class="t2"></u></p>
+        <p><span class="t1">审查意见(审查机构填写): </span> <u name="review" class="t2"></u></p>
         <p><span class="t1">主办单位: </span> <u name="zunits" class="t2"></u></p>
         <p><span class="t1">会办单位:</span> <u name="hunits" class="t2"></u></p>
-        <p><span class="t1">审查意见: </span> <u name="review" class="t2"></u></p>
     </div>
 
     <table class="table1" cellpadding="0" cellspacing="0">
-<!--        <tr> -->
-<!--            <th>提案者</th>-->
-<!--            <td><span name="realName"></span></td>-->
-<!--            <th>移动电话</th>-->
-<!--            <td><span name="mobile"></span></td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <th>界别</th>-->
-<!--            <td><span name="subsector"></span></td>-->
-<!--            <th>工作单位</th>-->
-<!--            <td><span name="unitName"></span></td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <th>提案类型</th>-->
-<!--            <td><span name="type"></span></td>-->
-<!--            <th>提案类别</th>-->
-<!--            <td><span name="classify"></span></td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <th>联名人</th>-->
-<!--            <td><span name="peoplestwo"></span></td>-->
-<!--            <th>通讯地址</th>-->
-<!--            <td><span name="address"></span></td>-->
-<!--        </tr>-->
-        <tr>
+        <!--        <tr> -->
+        <!--            <th>提案者</th>-->
+        <!--            <td><span name="realName"></span></td>-->
+        <!--            <th>移动电话</th>-->
+        <!--            <td><span name="mobile"></span></td>-->
+        <!--        </tr>-->
+        <!--        <tr>-->
+        <!--            <th>界别</th>-->
+        <!--            <td><span name="subsector"></span></td>-->
+        <!--            <th>工作单位</th>-->
+        <!--            <td><span name="unitName"></span></td>-->
+        <!--        </tr>-->
+        <!--        <tr>-->
+        <!--            <th>提案类型</th>-->
+        <!--            <td><span name="type"></span></td>-->
+        <!--            <th>提案类别</th>-->
+        <!--            <td><span name="classify"></span></td>-->
+        <!--        </tr>-->
+        <!--        <tr>-->
+        <!--            <th>联名人</th>-->
+        <!--            <td><span name="peoplestwo"></span></td>-->
+        <!--            <th>通讯地址</th>-->
+        <!--            <td><span name="address"></span></td>-->
+        <!--        </tr>-->
+        <tr style="font-size: 14pt">
             <td>联名人</td>
             <td>界别</td>
             <td>通讯地址</td>
             <td>联系电话</td>
         </tr>
-        <tr th:each="s,state:${userList}">
+        <tr th:each="s,state:${userList}" style="font-size: 13pt">
             <td>[[${s.jpmsUser.realName}]]</td>
             <td>[[${s.jpmsUser.subsector}]]</td>
             <td>[[${s.jpmsUser.address}]]</td>
@@ -307,12 +341,12 @@
     </table>
 </div>
 
-<div style="text-align: center;">
-<!--    <button type="button" id="print">打印</button>-->
-    <a  th:href="'../word/'+${proposalId}">下载doc</a>
+<!--<div style="text-align: center;">
+    &lt;!&ndash;    <button type="button" id="print">打印</button>&ndash;&gt;
+    <a th:href="'../word/'+${proposalId}">下载doc</a>
     <input class="layui-btn layui-btn-red" type="button" value=" 打 印 预 览 " onclick="javascript: window.print();">
 
-</div>
+</div>-->
 
 <script src="../libs/js/jquery.min.js"></script>
 <script src="../libs/lodop/LodopFuncs.js"></script>
@@ -323,7 +357,6 @@
     $(function () {
 
 
-
         $("#print").on("click", function () {
             // LODOP = getLodop();
             // var strBodyStyle = "<style>" + $("#print-style").html() + "</style>";
@@ -332,10 +365,10 @@
             // LODOP.ADD_PRINT_HTM("0.5cm", "0.4cm", "RightMargin:0.4cm", "BottomMargin:1cm",
             //     strFormHtml);
             // LODOP.PREVIEW();
-              LODOP=getLodop();
-              LODOP.PRINT_INIT("打印控件功能演示_Lodop功能_完整全页");
-              LODOP.ADD_PRINT_HTM(10,10,"100%","100%","<!DOCTYPE html>"+document.getElementsByTagName("html")[0].innerHTML);
-              LODOP.PREVIEW();
+            LODOP = getLodop();
+            LODOP.PRINT_INIT("打印控件功能演示_Lodop功能_完整全页");
+            LODOP.ADD_PRINT_HTM(10, 10, "100%", "100%", "<!DOCTYPE html>" + document.getElementsByTagName("html")[0].innerHTML);
+            LODOP.PREVIEW();
 
         });
 
@@ -347,15 +380,15 @@
             success: function (data) {
 
 
-               // $("[name=proposalNumber]").text(data.proposalNumber);//提案号
-                if(data.review==null){
+                // $("[name=proposalNumber]").text(data.proposalNumber);//提案号
+                if (data.review == null) {
                     $("[name=review]").text("");
-                }else{
+                } else {
                     $("[name=review]").text(data.review);
                 }
-                if(data.proposalNumber==null){
+                if (data.proposalNumber == null) {
                     $("[name=proposalNumber]").text("  ");
-                }else{
+                } else {
                     $("[name=proposalNumber]").text(data.proposalNumber);
                 }
 

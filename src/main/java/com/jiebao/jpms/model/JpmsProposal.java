@@ -161,7 +161,7 @@ public class JpmsProposal extends Model<JpmsProposal> {
 	private List<JpmsPersons> userList;
 
     @TableField(exist = false)
-    @ApiModelProperty(value = "ABC办结类型", required = true)
+    @ApiModelProperty(value = "punit实体", required = true)
     private JpmsPunit overAnswerType;
 
 	@TableField(exist = false)
