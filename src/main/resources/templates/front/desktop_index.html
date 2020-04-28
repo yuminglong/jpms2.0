@@ -27,7 +27,7 @@
             <div class="data-show">
                 <ul class="clearfix">
                     <li>
-                        <a href="motion_index" class="clearfix">
+                        <a href="#" id="jump" class="clearfix">
                             <div class="icon-bg bg-org left">
                                 <i class="layui-icon layui-icon-form"></i>
                             </div>
@@ -42,7 +42,7 @@
                     </li>
 
                     <li>
-                        <a href="motion_index" class="clearfix">
+                        <a href="#" id="jumps" class="clearfix">
                             <div class="icon-bg bg-blue left">
                                 <i class="layui-icon layui-icon-form"></i>
                             </div>
@@ -68,7 +68,7 @@
                                         class="layui-icon layui-icon-add-circle"></i></a>
                             </div>
                             <div class="panel-body">
-                                <table class="table table-hover personal-task"  lay-filter="inform" id="inform">
+                                <table class="table table-hover personal-task" lay-filter="inform" id="inform">
 
                                 </table>
                             </div>
@@ -83,7 +83,7 @@
                                         class="layui-icon layui-icon-add-circle"></i></a>
                             </div>
                             <div class="panel-body">
-                                <table class="table table-hover personal-task"  lay-filter="workTrend" id="workTrend">
+                                <table class="table table-hover personal-task" lay-filter="workTrend" id="workTrend">
 
                                 </table>
                             </div>
@@ -100,7 +100,7 @@
                                     <i class="layui-icon layui-icon-add-circle"></i></a>
                             </div>
                             <div class="panel-body">
-                                <table class="table table-hover personal-task"  lay-filter="exchange" id="exchange">
+                                <table class="table table-hover personal-task" lay-filter="exchange" id="exchange">
 
                                 </table>
                             </div>
@@ -115,7 +115,7 @@
                                     <i class="layui-icon layui-icon-add-circle"></i></a>
                             </div>
                             <div class="panel-body">
-                                <table  class="table table-hover personal-task"  lay-filter="download" id="download">
+                                <table class="table table-hover personal-task" lay-filter="download" id="download">
 
                                 </table>
                             </div>
@@ -179,6 +179,55 @@
             height: "full-140"
         });
 
+
+        $.ajax({
+            url: "front/user/find",
+            data: {},
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                $("#jump").on("click", function () {
+                    if (data.type == 3) {
+                        window.location.href = "skip?table=system/motionList";
+                    } else if (data.type == 4) {
+                        window.location.href = "skip?table=system/motionList";
+                    } else if (data.type == 5) {
+                        window.location.href = "skip?table=system/motionList";
+                    } else if (data.type == 6) {
+                        window.location.href = "skip?table=system/motionList";
+                    } else if (data.type == 0) {
+                        window.location.href = "skip?table=front/members/motion_index";
+                    } else if (data.type == 1) {
+                        window.location.href = "skip?table=front/members/motion_index";
+                    } else if (data.type == 2) {
+                        window.location.href = "skip?table=front/members/motion_index";
+                    }
+                });
+                $("#jumps").on("click", function () {
+                    if (data.type == 3) {
+                        window.location.href = "skip?table=system/motionList";
+                    } else if (data.type == 4) {
+                        window.location.href = "skip?table=system/motionList";
+                    } else if (data.type == 5) {
+                        window.location.href = "skip?table=system/motionList";
+                    } else if (data.type == 6) {
+                        window.location.href = "skip?table=system/motionList";
+                    } else if (data.type == 0) {
+                        window.location.href = "skip?table=front/members/motion_index";
+                    } else if (data.type == 1) {
+                        window.location.href = "skip?table=front/members/motion_index";
+                    } else if (data.type == 2) {
+                        window.location.href = "skip?table=front/members/motion_index";
+                    }
+                });
+
+            },
+            error: function (msg) {
+                alert("用户查询失败")
+            }
+        });
+
+
         $.ajax({
             url: "front/members/listStrip",
             data: {},
@@ -199,16 +248,18 @@
             id: "download"
             , elem: '#download'
             , method: "get"
-            ,skin:"nob"
+            , skin: "nob"
             , url: 'system/download/findLists' //数据接口
             //, page: true //开启分页
             , cols: [
                 [
                     {field: "downloadId", width: 80, sort: true, fixed: 'left', hide: true}
-                    , {field: "title", width: '80%' , templet: function (item) {
-                        return '<a href="system/download/file/'+item.downloadId+'">' + item.title + '</a>';
-                    }}
-                    , {field: 'createTime', width: '20%' ,align: "center" }
+                    , {
+                    field: "title", width: '80%', templet: function (item) {
+                        return '<a href="system/download/file/' + item.downloadId + '">' + item.title + '</a>';
+                    }
+                }
+                    , {field: 'createTime', width: '20%', align: "center"}
                     , {field: 'period', width: 80, hide: true}
                     , {field: 'createUser', width: 80, sort: true, hide: true}
                 ]
@@ -231,16 +282,18 @@
             id: "exchange"
             , elem: '#exchange'
             , method: "get"
-            ,skin:"nob"
+            , skin: "nob"
             , url: 'system/exchange/exchangeList' //数据接口
             //, page: true //开启分页
             , cols: [
                 [
                     {field: "exchangeId", width: 80, sort: true, fixed: 'left', hide: true}
-                    , {field: "title", width: '80%' , templet: function (item) {
-                        return '<a href="exchange?exchangeId='+item.exchangeId+'" target="_blank">' + item.title + '</a>';
-                    }}
-                    , {field: 'createTime', width: '20%' ,align: "center" }
+                    , {
+                    field: "title", width: '80%', templet: function (item) {
+                        return '<a href="exchange?exchangeId=' + item.exchangeId + '" target="_blank">' + item.title + '</a>';
+                    }
+                }
+                    , {field: 'createTime', width: '20%', align: "center"}
                     , {field: 'period', width: 80, hide: true}
                     , {field: 'createUser', width: 80, sort: true, hide: true}
                 ]
@@ -259,21 +312,22 @@
         });
 
 
-
         table.render({
             id: "workTrend"
             , elem: '#workTrend'
             , method: "get"
-            ,skin:"nob"
+            , skin: "nob"
             , url: 'system/work/workList' //数据接口
             //, page: true //开启分页
             , cols: [
                 [
                     {field: "workId", width: 80, sort: true, fixed: 'left', hide: true}
-                    , {field: "title", width: '80%' , templet: function (item) {
-                        return '<a href="work?workId='+item.workId+'" target="_blank">' + item.title + '</a>';
-                    }}
-                    , {field: 'createTime', width: '20%' ,align: "center" }
+                    , {
+                    field: "title", width: '80%', templet: function (item) {
+                        return '<a href="work?workId=' + item.workId + '" target="_blank">' + item.title + '</a>';
+                    }
+                }
+                    , {field: 'createTime', width: '20%', align: "center"}
                     , {field: 'period', width: 80, hide: true}
                     , {field: 'createUser', width: 80, sort: true, hide: true}
                 ]
@@ -296,16 +350,18 @@
             id: "inform"
             , elem: '#inform'
             , method: "get"
-            ,skin:"nob"
+            , skin: "nob"
             , url: 'system/inform/informList' //数据接口
             //, page: true //开启分页
             , cols: [
                 [
                     {field: "informId", width: 80, sort: true, fixed: 'left', hide: true}
-                    , {field: "title", width: '80%' , templet: function (item) {
-                        return '<a href="inform?informId='+item.informId+'" target="_blank">' + item.title + '</a>';
-                    }}
-                    , {field: 'createTime', width: '20%' ,align: "center" }
+                    , {
+                    field: "title", width: '80%', templet: function (item) {
+                        return '<a href="inform?informId=' + item.informId + '" target="_blank">' + item.title + '</a>';
+                    }
+                }
+                    , {field: 'createTime', width: '20%', align: "center"}
                     , {field: 'period', width: 80, hide: true}
                     , {field: 'createUser', width: 80, sort: true, hide: true}
                 ]
@@ -324,12 +380,12 @@
                 $('.layui-table .layui-table-cell > span').css({'font-weight': 'bold'});//表头字体样式
 
                 $('th').hide();//表头隐藏的样式
-                $('.layui-table-view').css('margin-top','0');
-                $('.layui-table-view').css('margin-left','0.5%');
+                $('.layui-table-view').css('margin-top', '0');
+                $('.layui-table-view').css('margin-left', '0.5%');
 
-                $('.layui-table-view').css('margin-bottom','0');
+                $('.layui-table-view').css('margin-bottom', '0');
 
-                }
+            }
         });
 
         // 搜索提示
@@ -352,8 +408,6 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i
             class="layui-icon layui-icon-delete"></i>删除</a>
 </script>
-
-
 
 
 </body>
