@@ -46,6 +46,11 @@ public class JpmsStateController {
         return "login";
     }
 
+    @GetMapping("detaile/wySatisfaction")
+    public String wySatisfaction() {
+        return "wySatisfaction";
+    }
+
     @RequestMapping({"", "index"})
     public String index() {
         return "front/index";

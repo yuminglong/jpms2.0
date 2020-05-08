@@ -142,16 +142,6 @@
 <body>
 <span name="proposalId" id="proposalId" th:text="${proposalId}" hidden="true"></span>
 <div class="detail">
-    <!--<h3 class="title">
-        政协常宁市第
-        <span name="anniversary"></span>
-        届委员会第
-        <span name="number"></span>
-        次会议第
-        <span name="proposalNumber"></span>
-        号提案
-    </h3>-->
-
 
     <div style="height: 100px">
         <div style="float: right">
@@ -168,7 +158,8 @@
     <div>
         <div>
 
-            <div style="float: left"><p style="margin: 25px 0 0.5em;"><span style="font-family: 新宋体;font-size: 15pt">中 国 人 民</span></p>
+            <div style="float: left"><p style="margin: 25px 0 0.5em;"><span style="font-family: 新宋体;font-size: 15pt">中 国 人 民</span>
+            </p>
                 <p style="margin: 0.5em 0;"><span style="font-family: 新宋体;font-size: 15pt;">政治协商会议</span></p></div>
 
 
@@ -192,7 +183,6 @@
 
     </div>
     <!--      <div style="height: 30px"></div>-->
-
 
 
     <div class="tab" cellpadding="0" cellspacing="0">
@@ -329,15 +319,24 @@
         <tr>
             <th>委员满意度测评</th>
             <td class="td80" colspan="3">&nbsp;
-                <span name="satisfaction"></span>&nbsp;
-                <ul th:each="s,state:${JpmsAppendixthree}">
+                <a href="javascript:void(0)" onclick="wySat(proposalId)" style="color: blue"><u>提案办理情况征求意见表(委员)</u></a>
+                <ul th:each="s,state:${JpmsAppendixthree}" hidden="hidden">
                     <li class="tdDiv tdBlue">
                         &nbsp;<a th:href="'../file/' + ${s.appendixId}" style="color: blue">[[${s.appendixName}]]</a>
+                        <span name="appendixId" id="appendixId" th:text="${s.appendixId}" hidden="true"></span>
+                        <span name="appendixName" id="appendixName" th:text="${s.appendixName}" hidden="true"></span>
                         <span class="date">[[${s.createTime}]]</span>
                     </li>
                 </ul>
             </td>
         </tr>
+       <!-- <tr>
+            <th>提案委满意度测评</th>
+            <td class="td80" colspan="3">&nbsp;
+                <a href="javascript:void(0)" onclick="tawSat(proposalId)" style="color: blue"><u>提案办理情况征求意见表(提案委)</u></a>
+
+            </td>
+        </tr>-->
     </table>
 </div>
 
@@ -349,28 +348,44 @@
 </div>-->
 
 <script src="../libs/js/jquery.min.js"></script>
-<script src="../libs/lodop/LodopFuncs.js"></script>
+<script src="../layui/layui.js"></script>
 <script>
-    var Lodop;
-    // var cpath = "/";
+
+    var layer;
+    layui.use('layer', function () {
+        layer = layui.layer;
+    })
+
+
+    function wySat(proposalId) {
+        proposalId = $("#proposalId").text();
+       var appendixId = $("#appendixId").text();
+       var appendixName = $("#appendixName").text();
+        layer.open({
+            type: 2,
+            title: " ",
+            area: ['800px', '400px'],
+            content:encodeURI('wySatisfaction?proposalId=' + proposalId +'&appendixId='+appendixId +'&appendixName='+appendixName)
+        });
+    }
 
     $(function () {
 
 
-        $("#print").on("click", function () {
-            // LODOP = getLodop();
-            // var strBodyStyle = "<style>" + $("#print-style").html() + "</style>";
-            // var strFormHtml = strBodyStyle + "<body>" + $(".detail").html() + "</body>";
-            // LODOP.SET_PRINT_PAGESIZE(1, 0, 0, 'A4');
-            // LODOP.ADD_PRINT_HTM("0.5cm", "0.4cm", "RightMargin:0.4cm", "BottomMargin:1cm",
-            //     strFormHtml);
-            // LODOP.PREVIEW();
-            LODOP = getLodop();
-            LODOP.PRINT_INIT("打印控件功能演示_Lodop功能_完整全页");
-            LODOP.ADD_PRINT_HTM(10, 10, "100%", "100%", "<!DOCTYPE html>" + document.getElementsByTagName("html")[0].innerHTML);
-            LODOP.PREVIEW();
+        /*  $("#print").on("click", function () {
+              // LODOP = getLodop();
+              // var strBodyStyle = "<style>" + $("#print-style").html() + "</style>";
+              // var strFormHtml = strBodyStyle + "<body>" + $(".detail").html() + "</body>";
+              // LODOP.SET_PRINT_PAGESIZE(1, 0, 0, 'A4');
+              // LODOP.ADD_PRINT_HTM("0.5cm", "0.4cm", "RightMargin:0.4cm", "BottomMargin:1cm",
+              //     strFormHtml);
+              // LODOP.PREVIEW();
+              LODOP = getLodop();
+              LODOP.PRINT_INIT("打印控件功能演示_Lodop功能_完整全页");
+              LODOP.ADD_PRINT_HTM(10, 10, "100%", "100%", "<!DOCTYPE html>" + document.getElementsByTagName("html")[0].innerHTML);
+              LODOP.PREVIEW();
 
-        });
+          });*/
 
         $.ajax({
             url: "../parent/lookProposal/" + $("#proposalId").text(),
