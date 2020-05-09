@@ -53,6 +53,11 @@ public class JpmsStateController {
         return "wySatisfaction";
     }
 
+    @GetMapping("detaile/tawSatisfaction")
+    public String tawSatisfaction() {
+        return "tawSatisfaction";
+    }
+
     @GetMapping("tawloadSat")
     public String tawloadSat() {
         return "tawloadSat";

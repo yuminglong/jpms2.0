@@ -330,13 +330,12 @@
                 </ul>
             </td>
         </tr>
-       <!-- <tr>
+        <tr>
             <th>提案委满意度测评</th>
             <td class="td80" colspan="3">&nbsp;
                 <a href="javascript:void(0)" onclick="tawSat(proposalId)" style="color: blue"><u>提案办理情况征求意见表(提案委)</u></a>
-
             </td>
-        </tr>-->
+        </tr>
     </table>
 </div>
 
@@ -366,6 +365,17 @@
             title: " ",
             area: ['800px', '400px'],
             content:encodeURI('wySatisfaction?proposalId=' + proposalId +'&appendixId='+appendixId +'&appendixName='+appendixName)
+        });
+    }
+
+
+    function tawSat(proposalId) {
+        proposalId = $("#proposalId").text();
+        layer.open({
+            type: 2,
+            title: " ",
+            area: ['800px', '400px'],
+            content:encodeURI('tawSatisfaction?proposalId=' + proposalId)
         });
     }
 

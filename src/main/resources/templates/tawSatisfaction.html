@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>提案委满意度测评详情</title>
+</head>
+<body>
+
+<style type="text/css">
+    table.tftable {
+        font-size: 12px;
+        width: 100%;
+        border-width: 1px;
+        border-collapse: collapse;
+    }
+
+    table.tftable th {
+        font-size: 12px;
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        text-align: left;
+    }
+
+    table.tftable td {
+        font-size: 12px;
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;;
+    }
+</style>
+
+<table id="tfhover" class="tftable" border="1">
+    <p style="font-size: 25px " align="center"><strong> 提案办理情况征求意见表(提案委)</strong></p>
+    <tr>
+        <td rowspan="2"><strong> 提案编号</strong></td>
+        <td rowspan="2"><span name="proposalNumber"></span></span></td>
+        <td rowspan="2"><strong> 领衔代表</strong></td>
+        <td><strong> 姓名</strong></td>
+        <td><span name="realName"></span></td>
+    </tr>
+    <tr>
+        <td><strong> 单位及职务</strong></td>
+        <td><span name="unitName"></span></td>
+    </tr>
+    <tr>
+        <td><strong>提案标题</strong></td>
+        <td colspan="4"><span name="cause"></span></td>
+    </tr>
+    <tr style="height: 66px">
+        <td><strong>办理单位</strong></td>
+        <td colspan="4"><span><strong>主办单位：</strong></span><span name="zunits"></span><br/><span><strong>会办单位：</strong></span><span
+                name="hunits"></span></td>
+    </tr>
+    <tr>
+        <td rowspan="2"><strong>提案办理情况</strong></td>
+        <td><strong>满意度</strong></td>
+        <td colspan="3"><span name="satisfaction"></span></td>
+    </tr>
+    <tr>
+        <td><strong>评价内容</strong></td>
+        <td colspan="3"> &nbsp;<a href="javascript:void(0)" onclick="load()" style="color: blue"> <span
+                name="appendixName"></span></a></td>
+    </tr>
+</table>
+
+
+<script src="../libs/js/jquery.min.js"></script>
+<script src="../layui/layui.js"></script>
+<script>
+    var layer;
+    layui.use('layer', function () {
+        layer = layui.layer;
+    })
+
+
+    var proposalId;
+    var appendixId;
+
+    //获得参数
+    function getQueryVariable(variable) {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] == variable) {
+                return pair[1];
+            }
+        }
+        return ("");
+    }
+
+    $(function () {
+        proposalId = getQueryVariable("proposalId");
+
+        //获得附件数据
+        $.ajax({
+            url: "../selectapd/" + proposalId + '/7',
+            type: "GET",
+            dataType: "json",
+            success: function (msg) {
+                appendixId = msg.datas.appendixId;
+                if (msg.datas.appendixName == null) {
+                    $("[name=appendixId]").text(" ");
+                } else {
+                    $("[name=appendixId]").text(msg.datas.appendixId);
+                }
+                if (msg.datas.appendixName == null) {
+                    $("[name=appendixName]").text(" ");
+                } else {
+                    $("[name=appendixName]").text(msg.datas.appendixName);
+                }
+            },
+            error: function (error) {
+                alert("获取附件数据失败");
+            }
+        });
+
+
+        //获得提案大部分数据
+        $.ajax({
+            url: "../parent/lookProposal/" + proposalId,
+            type: "GET",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+
+
+                // $("[name=proposalNumber]").text(data.proposalNumber);//提案号
+                if (data.review == null) {
+                    $("[name=review]").text("");
+                } else {
+                    $("[name=review]").text(data.review);
+                }
+                if (data.proposalNumber == null) {
+                    $("[name=proposalNumber]").text("  ");
+                } else {
+                    $("[name=proposalNumber]").text(data.proposalNumber);
+                }
+                if (data.juser.unitName == null) {
+                    $("[name=unitName]").text("  ");
+                } else {
+                    $("[name=unitName]").text(data.juser.unitName);
+                }
+
+
+                $("[name=cause]").text(data.cause);//案由
+                $("[name=anniversary]").text(data.anniversary);//届
+                $("[name=number]").text(data.number);//次
+                $("[name=address]").text(data.juser.address);//通讯地址
+                $("[name=content]").html(data.content);//内容
+                $("[name=realName]").text(data.juser.realName);//提案者
+                // $("[name=unitName]").text(data.juser.unitName);//工作单位
+
+                //  $("[name=email]").text(data.juser.email);//邮箱
+                $("[name=subsector]").text(data.juser.subsector);//界别
+                $("[name=mobile]").text(data.juser.mobile);//手机
+                if (data.specifica == null) {
+                    $("[name=type]").text(data.type);//类型
+                } else {
+
+                    $("[name=type]").text(data.type + "(" + data.specifica + ")");//类型
+                }
+
+                $("[name=classify]").text(data.classify);//类别
+
+                if (data.peoplesthree == null) {
+                    $("[name=peoplestwo]").text("");
+                } else {
+                    $("[name=peoplestwo]").text(data.peoplesthree);//联名人
+                }
+
+                if (data.zunits == null) {
+                    $("[name=zunits]").text("");//主办
+                } else {
+                    $("[name=zunits]").text(data.zunits);//主办
+                }
+                if (data.hunits == null) {
+                    $("[name=hunits]").text("");//会办
+                } else {
+                    $("[name=hunits]").text(data.hunits);//会办
+                }
+                //  $("[name=postcode]").text(data.juser.postcode);//邮编
+                if (data.juser.postcode == null) {
+                    $("[name=postcode]").text("");
+                } else {
+                    $("[name=postcode]").text(data.juser.postcode);
+                }
+                $("[name=createTime]").text(data.createTime);//提案创建时间
+                if (data.endTime == null) {
+                    $("[name=endTime]").text("暂未办结");
+                } else {
+                    $("[name=endTime]").text(data.endTime);//办结时间
+                }
+                if (data.tawSatisfaction == null) {
+                    $("[name=satisfaction]").text(" ");//满意度测评
+                } else if (data.tawSatisfaction == '1') {
+                    $("[name=satisfaction]").text("非常满意");
+                } else if (data.tawSatisfaction == '2') {
+                    $("[name=satisfaction]").text("比较满意");
+                } else if (data.tawSatisfaction == '3') {
+                    $("[name=satisfaction]").text("不满意");
+                } else if (data.tawSatisfaction == '4') {
+                    $("[name=satisfaction]").text("非常不满意");
+                } else {
+                    $("[name=satisfaction]").text(data.tawSatisfaction);//满意度测评
+                }
+            }
+        });
+    });
+
+    function load() {
+        window.location.href = "../file/" + appendixId;
+    }
+
+
+</script>
+</body>
+</html>
