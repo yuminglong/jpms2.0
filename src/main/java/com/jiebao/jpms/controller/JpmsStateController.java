@@ -3,6 +3,7 @@ package com.jiebao.jpms.controller;
 import com.central.common.model.Result;
 import com.jiebao.jpms.model.JpmsAppendix;
 import com.jiebao.jpms.model.JpmsPersons;
+import com.jiebao.jpms.model.JpmsProposal;
 import com.jiebao.jpms.model.JpmsPunit;
 import com.jiebao.jpms.service.IJpmsAppendixService;
 import com.jiebao.system.model.JpmsDownload;
@@ -21,6 +22,7 @@ import com.alibaba.fastjson.JSONObject;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -49,6 +51,11 @@ public class JpmsStateController {
     @GetMapping("detaile/wySatisfaction")
     public String wySatisfaction() {
         return "wySatisfaction";
+    }
+
+    @GetMapping("tawloadSat")
+    public String tawloadSat() {
+        return "tawloadSat";
     }
 
     @RequestMapping({"", "index"})
@@ -422,5 +429,13 @@ public class JpmsStateController {
 
     }
 
+    @ApiOperation(value = "提案委满意度测评")
+    @PostMapping("/tawSatisfactionLoad")
+    @ResponseBody
+    public Result tawSatisfactionLoad(Integer proposalId, String tawSatisfaction)  {
+        JpmsProposal jpmsProposal = jpmsProposalService.getById(proposalId);
+        jpmsProposal.setTawSatisfaction(tawSatisfaction);
+        return jpmsProposalService.saveOrUpdate(jpmsProposal) ? Result.succeed("测评成功！") : Result.failed("测评失败");
 
+    }
 }

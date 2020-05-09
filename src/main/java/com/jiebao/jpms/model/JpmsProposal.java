@@ -172,4 +172,8 @@ public class JpmsProposal extends Model<JpmsProposal> {
 	@ApiModelProperty(value = "结束时间", required = true)
 	private String endDate;
 
+
+	@ApiModelProperty(value = "提案委满意度", required = true)
+	private String tawSatisfaction;
+
 }

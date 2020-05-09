@@ -389,6 +389,20 @@
                 });*/
                window.open( "systemcheckMotion?proposalId=" + data.proposalId,"审查提案")
             }
+            else if(layEvent === 'sat'){
+                if(data.status > '3' && data.status <= '10'){
+                    layer.open({
+                        type: 2,
+                        title: "提案委满意度测评",
+                        area: ['600px', '300px'],
+                        content:encodeURI('tawloadSat?proposalId=' + data.proposalId )
+                    });
+                }
+            else{
+                    layer.msg("此提案现在不能上传满意度测评", {icon: 2, time: 1500})
+                }
+
+            }
         });
         $("#channelSelect").on("click", function () {
             parent.layer.open({
@@ -419,6 +433,7 @@
 
 <script type="text/html" id="motionBar">
     <!-- <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reply"></i>答复</a>-->
+    <a class="layui-btn layui-btn-danger layui-btn-xs" shiro:hasPermission="sat" lay-event="sat"></i>满意度</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>审查</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-red" lay-event="del" shiro:hasPermission="deleteproposa"><i class="layui-icon layui-icon-delete"></i>删除</a>
 </script>

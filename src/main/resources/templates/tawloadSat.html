@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>提案委满意度上传</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="libs/css/style.css">
+</head>
+<body>
+<div class="layui-fluid layui-form motion-form motion-form1" lay-filter="layuiadmin-form-useradmin"
+     id="layuiadmin-form-useradmin">
+    <form action="" class="layui-form-item layui-form" onsubmit="return false;">
+        <div class="layui-form-item">
+            <div class="layui-inline left">
+                <input type="radio" name="tawSatisfaction" id="veryGood" value="1" title="非常满意" checked>
+                <input type="radio" name="tawSatisfaction" id="good" value="2" title="比较满意">
+                <input type="radio" name="tawSatisfaction" id="bead" value="3" title="不满意">
+                <input type="radio" name="tawSatisfaction" id="veryBad" value="4" title="非常不满意">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">满意度测评:</label>
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn" id="upload">
+                    <i class="layui-icon">&#xe67c;</i>文件上传
+                </button>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline left" id="downloadthree">
+
+            </div>
+        </div>
+        <div class="layui-form-item text-c">
+            <div class="layui-inline">
+                <button type="button" class="layui-btn" id="laws">确定</button>
+            </div>
+            <div class="layui-inline">
+                <button type="button" class="layui-btn" id="toClose">关闭</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="layui/layui.js"></script>
+<script>
+    layui.use(['layedit', 'laydate', 'form', 'upload', "element", "jquery"], function () {
+        var upload = layui.upload;
+        var $ = layui.jquery
+            , form = layui.form;
+
+        var proposalId;
+        //传参
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split("=");
+                if (pair[0] == variable) {
+                    return pair[1];
+                }
+            }
+            return ("");
+        }
+
+        $(function () {
+            proposalId = getQueryVariable("proposalId");
+        })
+
+
+        //附件和满意度上传
+        upload.render({
+            elem: '#upload' //绑定元素
+            , url: 'upload?proposalId=' + proposalId + '&type=7' //上传接口
+            , auto: false
+            , bindAction: '#laws'
+            , accept: 'file' //允许上传的文件类型
+            , size: 20480 //最大允许上传的文件大小
+            , before: function () {
+                this.data = {
+                    "proposalId": proposalId
+                }
+            }
+            , done: function (msg) {
+                $.ajax({
+                    url: "tawSatisfactionLoad",
+                    data: {
+                        "proposalId": proposalId,
+                        "tawSatisfaction": $('input:radio:checked').val()
+                    },
+                    type: "post",
+                    dataType: "json",
+                    success: function (msg) {
+                        layer.closeAll();
+                        layer.msg(msg.resp_msg, {icon: 1, time: 3000}, function () {
+                            parent.layui.layer.closeAll();
+                        });
+                    },
+                    error: function (error) {
+                        alert("上传满意度失败")
+                    }
+                });
+                layer.closeAll();
+                layer.msg(msg.resp_msg, {icon: 1, time: 1500}, function () {
+                    parent.layui.layer.closeAll();
+                });
+            },
+            error: function () {
+                //请求异常回调
+                alert("上传异常,请检查文件是否过大");
+            }
+        });
+
+
+        //回显附件
+        $.ajax({
+            url: "selectapd/" + proposalId + '/7',
+            type: "GET",
+            dataType: "json",
+            success: function (msg) {
+                if (msg.datas == '-1') {
+                    // $("#downloadti").css('display', 'none');
+                } else {
+                    $("#downloadthree").append('<label class="layui-form-label">已上传附件:</label>' + '<a  class="layui-btn-red layui-download" href="/file/' + msg.datas.appendixId + '" style="color: blue">' + msg.datas.appendixName + '</a>');
+                }
+            },
+            error: function (error) {
+                alert("回显文件失败");
+            }
+
+        });
+
+        //回显radio
+        $.ajax({
+            url: "parent/lookProposal/" + proposalId,
+            type: "GET",
+            dataType: "json",
+            success: function (msg) {
+                if (msg.tawSatisfaction == '1') {
+                    $("input[name=tawSatisfaction][value='1']").attr("checked", true);
+                } else if (msg.tawSatisfaction == '2') {
+                    $("input[name=tawSatisfaction][value='2']").attr("checked", true);
+                } else if (msg.tawSatisfaction == '3') {
+                    $("input[name=tawSatisfaction][value='3']").attr("checked", true);
+                } else if (msg.tawSatisfaction == '4') {
+                    $("input[name=tawSatisfaction][value='4']").attr("checked", true);
+                }
+                form.render();   //关键一步
+            },
+            error: function (error) {
+                alert("回显满意度失败");
+            }
+        });
+
+
+        // 关闭
+        $("#toClose").on("click", function () {
+            parent.layui.layer.closeAll();
+        });
+    });
+</script>
+</body>
+</html>
