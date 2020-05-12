@@ -223,11 +223,66 @@
             <td>通讯地址</td>
             <td>联系电话</td>
         </tr>
-        <tr th:each="s,state:${userList}" style="font-size: 13pt">
+        <tr th:each="s,state:${userList}" style="font-size: 13pt" >
             <td>[[${s.jpmsUser.realName}]]</td>
             <td>[[${s.jpmsUser.subsector}]]</td>
             <td>[[${s.jpmsUser.address}]]</td>
+            <td style="display:none" id="sizes">[[${state.size}]]</td>
             <td>[[${s.jpmsUser.mobile}]]</td>
+        </tr>
+        <tr  style="height: 39px" id="sta">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr  style="height: 39px" id="stb">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr  style="height: 39px" id="stc">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr  style="height: 39px" id="std">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr  style="height: 39px" id="ste">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr  style="height: 39px" id="stf">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr  style="height: 39px" id="stg">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr  style="height: 39px" id="sth">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr  style="height: 39px" id="sti">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
         </tr>
     </table>
 
@@ -380,6 +435,35 @@
     }
 
     $(function () {
+        var sizes = $("#sizes").text()
+
+        if(sizes == 1){
+             $("#sta").css('display', 'none');
+        }
+        if(sizes == 2){
+            $("#sta,#stb").css('display', 'none');
+        }
+        if(sizes == 3){
+            $("#sta,#stb,#stc").css('display', 'none');
+        }
+        if(sizes == 4){
+            $("#sta,#stb,#stc,#std").css('display', 'none');
+        }
+        if(sizes == 5){
+            $("#sta,#stb,#stc,#std,#ste").css('display', 'none');
+        }
+        if(sizes == 6){
+            $("#sta,#stb,#stc,#std,#ste,#stf").css('display', 'none');
+        }
+        if(sizes == 7){
+            $("#sta,#stb,#stc,#std,#ste,#stf,#stg").css('display', 'none');
+        }
+        if(sizes == 8){
+            $("#sta,#stb,#stc,#std,#ste,#stf,#stg,#sth").css('display', 'none');
+        }
+        if(sizes >= 9){
+            $("#sta,#stb,#stc,#std,#ste,#stf,#stg,#sth,#sti").css('display', 'none');
+        }
 
 
         /*  $("#print").on("click", function () {
