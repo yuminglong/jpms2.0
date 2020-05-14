@@ -122,10 +122,10 @@
 
         <div class="layui-form-item">
             <div id="test3" class="demo-transfer layui-inline left"></div>
-            <div id="buchong">
+            <div id="buchong" style="display: none">
                 <p>联名用户补充：</p>
                 <textarea name="peoples" style="word-break: break-all;height: 334px;width: 260px"
-                          placeholder="用户之间用，逗号隔开"></textarea>
+                          placeholder="用户之间用，逗号隔开" ></textarea>
             </div>
 
             <!-- <div id="test2" class="demo-transfer layui-inline left"></div>-->
@@ -237,10 +237,10 @@
 
                 if (data.type == '个人提案') {
                     $("#test3").css('display', 'none');
-                    $("#buchong").css('display', 'none');
+                 //   $("#buchong").css('display', 'none');
                 } else {
                     $("#test3").css('display', 'block');
-                    $("#buchong").css('display', 'block');
+                  //  $("#buchong").css('display', 'block');
                 }
                 layedit.setContent(index, data.content, true);
             }

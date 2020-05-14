@@ -57,11 +57,12 @@ public class JpmsMembersController {
         jpmsProposal.setLeader(user.getRealName());//主导人
         jpmsProposal.setMobile(user.getMobile());//手机
         jpmsProposal.setStatus(1);
-        if (jpmsProposal.getPeoplestwo() != null && jpmsProposal.getPeoplestwo() != "") {
+       /* if (jpmsProposal.getPeoplestwo() != null && jpmsProposal.getPeoplestwo() != "") {
             jpmsProposal.setPeoplesthree(jpmsProposal.getPeoplestwo() + ',' + jpmsProposal.getPeoples());
         } else {
             jpmsProposal.setPeoplesthree(jpmsProposal.getPeoples());
-        }
+        }*/
+        jpmsProposal.setPeoplesthree(jpmsProposal.getPeoplestwo());
 
         return jpmsProposalService.saveOrUpdate(jpmsProposal) ? Result.succeedWith(jpmsProposal, 200, "新增成功") : Result.failed("新增失败");
     }
@@ -112,11 +113,12 @@ public class JpmsMembersController {
                 //SMSUtils.sendSMS(false, "497409", "null", j.getMobile(), "0");
             }
         }
-        if (jpmsProposal.getPeoplestwo() != null && jpmsProposal.getPeoplestwo() != "") {
+      /*  if (jpmsProposal.getPeoplestwo() != null && jpmsProposal.getPeoplestwo() != "") {
             jpmsProposal.setPeoplesthree(jpmsProposal.getPeoplestwo() + ',' + jpmsProposal.getPeoples());
         } else {
             jpmsProposal.setPeoplesthree(jpmsProposal.getPeoples());
-        }
+        }*/
+        jpmsProposal.setPeoplesthree(jpmsProposal.getPeoplestwo());
 
         return jpmsProposalService.saveOrUpdate(jpmsProposal) ? Result.succeedWith(jpmsProposal, 200, "修改成功") : Result.failed("请刷新重试");
     }
