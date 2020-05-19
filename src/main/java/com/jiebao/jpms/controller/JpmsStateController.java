@@ -78,12 +78,24 @@ public class JpmsStateController {
     @GetMapping("detaile/{proposalId}")
     public String detaile(@PathVariable Integer proposalId, Model model) {
         model.addAttribute("proposalId", proposalId);
+        JpmsProposal byId1 = jpmsProposalService.findById(proposalId);
+        Integer userId = byId1.getUserId();
+
         //联名用户
         List<JpmsPersons> userList = jpmsUserService.jointlm(proposalId);
 		for(JpmsPersons p:userList){
-			p.setJpmsUser(jpmsUserService.getById(p.getUserId()));
+            JpmsUser byId = jpmsUserService.getById(p.getUserId());
+                p.setJpmsUser(byId);
 		}
-		model.addAttribute("userList", userList);
+		//迭代器移除比较靠谱
+        Iterator<JpmsPersons> iter = userList.iterator();
+        while(iter.hasNext()){
+            JpmsPersons s = iter.next();
+            if(s.getJpmsUser().getUserId().equals(userId)){
+                iter.remove();
+            }
+        }
+        model.addAttribute("userList", userList);
         for (int i = 1; i < 5; i++) {
             if (i == 3) {//单位回复
                 List<JpmsAppendix> zlist = new ArrayList<>();//主办

@@ -218,7 +218,7 @@
         <!--            <td><span name="address"></span></td>-->
         <!--        </tr>-->
         <tr style="font-size: 14pt">
-            <td>联名人</td>
+            <td>提案人</td>
             <td>界别</td>
             <td>通讯地址</td>
             <td>联系电话</td>
@@ -230,7 +230,7 @@
             <td name="iphone"></td>
         </tr>
         <tr th:each="s,state:${userList}" style="font-size: 13pt" >
-            <td>[[${s.jpmsUser.realName}]]</td>
+            <td id="real">[[${s.jpmsUser.realName}]]</td>
             <td>[[${s.jpmsUser.subsector}]]</td>
             <td>[[${s.jpmsUser.address}]]</td>
             <td style="display:none" id="sizes">[[${state.size}]]</td>
@@ -507,13 +507,18 @@
                 $("[name=anniversary]").text(data.anniversary);//届
                 $("[name=number]").text(data.number);//次
                 $("[name=address]").text(data.juser.address);//通讯地址
-                $("[name=adss]").text(data.juser.address);//通讯地址
+                if (data.juser.address == null) {
+                    $("[name=adss]").text("  ");
+                } else {
+                    $("[name=adss]").text(data.juser.address);//通讯地址
+                }
+                $("[name=unitName]").text(data.juser.unitName);//工作单位
                 $("[name=content]").html(data.content);//内容
                 $("[name=realName]").text(data.juser.realName);//提案者
                 if (data.juser.realName == null) {
                     $("[name=RName]").text("  ");
                 } else {
-                    $("[name=RName]").text(data.juser.realName+ "(提案者)");
+                    $("[name=RName]").text(data.juser.realName+ "(主导者)");
                 }
                 $("[name=unitName]").text(data.juser.unitName);//工作单位
 
