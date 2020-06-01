@@ -541,6 +541,11 @@
             var zunits = '';
             getData = transfer.getData('demo1'); //获取用户右侧数据
             getData2 = transfer.getData('demo2'); //获取单位右侧数据
+            console.log(getData2);
+            if(getData2.length>1){
+                alert("主办单位不能为多个")
+                return false;
+            }
             for (var q = 0; q < getData2.length; q++) {
                 valuetwo[q] = getData2[q].value
                 zunits += getData2[q].title

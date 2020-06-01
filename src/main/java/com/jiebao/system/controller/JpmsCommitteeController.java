@@ -66,7 +66,10 @@ public class JpmsCommitteeController {
 		Integer proposalId = jpmsProposal.getProposalId();
 		iJpmsPunitService.updateAnswer(proposalId,overAnswer);
 		//JpmsProposal p = jpmsProposalService.getById(jpmsProposal.getProposalId());
-		jpmsProposal.setStatus(4);//单位办理
+		if(jpmsProposal.getStatus() <= 4){
+			jpmsProposal.setStatus(4);//单位办理
+		}
+
 
 		return jpmsProposalService.saveOrUpdate(jpmsProposal) ? Result.succeed(jpmsProposal, "提交成功") : Result.failed("请刷新重试");
 

@@ -240,6 +240,7 @@ public class WxFile {
 		jpmsProposal.setUserId(user.getUserId());
 		jpmsProposal.setLeader(user.getRealName());//主导人
 		jpmsProposal.setMobile(user.getMobile());//手机
+		jpmsProposal.setStatus(1);
 		return jpmsProposalService.saveOrUpdate(jpmsProposal) ? Result.succeedWith(jpmsProposal, 200, "新增成功") : Result.failed("新增失败");
 	}
 
@@ -414,9 +415,10 @@ public class WxFile {
 					}
 				}
 				//model.addAttribute("JpmsAppendixz", zlist);
-				map.put("JpmsAppendixz", list);
+				map.put("JpmsAppendixz", zlist);
 				//model.addAttribute("JpmsAppendixh", hlist);
-				map.put("JpmsAppendixh", list);
+				map.put("JpmsAppendixh", hlist);
+
 
 			}else {
 				List<JpmsAppendix> list = jpmsProposalService.appendix(proposalId, i);//提案相关附件
