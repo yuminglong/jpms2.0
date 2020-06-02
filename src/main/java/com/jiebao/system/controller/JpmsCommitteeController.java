@@ -65,8 +65,9 @@ public class JpmsCommitteeController {
 		String overAnswer = httpServletRequest.getParameter("overAnswer");
 		Integer proposalId = jpmsProposal.getProposalId();
 		iJpmsPunitService.updateAnswer(proposalId,overAnswer);
+		JpmsProposal byId = jpmsProposalService.findById(proposalId);
 		//JpmsProposal p = jpmsProposalService.getById(jpmsProposal.getProposalId());
-		if(jpmsProposal.getStatus() <= 4){
+		if(byId.getStatus() <= 4){
 			jpmsProposal.setStatus(4);//单位办理
 		}
 
