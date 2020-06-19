@@ -110,7 +110,7 @@ public class JpmsMembersController {
             List<JpmsUser> jpmsUserListT = jpmsUserService.userType(6);
             for (JpmsUser j : jpmsUserListT) {
                 //System.out.println("市委办" + j.getMobile());
-                //SMSUtils.sendSMS(false, "497409", "null", j.getMobile(), "0");
+                //SMSUtils.sendSMS(false, "497409", "null", j.getMobile(), "0");18974787233李主任
             }
         }
       /*  if (jpmsProposal.getPeoplestwo() != null && jpmsProposal.getPeoplestwo() != "") {
