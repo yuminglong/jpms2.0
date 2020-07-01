@@ -125,7 +125,6 @@ public class JpmsUserController {
 					}else if(u.getUnitId() == p.getUnitId()) {
 						jointpunit.add(u.getUnitId());
 					}
-
 				}
 			}
 		}

@@ -5,11 +5,14 @@ import com.jiebao.jpms.model.JpmsAppendix;
 import com.jiebao.jpms.model.JpmsProposal;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 
 @Mapper
+@Repository
 public interface JpmsProposalMapper extends SuperMapper<JpmsProposal> {
 
 	List<JpmsProposal> findList(@Param("cause") String cause, @Param("status") Integer stutus,@Param("startDate") String startDate,@Param("endDate") String endDate);
@@ -25,4 +28,7 @@ public interface JpmsProposalMapper extends SuperMapper<JpmsProposal> {
 	Integer deletepersons(@Param("proposalId") Integer proposalId);
 
 	Integer maxnumber();
+
+	@Update("UPDATE  jiebao_jpms_proposal p   SET  p.`status` = 7 where p.proposal_id = #{proposalId} ")
+	 boolean  updatebyProId(@Param("proposalId")Integer proposalId);
 }

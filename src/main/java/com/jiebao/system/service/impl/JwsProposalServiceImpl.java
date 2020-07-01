@@ -240,5 +240,10 @@ public class JwsProposalServiceImpl extends ServiceImpl<JpmsProposalMapper, Jpms
 	public Integer maxnumber() {
 		return baseMapper.maxnumber();
 	}
+
+	@Override
+	public boolean  updatebyProId(Integer proposalId){
+		return jpmsProposalMapper.updatebyProId(proposalId);
+	}
 }
 

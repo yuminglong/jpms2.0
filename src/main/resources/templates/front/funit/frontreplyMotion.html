@@ -36,7 +36,6 @@
     <div class="layui-form-item">
         <label class="layui-form-label"></label>
         <div class="layui-inline left" id="downloadthree">
-
         </div>
     </div>
     <p style="font-size: 15px ;text-align: center ;color: #9F9F9F">注：附件都为单附件，上传后原附件自动进行删除</p>
@@ -45,8 +44,8 @@
 <script src="layui/layui.js"></script>
 <script>
     layui.use(['layedit', 'laydate', 'form', 'upload', "element", "jquery"], function () {
-        var upload = layui.upload;
-        var $ = layui.jquery
+        var upload = layui.upload,
+             $ = layui.jquery
             , form = layui.form;
 
         //执行实例   提案附件
@@ -79,7 +78,10 @@
 
                 //layer.msg("上传成功！", {icon: 1, time: 3000}, function () { });
                 $("#downloadthree a").remove();
-                $("#downloadthree").append('<a  class="layui-btn-red layui-download" href="/file/' + res.datas.appendixId + '" style="color: blue">' + res.datas.appendixName + '</a>');
+                $("#downloadthree").append('<a  class="layui-btn-red layui-download" href="/file/' + res.datas.appendixId + '" style="color: blue">' + res.datas.appendixName +'&nbsp'+ '</a>'+'<a class="layui-btn-red layui-download" style="color: red" onclick="parent.layer.close(parent.layer.getFrameIndex(window.name))" href="delete/'+ res.datas.appendixId +'">'+"删除"+' </a>');
+                $("#downloadFour a").remove();
+
+
             }
             , error: function () {
                 //请求异常回调
@@ -99,7 +101,7 @@
                 if (msg.datas == '-1') {
                     // $("#downloadti").css('display', 'none');
                 } else {
-                    $("#downloadthree").append('<a  class="layui-btn-red layui-download" href="/file/' + msg.datas.appendixId + '" style="color: blue">' + msg.datas.appendixName + '</a>');
+                    $("#downloadthree").append('<a  class="layui-btn-red layui-download" href="/file/' + msg.datas.appendixId + '" style="color: blue">' + msg.datas.appendixName + '</a>'+'<a class="layui-btn-red layui-download" style="color: red" onclick="parent.layer.close(parent.layer.getFrameIndex(window.name))" href="delete/'+ msg.datas.appendixId +'"> '+"删除"+' </a>');
                 }
             },
             error: function (error) {
@@ -125,6 +127,8 @@
             }
 
         });
+
+
 
         // 关闭
         $("#toClose").on("click", function () {

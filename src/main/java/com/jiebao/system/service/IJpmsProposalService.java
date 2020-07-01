@@ -105,5 +105,5 @@ public interface IJpmsProposalService extends IService<JpmsProposal> {
 	 */
 	Integer maxnumber();
 
-
+	boolean updatebyProId(Integer proposalId);
 }

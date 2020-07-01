@@ -6,6 +6,7 @@ import com.jiebao.jpms.model.JpmsPersons;
 import com.jiebao.jpms.model.JpmsProposal;
 import com.jiebao.jpms.model.JpmsPunit;
 import com.jiebao.jpms.service.IJpmsAppendixService;
+import com.jiebao.jpms.service.IJpmsPunitService;
 import com.jiebao.system.model.JpmsDownload;
 import com.jiebao.system.model.JpmsUser;
 import com.jiebao.system.service.IJpmsDownloadService;
@@ -41,6 +42,9 @@ public class JpmsStateController {
 
     @Autowired
     private IJpmsAppendixService jpmsAppendixService;
+
+    @Autowired
+    private IJpmsPunitService iJpmsPunitService;
 
 
     @RequestMapping("login")
@@ -310,7 +314,7 @@ public class JpmsStateController {
         map.put("code", 0);//0表示成功，1失败
         map.put("msg", "上传成功");//提示消息
         map.put("data", map2);
-        map2.put("src", "http://www.hnchangning.gov.cn/jpms" + src);//图片url
+        map2.put("src", "http://61.187.179.214/jpms" + src);//图片url
         //map2.put("src", "http://192.168.20.100/jpms" + src);//图片url
         map2.put("title", file.getOriginalFilename());//图片名称，这个会显示在输入框里
         String result = new JSONObject(map).toString();
@@ -432,6 +436,30 @@ public class JpmsStateController {
         }
         return jpmsAppendixService.removeById(AppendixId);
     }
+
+    @ApiOperation(value = "主办单位附件删除")
+    @GetMapping("delete/{appendixId}")
+    public String deleteAppendixByUnit(@PathVariable Integer appendixId, HttpSession session) {
+        JpmsAppendix appendix = jpmsAppendixService.getById(appendixId);
+        File file = new File(appendix.getFileName());
+        if (file.exists()) {
+            file.delete();
+        }
+        Integer ProposalId = appendix.getProposalId();
+        JpmsUser user = (JpmsUser) session.getAttribute("user");
+        Integer unitId = user.getUnitId();
+        try {
+            boolean b = iJpmsPunitService.updateByproId(ProposalId,unitId);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        jpmsAppendixService.removeById(appendixId);
+        return "front/funit/frontreplyMotion";
+
+    }
+
+
+
 
     @ApiOperation(value = "查询附件")
     @GetMapping("/selectapd/{proposalId}/{type}")

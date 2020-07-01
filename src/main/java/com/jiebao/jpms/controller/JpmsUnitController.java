@@ -114,6 +114,12 @@ public class JpmsUnitController {
 
 				p.setAnswer(answer);
 				jpmsPunitService.saveOrUpdate(p);
+                JpmsProposal byId = jpmsProposalService.findById(proposalId);
+                Integer status = byId.getStatus();
+                if(status == 4){
+                    jpmsProposalService.updatebyProId(proposalId);
+                }
+
 			}
 		}
 		return Result.succeed("答复成功！");
