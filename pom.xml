@@ -12,7 +12,7 @@
 
     <groupId>com.jiebao</groupId>
     <artifactId>jpms</artifactId>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <dependencies>
         <!-- 公共实体类模块 -->

@@ -3,7 +3,7 @@
       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
-    <title>单位答复</title>
+    <title>单位上传满意度</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -16,20 +16,13 @@
     <input type="hidden" name="proposalId" id="proposalId" autocomplete="off" class="layui-input"
            th:value="${proposalId}">
 
-    <div class="layui-form-item">
-        <div class="layui-inline left">
-            <input type="radio" name="answer" value="A.已经办结" title="A.已经办理" checked>
-            <input type="radio" name="answer" value="B.列入计划拟解决或拟采纳" title="B.列入计划拟解决或拟采纳">
-            <input type="radio" name="answer" value="C.因政策限制或条件不成熟，暂时不能办理" title="C.因政策限制或条件不成熟，暂时不能办理。">
 
-        </div>
-    </div>
     <div class="layui-form-item">
         <label class="layui-form-label"></label>
         <div class="layui-inline left">
             <h2 id="hint" style="display:none;color: red"> 此提案已办结</h2>
             <button type="button" class="layui-btn layui-btn-red" id="upload">
-                <i class="layui-icon">&#xe67c;</i>附件上传
+                <i class="layui-icon">&#xe67c;</i>如委员无法上传满意度，请拍摄纸质上传
             </button>
         </div>
     </div>
@@ -51,15 +44,14 @@
         //执行实例   提案附件
         var uploadInst = upload.render({
             elem: '#upload' //绑定元素
-            , url: 'upload?proposalId=' + $("#proposalId").val() + '&type=3' //上传接口
+            , url: 'upload?proposalId=' + $("#proposalId").val() + '&type=8' //上传接口
             , accept: 'file' //允许上传的文件类型
             , size: 20480 //最大允许上传的文件大小
             , done: function (res) {
                 $.ajax({
-                    url: "front/unit/answer",
+                    url: "front/unit/satisfactionUnit",
                     data: {
-                        "proposalId": $("#proposalId").val(),
-                        "answer": $('input:radio:checked').val()
+                        "proposalId": $("#proposalId").val()
                     },
                     type: "POST",
                     dataType: "json",
@@ -93,7 +85,7 @@
         });
 
         $.ajax({
-            url: "selectapd/" + $("#proposalId").val() + '/3',
+            url: "selectapd/" + $("#proposalId").val() + '/8',
             type: "GET",
             dataType: "json",
             success: function (msg) {
@@ -125,7 +117,6 @@
             error: function (error) {
                 alert("异常");
             }
-
         });
 
 

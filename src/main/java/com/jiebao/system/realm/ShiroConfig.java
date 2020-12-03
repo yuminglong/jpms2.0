@@ -34,6 +34,7 @@ public class ShiroConfig {
 
 		//放行login.html页面
 		filterMap.put("/login", "anon");
+		filterMap.put("/docking/**", "anon");
 		filterMap.put("/index", "authc");
 		filterMap.put("/", "authc");
 		filterMap.put("/system/user/login", "anon");

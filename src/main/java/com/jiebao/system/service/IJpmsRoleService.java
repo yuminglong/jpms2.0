@@ -6,4 +6,6 @@ import com.jiebao.system.model.JpmsRole;
 
 public interface IJpmsRoleService extends IService<JpmsRole> {
 
+
+
 }

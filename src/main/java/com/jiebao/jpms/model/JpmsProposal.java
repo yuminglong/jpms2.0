@@ -176,4 +176,19 @@ public class JpmsProposal extends Model<JpmsProposal> {
 	@ApiModelProperty(value = "提案委满意度", required = true)
 	private String tawSatisfaction;
 
+	@TableField(exist = false)
+	@ApiModelProperty(value = "办理单位（主办会办）", required = true)
+	private List<JpmsUnit> dockingUnits;
+
+
+	@TableField(exist = false)
+	@ApiModelProperty(value = "附件ID", required = true)
+	private List dockingAppendixIds;
+
+	@ApiModelProperty(value = "是否对接0没有，1已经对接", required = true)
+	private Integer isDocking;
+
+	@TableField(exist = false)
+	@ApiModelProperty(value = "用户详情", required = true)
+	private JpmsUser user;
 }

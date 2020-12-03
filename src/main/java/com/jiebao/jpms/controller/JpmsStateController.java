@@ -176,6 +176,22 @@ public class JpmsStateController {
         return "front/funit/frontreplyMotion";
     }
 
+
+    @ApiOperation(value = "前台答复页面跳转")
+    @GetMapping("/Reply")
+    public String Reply(Integer proposalId, Model model, HttpSession session) {
+        model.addAttribute("proposalId", proposalId);
+        JpmsUser user = (JpmsUser) session.getAttribute("user");
+        if (user.getType() == 1) {//单位
+            return "front/funit/replyMotion";
+        } else if (user.getType() == 2) {//委员
+            return "front/members/frontreplyMotionw";
+        }
+        return "front/funit/replyMotion";
+    }
+
+
+
     @ApiOperation(value = "页面跳转")
     @GetMapping("/amendUser")
     public String amendUser(Integer UserId, Model model) {

@@ -119,12 +119,23 @@ public class JpmsUnitController {
                 if(status == 4){
                     jpmsProposalService.updatebyProId(proposalId);
                 }
-
 			}
 		}
 		return Result.succeed("答复成功！");
-
 	}
 
-
+	@ApiOperation(value = "单位代传满意度")
+	@PostMapping("/satisfactionUnit")
+	public Result satisfactionUnit(Integer proposalId, HttpSession session) {
+		JpmsUser user = (JpmsUser) session.getAttribute("user");
+		JpmsProposal jpmsProposal = jpmsProposalService.getById(proposalId);
+		if (jpmsProposal.getStatus() <6){
+			return Result.failed("请上传单位意见");
+		}
+		else {
+			jpmsProposal.setStatus(8);//已测评
+			jpmsProposalService.saveOrUpdate(jpmsProposal);
+			return Result.succeed("测评成功！");
+		}
+	}
 }

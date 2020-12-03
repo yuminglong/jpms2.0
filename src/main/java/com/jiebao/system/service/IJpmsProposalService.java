@@ -2,11 +2,10 @@ package com.jiebao.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.central.common.model.Result;
+
 import com.github.pagehelper.PageInfo;
-import com.jiebao.jpms.model.JpmsAppendix;
-import com.jiebao.jpms.model.JpmsProposal;
-import com.jiebao.jpms.model.JpmsPunit;
-import com.jiebao.jpms.model.JpmsUnit;
+import com.jiebao.jpms.model.*;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -106,4 +105,10 @@ public interface IJpmsProposalService extends IService<JpmsProposal> {
 	Integer maxnumber();
 
 	boolean updatebyProId(Integer proposalId);
+
+
+	PageInfo<JpmsProposal> getProposalList(Integer pageNumber, Integer pageSize);
+
+
+	boolean updateIsDocking(Integer proposalId);
 }

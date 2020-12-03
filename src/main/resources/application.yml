@@ -6,6 +6,7 @@ spring:
     #                username: ${jiebao.datasource.username}
     #                password: ${jiebao.datasource.password}
     url: jdbc:mysql://127.0.0.1:3306/jpms?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
+    #url: jdbc:mysql://114.116.174.5:3306/jpms?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
     username: root
     #password: jiebao@2008
     password: 123456
@@ -19,8 +20,8 @@ spring:
 
   #静态资源
   resources:
-    static-locations: classpath:/static/   ,file:D:/jpms/jpmsupload/picture/
-
+    #static-locations: classpath:/static/   ,file:D:/jpms/jpmsupload/picture/
+    static-locations: classpath:/static/   ,file:/usr/local/jpms/picture/
   #session 3小时
   server:
     session:
@@ -53,4 +54,4 @@ pagehelper:
   reasonable: true
   supportMethodsArguments: true
   params: count=countSql
-  autoRuntimeDialect: trues
+  autoRuntimeDialect: true

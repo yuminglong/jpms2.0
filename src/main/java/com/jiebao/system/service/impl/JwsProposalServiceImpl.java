@@ -1,30 +1,45 @@
 package com.jiebao.system.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+
+
+
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.central.common.model.Result;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jiebao.jpms.mapper.JpmsAppendixMapper;
 import com.jiebao.jpms.mapper.JpmsPunitMapper;
 import com.jiebao.jpms.mapper.JpmsUnitMapper;
-import com.jiebao.jpms.model.JpmsAppendix;
-import com.jiebao.jpms.model.JpmsPersons;
-import com.jiebao.jpms.model.JpmsPunit;
+import com.jiebao.jpms.model.*;
+import com.jiebao.jpms.service.IJpmsAppendixService;
+import com.jiebao.jpms.service.IJpmsPunitService;
 import com.jiebao.jpms.service.IJpmsUnitService;
+import com.jiebao.jpms.util.JiebaoConstant;
+import com.jiebao.jpms.util.SortUtil;
 import com.jiebao.system.mapper.JpmsProposalMapper;
-import com.jiebao.jpms.model.JpmsProposal;
 import com.jiebao.system.model.JpmsUser;
 import com.jiebao.system.service.IJpmsProposalService;
 import com.jiebao.system.service.IJpmsUserService;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Slf4j
@@ -43,6 +58,20 @@ public class JwsProposalServiceImpl extends ServiceImpl<JpmsProposalMapper, Jpms
 
     @Resource
     private JpmsUnitMapper jpmsUnitMapper;
+
+    @Resource
+	private JpmsPunitMapper jpmsPunitMapper;
+
+	@Resource
+	private IJpmsPunitService jpmsPunitService;
+
+	@Resource
+	private JpmsAppendixMapper jpmsAppendixMapper;
+
+
+	@Resource
+	private IJpmsAppendixService jpmsAppendixService;
+
 
 	@Override
 	public JpmsProposal findById(Integer proposalId) {
@@ -245,5 +274,45 @@ public class JwsProposalServiceImpl extends ServiceImpl<JpmsProposalMapper, Jpms
 	public boolean  updatebyProId(Integer proposalId){
 		return jpmsProposalMapper.updatebyProId(proposalId);
 	}
+
+	@Override
+	public PageInfo<JpmsProposal> getProposalList(Integer pageNumber, Integer pageSize) {
+		Page page = PageHelper.startPage(pageNumber, pageSize);
+		Map<String, Object> map = new HashMap<>();
+		map.put("status",4);
+		map.put("is_docking",0);
+		List<JpmsProposal> jpmsProposals = jpmsProposalMapper.selectByMap(map);
+		for (JpmsProposal p: jpmsProposals
+			 ) {
+			List<JpmsUnit>  pUnits = new ArrayList<>();
+			List appendixList = new ArrayList<>();
+			List<JpmsPunit> unit = jpmsPunitMapper.getUnit(p.getProposalId());
+			HashMap<String, Object> fileMap = new HashMap<>();
+			fileMap.put("proposal_id",p.getProposalId());
+			List<JpmsAppendix> fileList = jpmsAppendixMapper.selectByMap(fileMap);
+			for (JpmsAppendix file: fileList
+				 ) {
+				appendixList.add(file.getAppendixId());
+			}
+			p.setDockingAppendixIds(appendixList);
+			for (JpmsPunit u:unit
+				 ) {
+				JpmsUnit jpmsUnit = jpmsUnitService.selectById(u.getUnitId());
+				pUnits.add(jpmsUnit);
+			}
+			p.setDockingUnits(pUnits);
+			JpmsUser byId = iJpmsUserService.getById(p.getUserId());
+			p.setUser(byId);
+		}
+		PageInfo info = new PageInfo<>(page.getResult());
+		return info;
+	}
+
+	@Override
+	public boolean updateIsDocking(Integer proposalId) {
+		return jpmsProposalMapper.updateIsDocking(proposalId);
+	}
+
+
 }
 
