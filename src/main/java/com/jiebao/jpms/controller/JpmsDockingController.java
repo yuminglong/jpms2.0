@@ -2,6 +2,7 @@ package com.jiebao.jpms.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
+import com.jiebao.jpms.mapper.JpmsAppendixMapper;
 import com.jiebao.jpms.mapper.JpmsPunitMapper;
 import com.jiebao.jpms.model.*;
 import com.jiebao.jpms.service.IJpmsAppendixService;
@@ -46,6 +47,8 @@ public class JpmsDockingController extends BaseController {
 
 	@Autowired
 	private IJpmsUnitService jpmsUnitService;
+	@Autowired
+	private JpmsAppendixMapper jpmsAppendixMapper;
 
 	static final String JieBaoId = "b1c8adc7ad74b8b520438c0b58038202";
 
@@ -216,18 +219,38 @@ public class JpmsDockingController extends BaseController {
 
 
 	@PostMapping("updateYear")
+	@ApiOperation("添加或者修改年度")
 	public JiebaoResponse updateYear(JpmsYear year) {
-		return null;
+		JiebaoResponse jiebaoResponse = new JiebaoResponse();
+		try {
+			if (year.getYearId() == null)
+				jpmsAppendixMapper.addLK(year.getDate(), year.getStatus());
+			else
+				jpmsAppendixMapper.updateSetStatus(year.getStatus(), year.getYearId());
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			jiebaoResponse.failMessage("操作失败");
+		}
+		return jiebaoResponse;
 	}
-
+	@ApiOperation("查询年度")
 	@GetMapping("listYear")  //查全部
-	public JiebaoResponse updateYear() {
-		return null;
+	public JiebaoResponse listYear() {
+		return new JiebaoResponse().data(jpmsAppendixMapper.listYear()).okMessage("查询成功");
 	}
 
 	@Delete("deleteYear")
-	public JiebaoResponse deleteYear() {
-		return null;
+	@ApiOperation("删除年度")
+	public JiebaoResponse deleteYear(Long id) {
+		JiebaoResponse jiebaoResponse = new JiebaoResponse();
+		try {
+			jpmsAppendixMapper.deleteById(id);
+			jiebaoResponse.okMessage("操作成功");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			jiebaoResponse.failMessage("操作失败");
+		}
+		return jiebaoResponse;
 	}
 
 

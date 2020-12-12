@@ -4,12 +4,10 @@ import com.central.db.mapper.SuperMapper;
 import com.jiebao.jpms.model.JpmsAppendix;
 import com.jiebao.jpms.model.JpmsYear;
 import io.swagger.models.auth.In;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 
@@ -21,11 +19,11 @@ public interface JpmsAppendixMapper extends SuperMapper<JpmsAppendix> {
 
 
 	@Delete("delete from  jiebao_jpms_year  where id=#{id}")
-	Integer deleteById(Long id);
+	Integer deleteById(@Param("id") Long id);
 
-	@Update("update jiebao_jpms_year set status=#{status}")
-	Integer updateSetStatus(Boolean status);
+	@Update("update jiebao_jpms_year set status=#{status} where year_id=#{yearId}")
+	Integer updateSetStatus(@Param("status")int status,@Param("yearId") Long yearId);
 
 	@Update("insert into jiebao_jpms_year(date,status) values(#{date},#{status})")
-	Integer addLK(LocalDate date, Boolean status);
+	Integer addLK(@Param("date") String date, @Param("status") int status);
 }
