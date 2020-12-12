@@ -297,7 +297,7 @@ public class JpmsWordController {
             poifs.writeFilesystem(ostream);
             bais.close();
             ostream.close();
-            poifs.close();
+           // poifs.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
