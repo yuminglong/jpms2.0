@@ -15,11 +15,12 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+
 
 
 @Slf4j
@@ -117,4 +118,15 @@ public class JpmsParentController {
     }
 
 
+
+
+    @ApiOperation(value = "导出提案")
+    @GetMapping("/excel")
+    public Result excel(Integer [] ids , HttpServletResponse response) {
+
+
+
+
+        return null;
+    }
 }

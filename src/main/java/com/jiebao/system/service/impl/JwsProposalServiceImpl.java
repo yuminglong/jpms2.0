@@ -17,8 +17,7 @@ import com.jiebao.jpms.model.*;
 import com.jiebao.jpms.service.IJpmsAppendixService;
 import com.jiebao.jpms.service.IJpmsPunitService;
 import com.jiebao.jpms.service.IJpmsUnitService;
-import com.jiebao.jpms.util.JiebaoConstant;
-import com.jiebao.jpms.util.SortUtil;
+
 import com.jiebao.system.mapper.JpmsProposalMapper;
 import com.jiebao.system.model.JpmsUser;
 import com.jiebao.system.service.IJpmsProposalService;

@@ -191,4 +191,7 @@ public class JpmsProposal extends Model<JpmsProposal> {
 	@TableField(exist = false)
 	@ApiModelProperty(value = "用户详情", required = true)
 	private JpmsUser user;
+
+	@ApiModelProperty(value = "重要提案", required = true)
+	private Integer ifImport;
 }

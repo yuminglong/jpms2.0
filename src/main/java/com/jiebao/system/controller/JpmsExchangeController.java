@@ -25,6 +25,7 @@ public class JpmsExchangeController {
 
 	@ApiOperation(value = "根据标题分页 搜索经验交流")
 	@GetMapping("/findList")
+
 	public Result findList(@RequestParam(defaultValue = "1") Integer pageNumber, @RequestParam(defaultValue = "20") Integer pageSize, @RequestParam(required = false) String title) {
 		PageInfo<JpmsExchange> list = iJpmsExchangeService.findList(pageNumber, pageSize, title);
 		return Result.succeedWith(list, 200, "cg");

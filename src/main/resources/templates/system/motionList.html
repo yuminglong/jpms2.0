@@ -84,9 +84,10 @@
 
                         <div class="layui-inline user-title4">
                             <label class="layui-form-label">年份</label>
-                            <div class="layui-input-inline list-search">
-                                <input type="text" class="layui-input" id="time" placeholder=" - " autocomplete="off">
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" id="time" readonly="" placeholder="请输入年份" >
                             </div>
+
                         </div>
 
                         <div class="layui-inline">
@@ -107,7 +108,14 @@
                 <div class="layui-inline left">
                     <button type="button" shiro:hasPermission="deleteproposa" class="layui-btn layui-btn-sm layui-btn-danger" lay-event="partDelete">彻底删除</button>
                 </div>
+                <!--<div class="layui-inline ">
+                    <button type="button"  class="layui-btn layui-btn-sm " lay-event="import"><i class="layui-icon layui-icon-search" formnovalidate></i>设为重要提案</button>
+                </div>
+                <div class="layui-inline left">
+                    <button type="button"  class="layui-btn layui-btn-sm layui-btn" lay-event="NotImport">取消重要提案</button>
+                </div>-->
             </div>
+
         </div>
         <table class="layui-table lay-even=" lay-filter="motionTable" id="motionTable"></table>
     </div>
@@ -141,13 +149,17 @@
                     {type: "checkbox", fixed: "left", width: 30},
                     {field: "proposalId", title: "ID", width: 80,hide: true},
                     {field: "proposalNumber", title: "提案号", width: 80},
-
                     {type: "numbers", title: "序号", width: "6%", hide: true},
 
                     {
                         field: "cause", title: "提案标题", align: "center", templet: function (item) {
+                            if(item.ifImport === 1) {
+                                return '<a style="color: red" href="detaile/'+item.proposalId+'" target="_blank">' + item.cause + '</a>';
+                            }else {
+                                return '<a href="detaile/'+item.proposalId+'" target="_blank">' + item.cause + '</a>';
+                            }
                            /* return '<a href="detaile?proposalId=item.proposalId" target="_blank">' + item.cause + '</a>';*/
-                            return '<a href="detaile/'+item.proposalId+'" target="_blank">' + item.cause + '</a>';
+
                             //return '<a href="word">' + item.cause + '</a>';
                         }
                     },
@@ -211,14 +223,12 @@
 
         //提交时间查询
         var startTime ;
-        var endTime ;
         laydate.render({
             elem: '#time'
             ,type: 'year'
-            ,range: true
-            ,done:function (value,data,endDate) {
-                    startTime = data.year
-                    endTime = endDate.year
+            ,trigger: 'click'
+            ,done:function (value,data) {
+                startTime = data.year
             }
         });
 
@@ -315,9 +325,15 @@
                             });
                         });
                     }
+                    case 'import':
+                        if (data.length == 0) {
+                            layer.msg('请选择一行');
+                        }
+
                     break;
             }
             ;
+
         });
 
 
@@ -325,14 +341,14 @@
         form.on("submit(search)", function (data) {
             var index = layer.msg('查询中，请稍候...', {icon: 16, time: false, shade: 0});
             setTimeout(function () {
+                console.log('++++++', data);
                 table.reload('motionTable', { //表格的id
                     url: "parent/findList",
                     where: {
                         'cause': data.field.title,
                         'status': data.field.status,
-                        'unitId': $('#lunit').val(),
-                        'startDate':startTime,
-                        'endDate':endTime
+                        'startDate': startTime,
+                        'unitId': $('#lunit').val()
                     }
                 });
                 layer.close(index);
