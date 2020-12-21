@@ -350,8 +350,8 @@
                 <ul th:each="s,state:${JpmsAppendixz}">
                     <li class="tdDiv tdBlue">
                         <span style="color: red">办理单位：[[${s.unitName}]]</span><br>
-                        <span style="color: #9F9F9F" shiro:hasPermission="after">之前办理类型：[[${s.answerAfter}]]</span><br>
-                        办理类型： <span style="color: #9F9F9F">[[${s.answer}]]</span><br>
+                      <!--  <span style="color: #9F9F9F" shiro:hasPermission="after">之前办理类型：[[${s.answerAfter}]]</span><br>-->
+                        单位答复： <span style="color: #9F9F9F">[[${s.answer}]]</span><br>
                         附件：<a th:href="'../file/' + ${s.appendixId}" style="color: blue">[[${s.appendixName}]]</a><br>
                         时间： <span class="date">[[${s.createTime}]]</span>
                     </li>
@@ -364,8 +364,8 @@
                 <ul th:each="s,state:${JpmsAppendixh}">
                     <li>
                         <span style="color: red">办理单位：[[${s.unitName}]]</span><br>
-                        <span style="color: #9F9F9F" shiro:hasPermission="after">之前办理类型：[[${s.answerAfter}]]</span><br>
-                        办理类型： <span style="color: #9F9F9F">[[${s.answer}]]</span><br>
+                       <!-- <span style="color: #9F9F9F" shiro:hasPermission="after">之前办理类型：[[${s.answerAfter}]]</span><br>-->
+                        单位答复： <span style="color: #9F9F9F">[[${s.answer}]]</span><br>
                         附件：<a th:href="'../file/' + ${s.appendixId}" style="color: blue">[[${s.appendixName}]]</a><br>
                         时间： <span>[[${s.createTime}]]</span>
                     </li>

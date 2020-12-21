@@ -8,6 +8,7 @@ import com.jiebao.jpms.model.JpmsReply;
 import com.jiebao.jpms.service.IJpmsAppendixService;
 import com.jiebao.jpms.service.IJpmsReplyService;
 import com.jiebao.jpms.service.IJpmsUnitService;
+import com.jiebao.system.mapper.JpmsProposalMapper;
 import com.jiebao.system.model.JpmsUser;
 import com.jiebao.system.service.IJpmsProposalService;
 import io.swagger.annotations.Api;
@@ -40,6 +41,9 @@ public class JpmsParentController {
 
     @Autowired
     private IJpmsReplyService jpmsReplyService;
+
+    @Autowired
+    private JpmsProposalMapper jpmsProposalMapper;
 
     @ApiOperation(value = "查看全部提案")
     @GetMapping("/findList")
@@ -128,5 +132,24 @@ public class JpmsParentController {
 
 
         return null;
+    }
+
+
+    @ApiOperation(value = "设置为重要提案")
+    @GetMapping("/importProposal")
+    public Result importProposal(Integer [] ids) {
+            Arrays.stream(ids).forEach(id->{
+                jpmsProposalMapper.importProposal(id);
+            });
+        return Result.succeed("成功");
+    }
+
+    @ApiOperation(value = "取消设置为重要提案")
+    @GetMapping("/NotImportProposal")
+    public Result NotImportProposal(Integer [] ids) {
+        Arrays.stream(ids).forEach(id->{
+            jpmsProposalMapper.NotImportProposal(id);
+        });
+        return Result.succeed("成功");
     }
 }

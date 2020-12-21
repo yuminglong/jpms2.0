@@ -34,4 +34,10 @@ public interface JpmsProposalMapper extends SuperMapper<JpmsProposal> {
 
 	@Update("UPDATE  jiebao_jpms_proposal  SET is_docking = 1 WHERE proposal_id =#{proposalId}")
 	boolean updateIsDocking(Integer proposalId);
+
+	@Update("UPDATE  jiebao_jpms_proposal  SET if_import = 1 WHERE proposal_id =#{id}")
+	boolean importProposal(Integer id);
+
+	@Update("UPDATE  jiebao_jpms_proposal  SET if_import = null WHERE proposal_id =#{id}")
+	boolean NotImportProposal(Integer id);
 }
