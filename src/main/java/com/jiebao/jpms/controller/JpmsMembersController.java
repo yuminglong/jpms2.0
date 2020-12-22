@@ -81,7 +81,6 @@ public class JpmsMembersController {
         jpmsProposal.setSatisfaction(satisfaction);
         jpmsProposal.setStatus(8);//已测评
         return jpmsProposalService.saveOrUpdate(jpmsProposal) ? Result.succeed("测评成功！") : Result.failed("测评失败");
-
     }
 
     @ApiOperation(value = "根据提案ID 查看提案答复详情")

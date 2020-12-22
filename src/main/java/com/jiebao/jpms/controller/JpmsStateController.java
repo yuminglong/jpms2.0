@@ -496,7 +496,7 @@ public class JpmsStateController {
     public Result tawSatisfactionLoad(Integer proposalId, String tawSatisfaction)  {
         JpmsProposal jpmsProposal = jpmsProposalService.getById(proposalId);
         jpmsProposal.setTawSatisfaction(tawSatisfaction);
+        //jpmsProposal.setStatus(8);
         return jpmsProposalService.saveOrUpdate(jpmsProposal) ? Result.succeed("测评成功！") : Result.failed("测评失败");
-
     }
 }
