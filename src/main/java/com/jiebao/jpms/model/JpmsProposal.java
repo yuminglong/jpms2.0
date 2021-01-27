@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 
 import java.util.Date;
@@ -21,6 +22,7 @@ import java.util.List;
  */
 @Getter
 @Setter
+@ToString
 @EqualsAndHashCode(callSuper = false)
 @TableName("jiebao_jpms_proposal")
 public class JpmsProposal extends Model<JpmsProposal> {

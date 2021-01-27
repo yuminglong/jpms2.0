@@ -2,6 +2,7 @@ package com.jiebao.jpms.mapper;
 
 import com.central.db.mapper.SuperMapper;
 import com.jiebao.jpms.model.JpmsAppendix;
+import com.jiebao.jpms.model.JpmsProposal;
 import com.jiebao.jpms.model.JpmsYear;
 import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.*;
@@ -26,4 +27,15 @@ public interface JpmsAppendixMapper extends SuperMapper<JpmsAppendix> {
 
 	@Update("insert into jiebao_jpms_year(date,status) values(#{date},#{status})")
 	Integer addLK(@Param("date") String date, @Param("status") int status);
+
+	/**
+	 * 年度区间查询出列表
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
+	@Select("select * from jiebao_jpms_proposal where create_time>=#{startDate} and create_time<#{endDate}  order by unit_id asc,create_time ASC ")
+	List<JpmsProposal> listByYear(@Param("startDate") String startDate,@Param("endDate") String endDate);
+
+
 }

@@ -88,7 +88,6 @@
                             <div class="layui-input-inline">
                                 <input type="text" class="layui-input" id="time" readonly="" placeholder="请输入年份">
                             </div>
-
                         </div>
 
                         <div class="layui-inline">
@@ -118,6 +117,9 @@
                 </div>
                 <div class="layui-inline " style="margin-left: 10px">
                     <button type="button" class="layui-btn layui-btn-sm layui-btn" lay-event="NotImport">取消重要提案</button>
+                </div>
+                <div class="layui-inline " style="margin-left: 10px">
+                    <button type="button" class="layui-btn layui-btn-sm layui-btn" lay-event="order">排序</button>
                 </div>
             </div>
 
@@ -379,6 +381,27 @@
                             });
                         });
                     }
+                    break;
+
+                case 'order':
+                        layer.confirm('是否对提案进行排序?', {icon: 3, title: '提示'}, function (index) {
+                            //  obj.del();//删除对应行（tr）的Dom结构
+                            layer.close(index);
+                            $.ajax({
+                                url: "docking/sort",
+                                data: {},
+                                type: "GET",
+                                dataType: "json",
+                                success: function (msg) {
+                                    layer.msg(msg.resp_msg, {icon: 1, time: 1500}, function () {
+                                        location.reload();//刷新表格
+                                    });
+                                },
+                                error: function (error) {
+                                    alert("异常");
+                                }
+                            });
+                        });
                     break;
             }
             ;

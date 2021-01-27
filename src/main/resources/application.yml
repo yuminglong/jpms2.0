@@ -5,11 +5,11 @@ spring:
     #                url: jdbc:mysql://${jiebao.datasource.ip}:3306/jpms?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
     #                username: ${jiebao.datasource.username}
     #                password: ${jiebao.datasource.password}
-    url: jdbc:mysql://127.0.0.1:3306/jpms?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
-    #url: jdbc:mysql://114.116.174.5:3306/jpms?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://114.116.174.5:3306/jpms?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
+    #url: jdbc:mysql://114.116.174.5:3306/jpms-new?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
     username: root
-    #password: jiebao@2008
-    password: 123456
+    password: jiebao@2008
+    #password: 123456
     driver-class-name: com.mysql.jdbc.Driver
 
   #文件上传大小限制
